@@ -23,7 +23,7 @@ namespace BusinessObject.Model
         public string? Description { get; set; }
 
         public User? Manager { get; set; }
-        public int ManagerId { get; set; }
+        public Guid ManagerId { get; set; }
 
         public IEnumerable<User> Staffs { get; set; } = new List<User>();
 

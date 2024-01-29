@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObject.Model
 {
-    public class Payment
+    public class Wallet
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PaymentId { get; set; }
@@ -16,7 +16,7 @@ namespace BusinessObject.Model
         public string? CardType { get; set; }
         public string? BankName { get; set; }
 
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public User? User { get; set; }
     }
 }

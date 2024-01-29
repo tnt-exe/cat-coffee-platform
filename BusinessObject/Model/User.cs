@@ -1,25 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessObject.Model
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string? UserName { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string? Email { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string? Password { get; set; }
-
         [Required]
         [MaxLength(50)]
         public string? FirstName { get; set; }
@@ -31,16 +16,14 @@ namespace BusinessObject.Model
         public byte? Role { get; set; }
         public byte? Status { get; set; }
 
-        [Required]
-        [Phone]
-        public string? PhoneNumber { get; set; }
-
         public int? CoffeeShopId { get; set; }
         public CoffeeShop? CoffeeShop { get; set; }
 
         public int? ManagerShopId { get; set; }
         public CoffeeShop? ManagedCoffeeShop { get; set; }
 
-        public IEnumerable<Payment> Payments { get; set; } = new List<Payment>();
+        public IEnumerable<Wallet> Wallets { get; set; } = new List<Wallet>();
+
+        public IEnumerable<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
