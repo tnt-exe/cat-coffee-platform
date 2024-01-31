@@ -1,0 +1,122 @@
+﻿@page "/register"
+@model CatCoffeePlatformRazorPages.Register.RegisterModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div style="position: fixed; top: 15%; right: 10%; width: 25%;">
+    @{
+        if (ViewData["warning"] != null)
+        {
+            <div class="alert alert-info">
+                @ViewData["warning"]
+            </div>
+        }
+        var data = (List<string>?)ViewData["errors"];
+        if (data != null)
+        {
+            <div style="margin-top:20px">
+                @foreach (var item in data)
+                {
+                    <div class="alert alert-danger" style="margin-top:10px">
+                        @item
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+<h4>Register</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Account.FirstName" class="control-label"></label>
+                <input asp-for="Account.FirstName" class="form-control" required/>
+                <span asp-validation-for="Account.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.LastName" class="control-label"></label>
+                <input asp-for="Account.LastName" class="form-control" required/>
+                <span asp-validation-for="Account.LastName" class="text-danger"></span>
+            </div>
+
+            @if(Model.IsAdmin){
+                <div class="form-group">
+                    <label asp-for="Account.LockoutEnabled" class="control-label"></label>
+                    <input asp-for="Account.LockoutEnabled" class="form-control" />
+                    <span asp-validation-for="Account.LockoutEnabled" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Account.LockoutEnd" class="control-label"></label>
+                    <input asp-for="Account.LockoutEnd" class="form-control" />
+                    <span asp-validation-for="Account.LockoutEnd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Account.Status" class="control-label"></label>
+                    <input asp-for="Account.Status" class="form-control" />
+                    <span asp-validation-for="Account.Status" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Account.Role" class="control-label"></label>
+                    <input asp-for="Account.Role" class="form-control" />
+                    <span asp-validation-for="Account.Role" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CoffeeShopId" class="control-label"></label>
+                    <input asp-for="CoffeeShopId" class="form-control" />
+                    <span asp-validation-for="CoffeeShopId" class="text-danger"></span>
+                </div>
+            }
+            else if(Model.IsManager){
+                <div class="form-group">
+                    <label asp-for="WorkingStaff" class="control-label"></label>
+                    <input asp-for="WorkingStaff" class="form-control" readonly/>
+                    <span asp-validation-for="WorkingStaff" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CoffeeShopId" class="control-label"></label>
+                    <input asp-for="CoffeeShopId" class="form-control" readonly/>
+                    <span asp-validation-for="CoffeeShopId" class="text-danger"></span>
+                </div>
+            }
+
+            <div class="form-group">
+                <label asp-for="Account.PhoneNumber" class="control-label"></label>
+                <input asp-for="Account.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Account.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Email" class="control-label"></label>
+                <input asp-for="Account.Email" class="form-control" />
+                <span asp-validation-for="Account.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.UserName" class="control-label"></label>
+                <input asp-for="Account.UserName" class="form-control" required/>
+                <span asp-validation-for="Account.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.Password" class="control-label"></label>
+                <input asp-for="Account.Password" type="password" class="form-control" required />
+                <span asp-validation-for="Account.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Account.ConfirmPassword" class="control-label"></label>
+                <input asp-for="Account.ConfirmPassword" type="password" class="form-control" required />
+                <span asp-validation-for="Account.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

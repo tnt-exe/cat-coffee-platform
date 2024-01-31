@@ -107,7 +107,7 @@ namespace DAO.UnitOfWork
         #region Payment
         private BaseDAO<Wallet> _walletDAO;
 
-        public BaseDAO<Wallet> PaymentDAO
+        public BaseDAO<Wallet> WalletDAO
         {
             get
             {
@@ -171,6 +171,11 @@ namespace DAO.UnitOfWork
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync()) > 0;
         }
 
         private bool disposed = false;

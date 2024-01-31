@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext?.User.Claims.Any() ?? false;
+    //var isAdmin = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Contains("Admin")) ?? false;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,8 +13,73 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CatCoffeePlatformRazorPages.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <script>
+        function toast({ title = '', message = '', type = 'info', duration = 3000 }) {
+            const main = document.getElementById('toast1');
+            if (main) {
+                const toast = document.createElement('div');
+
+                const autoRemoveId = setTimeout(function () {
+                    main.removeChild(toast);
+                }, duration + 1000)
+
+                toast.onclick = function (e) {
+                    if (e.target.closest('.toast__close')) {
+                        main.removeChild(toast);
+                        clearTimeout(autoRemoveId);
+                    }
+                }
+
+                const icons = {
+                    success: 'fa-solid fa-circle-check',
+                    info: 'fa-solid fa-circle-info',
+                    warning: 'fa-solid fa-circle-exclamation',
+                    error: 'fa-solid fa-circle-exclamation'
+                }
+                const icon = icons[type];
+                const delay = (duration / 1000).toFixed(2);
+
+                toast.classList.add('toast1', `toast--${type}`);
+                toast.style.animation = `slideInLeft ease 0.3s, fadeOut linear 1s ${delay}s forwards`;
+                toast.innerHTML = `
+                                    <div class="toast__icon">
+                                        <i class="${icon}"></i>
+                                    </div>
+                                    <div class="toast__body">
+                                        <h3 class="toast__title">${title}</h3>
+                                        <p class="toast__msg">${message}</p>
+                                    </div>
+                                    <div class="toast__close">
+                                        <i class="fa-solid fa-x"></i>
+                                    </div>
+                                `;
+                main.appendChild(toast);
+            }
+        }
+
+        function showToast(message) {
+            toast({
+                title: 'Success',
+                message: message,
+                type: 'info',
+                duration: 5000
+            });
+        }
+    </script>
+
+    <div id="toast1"></div>
+    @if (TempData["Information"] != null)
+    {
+        <script>
+            showToast('@TempData["Information"]');
+        </script>
+    }
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -20,12 +91,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Home">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                     </ul>
+                    <div class="col-md-3 text-info text-end">
+                        @if (!isAuthenticated)
+                        {
+                            <a href="/" class="nav-link text-dark">Sign-in</a>
+                        }
+                        else
+                        {
+                            <form method="post" action="/logout">
+                                <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
@@ -49,3 +132,80 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+<style>
+    #toast1 {
+        position: fixed;
+        top: 10%;
+        right: 10%;
+        z-index: 99999999;
+    }
+
+    .toast1 {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 2px;
+        padding: 20px 20px;
+        min-width: 400px;
+        max-width: 450px;
+        border-left: 4px solid;
+        box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
+        transition: all linear 0.3s;
+    }
+
+    @@keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(calc(100% + 32px));
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @@keyframes fadeOut {
+        to {
+            opacity: 0;
+        }
+    }
+
+    .toast__icon {
+        font-size: 30px;
+    }
+
+    .toast__icon,
+    .toast__body {
+        flex-grow: 1;
+    }
+
+    .toast__title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .toast__msg {
+        font-size: 16px;
+        color: #888;
+        margin-top: 6px;
+        line-height: 1.5;
+    }
+
+    .toast__close {
+        font-size: 15px;
+        color: rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+    }
+
+    .toast--info {
+        border-color: #2f86eb;
+    }
+
+        .toast--info .toast__icon {
+            color: #2f86eb;
+        }
+</style>

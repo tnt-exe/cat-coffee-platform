@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObject.Model
 {
@@ -7,14 +8,16 @@ namespace BusinessObject.Model
     {
         [Required]
         [MaxLength(50)]
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = default!;
 
         [Required]
         [MaxLength(50)]
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = default!;
 
         public byte? Role { get; set; }
         public byte? Status { get; set; }
+
+        public bool Deleted { get; set; } = false;
 
         public int? CoffeeShopId { get; set; }
         public CoffeeShop? CoffeeShop { get; set; }

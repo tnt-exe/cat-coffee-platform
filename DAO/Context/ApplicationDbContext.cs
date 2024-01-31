@@ -3,6 +3,7 @@ using DAO.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace DAO.Context
@@ -97,6 +98,21 @@ namespace DAO.Context
             modelBuilder.Ignore<IdentityUserLogin<Guid>>();
             modelBuilder.Ignore<IdentityUserToken<Guid>>();
             modelBuilder.Ignore<IdentityRoleClaim<Guid>>();
+        }
+    }
+
+    public class DbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    {
+        public ApplicationDbContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CatCoffeeShopDB")!);
+            return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
 }
