@@ -47,7 +47,7 @@ namespace DAO.Context
 
             builder.Properties<DateOnly>()
                 .HaveConversion<DateOnlyConverter, DateOnlyComparer>()
-                .HaveColumnType("date"); ;
+                .HaveColumnType("date");
 
             builder.Properties<TimeOnly>()
                 .HaveConversion<TimeOnlyConverter, TimeOnlyComparer>();
