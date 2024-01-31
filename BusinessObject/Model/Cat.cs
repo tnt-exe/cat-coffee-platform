@@ -15,6 +15,7 @@ namespace BusinessObject.Model
         [MaxLength(500)]
         public string? Description { get; set; }
         public int HealthyStatus { get; set; }
+        public bool IsDeleted { get; set; }
 
         public int AreaId { get; set; }
         public Area? Area { get; set; }
