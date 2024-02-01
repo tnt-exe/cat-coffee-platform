@@ -18,7 +18,7 @@ namespace Repository.Implement
             _mapper = mapper;
         }
         
-        public Task<OperationResult<IEnumerable<Category>>> GetAll(Expression<Func<Category, bool>>? filter, Func<IQueryable<Category>, IOrderedQueryable<Category>>? orderBy = null, string[]? includeProperties = null)
+        public Task<OperationResult<IEnumerable<Category>>> GetAll(Expression<Func<Category, bool>>? filter, int? pageIndex, int? pageSize, string[]? includeProperties = null)
         {
             var result = new OperationResult<IEnumerable<Category>>();
             try
@@ -37,7 +37,7 @@ namespace Repository.Implement
                 else
                 {
                     result.IsError = false;
-                    result.Payload = categories;
+                    result.Payload = categories.Take(pageSize ?? 10).Skip(pageIndex ?? 0).ToList();
                 }
             }
             catch (Exception e)

@@ -195,7 +195,6 @@ namespace CatCoffeePlatformAPI
             
             // Add Repository to the container
             builder.Services.AddScoped<UnitOfWork>();
-            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 
             var app = builder.Build();
 
