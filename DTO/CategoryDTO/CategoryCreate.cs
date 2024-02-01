@@ -1,6 +1,7 @@
 ﻿namespace DTO.CategoryDTO
 {
-    public class CategoryCreate
+    public record CategoryCreate
     {
+        public string CategoryName { get; init; }
     }
 }

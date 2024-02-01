@@ -24,22 +24,6 @@ namespace DAO.UnitOfWork
         }
         #endregion
 
-        #region Bill
-        private BaseDAO<Bill> _billDAO;
-
-        public BaseDAO<Bill> BillDAO
-        {
-            get
-            {
-                if (_billDAO == null)
-                {
-                    _billDAO = new BaseDAO<Bill>(_context);
-                }
-                return _billDAO;
-            }
-        }
-        #endregion
-
         #region Booking
         private BaseDAO<Booking> _bookingDAO;
 
@@ -121,17 +105,17 @@ namespace DAO.UnitOfWork
         #endregion
 
         #region Payment
-        private BaseDAO<Payment> _paymentDAO;
+        private BaseDAO<Wallet> _walletDAO;
 
-        public BaseDAO<Payment> PaymentDAO
+        public BaseDAO<Wallet> WalletDAO
         {
             get
             {
-                if (_paymentDAO == null)
+                if (_walletDAO == null)
                 {
-                    _paymentDAO = new BaseDAO<Payment>(_context);
+                    _walletDAO = new BaseDAO<Wallet>(_context);
                 }
-                return _paymentDAO;
+                return _walletDAO;
             }
         }
         #endregion
@@ -184,9 +168,14 @@ namespace DAO.UnitOfWork
         }
         #endregion
 
-        public async Task SaveAsync()
+        public async Task<int> SaveAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync()) > 0;
         }
 
         private bool disposed = false;

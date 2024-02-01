@@ -24,7 +24,7 @@ namespace BusinessObject.Model
 
         public bool Deleted { get; set; } = false;
         public User? Manager { get; set; }
-        public int ManagerId { get; set; }
+        public Guid ManagerId { get; set; }
 
         public IEnumerable<User> Staffs { get; set; } = new List<User>();
 

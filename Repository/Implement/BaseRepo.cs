@@ -1,15 +1,16 @@
 ﻿using DAO.Helper;
 using Repository.Interface;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Implement
 {
-    public abstract class BaseRepo<TRequest, TResponse> : IBaseRepo<TRequest, TResponse> where TRequest : class where TResponse : class
+    public abstract class BaseRepo<TEntity> : IBaseRepo<TEntity> where TEntity : class
     {
 
         public BaseRepo() { }
 
-        public Task<OperationResult<TResponse>> Create(TRequest requestModel)
+        public Task<OperationResult<TEntity>> Create(TEntity requestModel)
         {
             throw new NotImplementedException();
         }
@@ -19,27 +20,27 @@ namespace Repository.Implement
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult<Pagination<TResponse>>> GetAccountPaginationAsync(int pageIndex = 0, int pageSize = 10)
+        public Task<OperationResult<Pagination<TEntity>>> GetAccountPaginationAsync(int pageIndex = 0, int pageSize = 10)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult<IEnumerable<TResponse>>> GetAll(Expression<Func<TRequest, bool>>? predicate)
+        public Task<OperationResult<IEnumerable<TEntity>>> GetAll(Expression<Func<TEntity, bool>>? predicate)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult<TResponse>> GetById(int Id)
+        public Task<OperationResult<TEntity>> GetById(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult<TResponse>> GetByPredicate(Expression<Func<TRequest, bool>>? predicate)
+        public Task<OperationResult<TEntity>> GetByPredicate(Expression<Func<TEntity, bool>>? predicate)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult<TResponse>> Update(int Id, TRequest requestModel)
+        public Task<OperationResult<TEntity>> Update(int Id, TEntity requestModel)
         {
             throw new NotImplementedException();
         }

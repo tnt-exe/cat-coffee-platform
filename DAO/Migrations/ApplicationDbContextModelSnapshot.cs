@@ -17,7 +17,7 @@ namespace DAO.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.14")
+                .HasAnnotation("ProductVersion", "6.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -55,31 +55,6 @@ namespace DAO.Migrations
                     b.ToTable("Areas");
                 });
 
-            modelBuilder.Entity("BusinessObject.Model.Bill", b =>
-                {
-                    b.Property<int>("BillId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillId"), 1L, 1);
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalMoney")
-                        .HasColumnType("money");
-
-                    b.HasKey("BillId");
-
-                    b.HasIndex("BookingId")
-                        .IsUnique();
-
-                    b.ToTable("Bills");
-                });
-
             modelBuilder.Entity("BusinessObject.Model.Booking", b =>
                 {
                     b.Property<int>("BookingId")
@@ -100,6 +75,9 @@ namespace DAO.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Slots")
                         .HasColumnType("int");
 
@@ -112,8 +90,8 @@ namespace DAO.Migrations
                     b.Property<decimal>("TotalMoney")
                         .HasColumnType("money");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("BookingId");
 
@@ -175,6 +153,9 @@ namespace DAO.Migrations
                     b.Property<int>("HealthyStatus")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("CatId");
 
                     b.HasIndex("AreaId");
@@ -229,8 +210,8 @@ namespace DAO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ManagerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ManagerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<TimeSpan>("OpeningTime")
                         .HasColumnType("time");
@@ -242,38 +223,6 @@ namespace DAO.Migrations
                     b.HasKey("CoffeeShopId");
 
                     b.ToTable("CoffeeShops");
-                });
-
-            modelBuilder.Entity("BusinessObject.Model.Payment", b =>
-                {
-                    b.Property<int>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"), 1L, 1);
-
-                    b.Property<string>("AccountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CardType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PaymentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("BusinessObject.Model.Product", b =>
@@ -332,18 +281,27 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("BusinessObject.Model.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<int?>("CoffeeShopId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -355,30 +313,46 @@ namespace DAO.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<int?>("ManagerShopId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<byte?>("Role")
                         .HasColumnType("tinyint");
 
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte?>("Status")
                         .HasColumnType("tinyint");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CoffeeShopId");
 
@@ -387,6 +361,38 @@ namespace DAO.Migrations
                         .HasFilter("[ManagerShopId] IS NOT NULL");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BusinessObject.Model.Wallet", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"), 1L, 1);
+
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("BusinessObject.Model.Area", b =>
@@ -398,17 +404,6 @@ namespace DAO.Migrations
                         .IsRequired();
 
                     b.Navigation("CoffeeShop");
-                });
-
-            modelBuilder.Entity("BusinessObject.Model.Bill", b =>
-                {
-                    b.HasOne("BusinessObject.Model.Booking", "Booking")
-                        .WithOne("Bill")
-                        .HasForeignKey("BusinessObject.Model.Bill", "BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("BusinessObject.Model.Booking", b =>
@@ -432,7 +427,7 @@ namespace DAO.Migrations
                         .IsRequired();
 
                     b.HasOne("BusinessObject.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -484,17 +479,6 @@ namespace DAO.Migrations
                     b.Navigation("CoffeeShop");
                 });
 
-            modelBuilder.Entity("BusinessObject.Model.Payment", b =>
-                {
-                    b.HasOne("BusinessObject.Model.User", "User")
-                        .WithMany("Payments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BusinessObject.Model.Product", b =>
                 {
                     b.HasOne("BusinessObject.Model.Category", "Category")
@@ -540,10 +524,19 @@ namespace DAO.Migrations
                     b.Navigation("ManagedCoffeeShop");
                 });
 
+            modelBuilder.Entity("BusinessObject.Model.Wallet", b =>
+                {
+                    b.HasOne("BusinessObject.Model.User", "User")
+                        .WithMany("Wallets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BusinessObject.Model.Booking", b =>
                 {
-                    b.Navigation("Bill");
-
                     b.Navigation("BookingProducts");
                 });
 
@@ -576,7 +569,9 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("BusinessObject.Model.User", b =>
                 {
-                    b.Navigation("Payments");
+                    b.Navigation("Bookings");
+
+                    b.Navigation("Wallets");
                 });
 #pragma warning restore 612, 618
         }
