@@ -55,6 +55,7 @@ namespace Repository.Implement
                 if (cat is null || cat.IsDeleted)
                 {
                     result.AddError(ErrorCode.NotFound, "No cat found");
+                    return result;
                 }
 
                 cat!.IsDeleted = true;
@@ -83,6 +84,7 @@ namespace Repository.Implement
             if (cat == null)
             {
                 result.AddError(ErrorCode.NotFound, "No cat found");
+                return result;
             }
             var catDto = _mapper.Map<CatDto>(cat);
             result.Payload = catDto;
@@ -92,22 +94,24 @@ namespace Repository.Implement
 
         public async Task<OperationResult<IEnumerable<CatDto>>> GetCats()
         {
+            var result = new OperationResult<IEnumerable<CatDto>>
+            {
+                IsError = false,
+            };
+
             string[] includeProperties = { nameof(Area), nameof(CoffeeShop) };
             var catListQueryable = _unitOfWork.CatDAO.Get(filter: catEntity => !catEntity.IsDeleted,
                                                         includeProperties: includeProperties)
                                                         .ToList();
             var catList = _mapper.Map<IEnumerable<CatDto>>(catListQueryable);
 
-            var result = new OperationResult<IEnumerable<CatDto>>()
-            {
-                Payload = catList,
-                IsError = false,
-            };
-
             if (catList == null)
             {
                 result.AddError(ErrorCode.NotFound, "No cat found");
+                return result;
             }
+
+            result.Payload = catList;
 
             return result;
         }
@@ -125,6 +129,7 @@ namespace Repository.Implement
                 if (catEntity is null || catEntity.IsDeleted)
                 {
                     result.AddError(ErrorCode.NotFound, "No cat found");
+                    return result;
                 }
                 var catEntityUpdate = _mapper.Map<Cat>(catUpdate);
 
