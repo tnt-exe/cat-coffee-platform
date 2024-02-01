@@ -10,7 +10,13 @@ namespace CatCoffeePlatformAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.PropertyNamingPolicy = null;
+                o.JsonSerializerOptions.DictionaryKeyPolicy = null;
+            })
+                .AddNewtonsoftJson(option =>
+                    option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
