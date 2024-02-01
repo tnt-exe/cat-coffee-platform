@@ -1,4 +1,4 @@
-﻿using BusinessObject.Model;
+﻿using CatCoffeePlatformAPI.Controllers.Base;
 using DTO.CatDTO;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
@@ -7,7 +7,7 @@ namespace CatCoffeePlatformAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CatsController : ControllerBase
+    public class CatsController : BaseController
     {
         private readonly ICatRepo _catRepo;
 
@@ -17,27 +17,21 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CatDto>>> GetCats()
+        public async Task<IActionResult> GetCats()
         {
             var result = await _catRepo.GetCats();
-            if (result.IsError)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Payload);
+            return result.IsError
+                ? HandleErrorResponse(result.Errors)
+                : Ok(result.Payload);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CatDto>> GetCat(int id)
+        public async Task<IActionResult> GetCat(int id)
         {
             var result = await _catRepo.GetCatById(id);
-            if (result.IsError)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Payload);
+            return result.IsError
+                ? HandleErrorResponse(result.Errors)
+                : Ok(result.Payload);
         }
 
         [HttpPut("{id}")]
@@ -45,7 +39,8 @@ namespace CatCoffeePlatformAPI.Controllers
         {
             if (id != cat.CatId)
             {
-                return BadRequest("Invalid id");
+                ModelState.AddModelError("CatId", "CatId is not match");
+                return BadRequest(ModelState);
             }
             if (!ModelState.IsValid)
             {
@@ -53,15 +48,13 @@ namespace CatCoffeePlatformAPI.Controllers
             }
 
             var result = await _catRepo.UpdateCat(cat);
-            if (result.IsError)
-            {
-                return BadRequest(result.Errors);
-            }
-            return Ok(result.Payload);
+            return result.IsError
+                ? HandleErrorResponse(result.Errors)
+                : Ok(result.Payload);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cat>> PostCat(CatCreate cat)
+        public async Task<IActionResult> PostCat(CatCreate cat)
         {
             if (!ModelState.IsValid)
             {
@@ -69,23 +62,18 @@ namespace CatCoffeePlatformAPI.Controllers
             }
 
             var result = await _catRepo.CreateCat(cat);
-            if (result.IsError)
-            {
-                return BadRequest(result.Errors);
-            }
-            return Ok(result.Payload);
+            return result.IsError
+                ? HandleErrorResponse(result.Errors)
+                : Ok(result.Payload);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCat(int id)
         {
             var result = await _catRepo.DeleteCat(id);
-            if (result.IsError)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return NoContent();
+            return result.IsError
+                ? HandleErrorResponse(result.Errors)
+                : Ok(result.Payload);
         }
     }
 }
