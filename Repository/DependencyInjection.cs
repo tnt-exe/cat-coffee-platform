@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BusinessObject.Model;
+using Microsoft.Extensions.DependencyInjection;
 using Repository.Implement;
 using Repository.Interface;
 using Repository.MapperConfig;

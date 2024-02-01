@@ -1,4 +1,7 @@
+using DAO.UnitOfWork;
 using Repository;
+using Repository.Implement;
+using Repository.Interface;
 
 namespace CatCoffeePlatformAPI
 {
@@ -15,6 +18,10 @@ namespace CatCoffeePlatformAPI
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddRepositories();
+            
+            // Add Repository to the container
+            builder.Services.AddScoped<UnitOfWork>();
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 
             var app = builder.Build();
 
@@ -28,8 +35,7 @@ namespace CatCoffeePlatformAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-
+            
             app.MapControllers();
 
             app.Run();

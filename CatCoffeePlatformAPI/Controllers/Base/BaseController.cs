@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CatCoffeePlatformAPI.Controllers.Base
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class BaseController : ControllerBase
     {
-        protected IActionResult HandleErrorResponse(List<Error> errors)
+        protected IActionResult HandleErrorResponse(List<ErrorHelper> errors)
         {
             if (errors.Any(e => e.Code == ErrorCode.UnAuthorize))
             {

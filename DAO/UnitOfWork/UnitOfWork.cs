@@ -184,9 +184,9 @@ namespace DAO.UnitOfWork
         }
         #endregion
 
-        public async Task SaveAsync()
+        public async Task<int> SaveAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;
