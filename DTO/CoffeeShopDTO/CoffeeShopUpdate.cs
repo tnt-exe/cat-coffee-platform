@@ -1,8 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DTO.CoffeeShopDTO
 {
-    public class CoffeeShopCreate
+    public class CoffeeShopUpdate
     {
         public int CoffeeShopId { get; set; }
         [Required]
@@ -15,9 +20,8 @@ namespace DTO.CoffeeShopDTO
         public string ContactNumber { get; set; } = "00-0000-000";
 
         [Required]
-        [DataType(DataType.EmailAddress)]
-        [EmailAddress]
         public string? Email { get; set; }
         public string? Description { get; set; }
+        public bool Deleted { get; set; }
     }
 }

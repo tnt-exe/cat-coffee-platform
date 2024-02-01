@@ -22,6 +22,7 @@ namespace BusinessObject.Model
         public string? Email { get; set; }
         public string? Description { get; set; }
 
+        public bool Deleted { get; set; } = false;
         public User? Manager { get; set; }
         public int ManagerId { get; set; }
 
