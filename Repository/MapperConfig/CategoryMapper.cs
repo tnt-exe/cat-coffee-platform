@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BusinessObject.Model;
+using DTO.CategoryDTO;
 
 namespace Repository.MapperConfig
 {
@@ -7,6 +9,7 @@ namespace Repository.MapperConfig
         void CategoryMapper()
         {
             //CreateMap
+            CreateMap<CategoryCreate,Category>().ReverseMap();
         }
     }
 }

@@ -1,3 +1,4 @@
+using DAO.UnitOfWork;
 using BusinessObject.Enums;
 using BusinessObject.Model;
 using CatCoffeePlatformAPI.Permission;
@@ -11,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository;
+using Repository.Implement;
+using Repository.Interface;
 using System.Data;
 using System.Text.Json;
 
@@ -189,6 +192,10 @@ namespace CatCoffeePlatformAPI
             });
 
             builder.Services.AddRepositories();
+            
+            // Add Repository to the container
+            builder.Services.AddScoped<UnitOfWork>();
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 
             var app = builder.Build();
 
@@ -233,8 +240,7 @@ namespace CatCoffeePlatformAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-
+            
             app.MapControllers();
 
             app.Run();

@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Repository.Interface
 {
-    public interface IBaseRepo<TRequest, TResponse> where TRequest : class where TResponse : class
+    public interface IBaseRepo<TEntity> where TEntity : class
     {
-        Task<OperationResult<IEnumerable<TResponse>>> GetAll(Expression<Func<TRequest, bool>>? predicate);
-        Task<OperationResult<TResponse>> GetById(int Id);
-        Task<OperationResult<TResponse>> GetByPredicate(Expression<Func<TRequest, bool>>? predicate);
-        Task<OperationResult<TResponse>> Create(TRequest requestModel);
+        Task<OperationResult<IEnumerable<TEntity>>> GetAll(Expression<Func<TEntity, bool>>? predicate);
+        Task<OperationResult<TEntity>> GetById(int id);
+        Task<OperationResult<TEntity>> GetByPredicate(Expression<Func<TEntity, bool>>? predicate);
+        Task<OperationResult<TEntity>> Create(TEntity requestModel);
         Task<OperationResult<bool>> Delete(int id);
-        Task<OperationResult<TResponse>> Update(int Id, TRequest requestModel);
-        Task<OperationResult<Pagination<TResponse>>> GetAccountPaginationAsync(int pageIndex = 0, int pageSize = 10);
+        Task<OperationResult<TEntity>> Update(int id, TEntity requestModel);
+        Task<OperationResult<Pagination<TEntity>>> GetAccountPaginationAsync(int pageIndex = 0, int pageSize = 10);
     }
 }

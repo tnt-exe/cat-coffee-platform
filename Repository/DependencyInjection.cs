@@ -1,4 +1,4 @@
-﻿using DAO.Context;
+using DAO.Context;
 using DAO.Helper;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +13,7 @@ public static class DependencyInjection
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         #region Repositories
+
         services.AddScoped<IAreaRepo, AreaRepo>();
         services.AddScoped<IBillRepo, BillRepo>();
         services.AddScoped<IBookingProductRepo, BookingProductRepo>();
@@ -24,10 +25,13 @@ public static class DependencyInjection
         services.AddScoped<IProductRepo, ProductRepo>();
         services.AddScoped<ITimeFrameRepo, TimeFrameRepo>();
         services.AddScoped<IUserRepo, UserRepo>();
+
         #endregion
 
         #region Helper
+
         services.AddScoped<IValidateGet, ValidateGet>();
+
         #endregion
 
         services.AddSingleton<IDesignTimeDbContextFactory<ApplicationDbContext>, DbContextFactory>();
