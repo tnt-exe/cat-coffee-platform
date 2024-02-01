@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240121233119_InitDb")]
-    partial class InitDb
+    [Migration("20240131194238_AddSoftDeleteCat")]
+    partial class AddSoftDeleteCat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,6 +176,9 @@ namespace DAO.Migrations
 
                     b.Property<int>("HealthyStatus")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("CatId");
 

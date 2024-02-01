@@ -6,31 +6,33 @@ namespace DAO.Generic
 {
     public class BaseDAO<TEntity> where TEntity : class
     {
-        private ApplicationDbContext _context;
-        private DbSet<TEntity> dbSet;
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<TEntity> _dbSet;
 
         public BaseDAO(ApplicationDbContext context)
         {
             _context = context;
-            dbSet = _context.Set<TEntity>();
+            _dbSet = _context.Set<TEntity>();
         }
 
         public virtual IQueryable<TEntity> Get(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "")
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            string[]? includeProperties = null)
         {
-            IQueryable<TEntity> query = dbSet;
+            IQueryable<TEntity> query = _dbSet;
 
             if (filter != null)
             {
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            if (includeProperties != null)
             {
-                query = query.Include(includeProperty);
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
             }
 
             if (orderBy != null)
@@ -45,22 +47,22 @@ namespace DAO.Generic
 
         public virtual async Task<TEntity> GetByIDAsync(object id)
         {
-            return await dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public virtual async Task<TEntity> GetByIDAsync(params object[] keyValues)
         {
-            return await dbSet.FindAsync(keyValues);
+            return await _dbSet.FindAsync(keyValues);
         }
 
         public virtual async Task Insert(TEntity entity)
         {
-            await dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
         }
 
         public virtual void Delete(object id)
         {
-            TEntity entityToDelete = dbSet.Find(id);
+            TEntity entityToDelete = _dbSet.Find(id);
             Delete(entityToDelete);
         }
 
@@ -68,14 +70,14 @@ namespace DAO.Generic
         {
             if (_context.Entry(entityToDelete).State == EntityState.Detached)
             {
-                dbSet.Attach(entityToDelete);
+                _dbSet.Attach(entityToDelete);
             }
-            dbSet.Remove(entityToDelete);
+            _dbSet.Remove(entityToDelete);
         }
 
         public virtual void Update(TEntity entityToUpdate)
         {
-            dbSet.Attach(entityToUpdate);
+            _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
         }
     }

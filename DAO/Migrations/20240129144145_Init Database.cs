@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAO.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class InitDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,7 +35,7 @@ namespace DAO.Migrations
                     ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ManagerId = table.Column<int>(type: "int", nullable: false)
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,22 +118,31 @@ namespace DAO.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Role = table.Column<byte>(type: "tinyint", nullable: true),
                     Status = table.Column<byte>(type: "tinyint", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CoffeeShopId = table.Column<int>(type: "int", nullable: true),
-                    ManagerShopId = table.Column<int>(type: "int", nullable: true)
+                    ManagerShopId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Users_CoffeeShops_CoffeeShopId",
                         column: x => x.CoffeeShopId,
@@ -185,10 +194,11 @@ namespace DAO.Migrations
                     Date = table.Column<DateTime>(type: "date", nullable: false),
                     Slots = table.Column<int>(type: "int", nullable: false),
                     TotalMoney = table.Column<decimal>(type: "money", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     AreaId = table.Column<int>(type: "int", nullable: false),
                     TimeFrameId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CoffeeShopId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -216,12 +226,12 @@ namespace DAO.Migrations
                         name: "FK_Booking_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payments",
+                name: "Wallets",
                 columns: table => new
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
@@ -230,37 +240,16 @@ namespace DAO.Migrations
                     PaymentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CardType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BankName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
+                    table.PrimaryKey("PK_Wallets", x => x.PaymentId);
                     table.ForeignKey(
-                        name: "FK_Payments_Users_UserId",
+                        name: "FK_Wallets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Bills",
-                columns: table => new
-                {
-                    BillId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalMoney = table.Column<decimal>(type: "money", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bills", x => x.BillId);
-                    table.ForeignKey(
-                        name: "FK_Bills_Booking_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Booking",
-                        principalColumn: "BookingId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -294,12 +283,6 @@ namespace DAO.Migrations
                 name: "IX_Areas_CoffeeShopId",
                 table: "Areas",
                 column: "CoffeeShopId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bills_BookingId",
-                table: "Bills",
-                column: "BookingId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Booking_AreaId",
@@ -337,11 +320,6 @@ namespace DAO.Migrations
                 column: "CoffeeShopId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_UserId",
-                table: "Payments",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -367,13 +345,15 @@ namespace DAO.Migrations
                 column: "ManagerShopId",
                 unique: true,
                 filter: "[ManagerShopId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wallets_UserId",
+                table: "Wallets",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Bills");
-
             migrationBuilder.DropTable(
                 name: "BookingProducts");
 
@@ -381,7 +361,7 @@ namespace DAO.Migrations
                 name: "Cats");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "Wallets");
 
             migrationBuilder.DropTable(
                 name: "Booking");

@@ -1,11 +1,14 @@
 ﻿using BusinessObject.Model;
 using DAO.Helper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace DAO.Context
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public ApplicationDbContext() : base()
         {
@@ -17,16 +20,14 @@ namespace DAO.Context
         }
 
         public DbSet<Area> Areas { get; set; } = default!;
-        public DbSet<Bill> Bills { get; set; } = default!;
         public DbSet<Booking> Booking { get; set; } = default!;
         public DbSet<BookingProduct> BookingProducts { get; set; } = default!;
         public DbSet<Cat> Cats { get; set; } = default!;
         public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<CoffeeShop> CoffeeShops { get; set; } = default!;
-        public DbSet<Payment> Payments { get; set; } = default!;
+        public DbSet<Wallet> Wallets { get; set; } = default!;
         public DbSet<Product> Products { get; set; } = default!;
         public DbSet<TimeFrame> TimeFrames { get; set; } = default!;
-        public DbSet<User> Users { get; set; } = default!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,7 +48,7 @@ namespace DAO.Context
 
             builder.Properties<DateOnly>()
                 .HaveConversion<DateOnlyConverter, DateOnlyComparer>()
-                .HaveColumnType("date"); ;
+                .HaveColumnType("date");
 
             builder.Properties<TimeOnly>()
                 .HaveConversion<TimeOnlyConverter, TimeOnlyComparer>();
@@ -90,6 +91,28 @@ namespace DAO.Context
                     .WithOne(booking => booking.CoffeeShop)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Ignore<IdentityRole<Guid>>();
+            modelBuilder.Ignore<IdentityUserRole<Guid>>();
+            modelBuilder.Ignore<IdentityUserClaim<Guid>>();
+            modelBuilder.Ignore<IdentityUserLogin<Guid>>();
+            modelBuilder.Ignore<IdentityUserToken<Guid>>();
+            modelBuilder.Ignore<IdentityRoleClaim<Guid>>();
+        }
+    }
+
+    public class DbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    {
+        public ApplicationDbContext CreateDbContext(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CatCoffeeShopDB")!);
+            return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
 }

@@ -2,8 +2,10 @@
 
 namespace DTO.CatDTO
 {
-    public class CatCreate
+    public class CatUpdate
     {
+        public int CatId { get; set; }
+
         [Required]
         [MinLength(5)]
         [MaxLength(50)]
@@ -17,7 +19,5 @@ namespace DTO.CatDTO
 
         [Required]
         public int AreaId { get; set; }
-
-        public int? CoffeeShopId { get; set; }
     }
 }

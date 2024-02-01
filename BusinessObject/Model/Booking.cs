@@ -12,6 +12,7 @@ namespace BusinessObject.Model
         public int Slots { get; set; }
         [Column(TypeName = "money")]
         public Decimal TotalMoney { get; set; }
+        public DateTime PaymentDate { get; set; }
         public int Status { get; set; }
 
         public int AreaId { get; set; }
@@ -20,13 +21,11 @@ namespace BusinessObject.Model
         public int TimeFrameId { get; set; }
         public TimeFrame? TimeFrame { get; set; }
 
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public User? User { get; set; }
 
         public int CoffeeShopId { get; set; }
         public CoffeeShop? CoffeeShop { get; set; }
-
-        public Bill? Bill { get; set; }
 
         public IEnumerable<BookingProduct> BookingProducts { get; set; } = new List<BookingProduct>();
 

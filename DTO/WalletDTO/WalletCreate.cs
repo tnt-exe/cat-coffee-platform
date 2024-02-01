@@ -1,6 +1,6 @@
 ﻿namespace DTO.PaymentDTO
 {
-    public class PaymentCreate
+    public class WalletCreate
     {
     }
 }

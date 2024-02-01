@@ -1,0 +1,52 @@
+﻿@page "/"
+@model LoginModel
+@{
+    ViewData["Title"] = "Login page";
+}
+
+<div style="position: fixed; top: 15%; right: 10%; width: 25%;">
+    @{
+        if (ViewData["warning"] != null)
+        {
+            <div class="alert alert-info">
+                @ViewData["warning"]
+            </div>
+        }
+        var data = (List<string>?)ViewData["errors"];
+        if (data != null)
+        {
+            <div style="margin-top:20px">
+                @foreach (var item in data)
+                {
+                    <div class="alert alert-danger" style="margin-top:10px">
+                        @item
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+<section class="main">
+    <h2>Sign in</h2>
+
+    <form method="post" class="w-100">
+        <div class="main_content_container">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <p>Email</p>
+                <input style="border: 1px solid #ddd; padding: 6px 10px; width: 100%" asp-for="UserLogin.UserName" />
+                <span asp-validation-for="UserLogin.UserName" class="text-danger"></span>
+            </div>
+            <div>
+                <p>Password</p>
+                <input style="border: 1px solid #ddd; padding: 6px 10px; width: 100%" type="password" asp-for="UserLogin.Password" />
+                <span asp-validation-for="UserLogin.Password"></span>
+            </div>
+            <div>
+                <p>Don't have an account? <a style="color: #a4d587" href="./Register">Register</a> Here!</p>
+            </div>
+            <button type="submit">Login</button>
+        </div>
+    </form>
+</section>
