@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BusinessObject.Model;
+using DTO.CoffeeShopDTO;
 
 namespace Repository.MapperConfig
 {
@@ -6,7 +8,7 @@ namespace Repository.MapperConfig
     {
         void CoffeeShopMapper()
         {
-            //CreateMap
+            CreateMap<CoffeeShop, CoffeeShopResponseDTO>();
         }
     }
 }

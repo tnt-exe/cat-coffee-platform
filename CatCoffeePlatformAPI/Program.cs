@@ -28,7 +28,7 @@ namespace CatCoffeePlatformAPI
             var Configuration = builder.Configuration;
 
             // Add services to the container.
-
+          
             // Add CORS
             builder.Services.AddCors(o =>
             {
