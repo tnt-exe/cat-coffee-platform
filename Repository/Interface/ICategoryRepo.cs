@@ -7,8 +7,8 @@ namespace Repository.Interface
 {
     public interface ICategoryRepo
     {
-        Task<OperationResult<IEnumerable<Category>>> GetAll(Expression<Func<Category, bool>>? filter, Func<IQueryable<Category>, IOrderedQueryable<Category>>? orderBy = null,
-            string[]? includeProperties = null);
+        Task<OperationResult<IEnumerable<Category>>> GetAll(Expression<Func<Category, bool>>? filter,
+             int? pageIndex = 0, int? pageSize = 10, string[]? includeProperties = null);
         Task<OperationResult<Category>> GetById(int id);
         Task<OperationResult<Category>> GetByFilter(Expression<Func<Category, bool>>? filter);
         Task<OperationResult<Category>> Create(CategoryCreate requestModel);
