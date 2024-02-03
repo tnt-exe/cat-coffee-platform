@@ -1,5 +1,6 @@
 using DAO.Context;
 using DAO.Helper;
+using DAO.UnitOfWork;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
 using Repository.Implement;
