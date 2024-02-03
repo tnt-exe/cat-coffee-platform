@@ -80,7 +80,7 @@ namespace Repository.Implement
             return Task.FromResult(result);
         }
 
-        public async Task<OperationResult<Category>> Create(CategoryCreate requestModel)
+        public async Task<OperationResult<Category>> Create(CategoryUpsert requestModel)
         {
             
             var result = new OperationResult<Category>();
@@ -140,7 +140,7 @@ namespace Repository.Implement
             return result;
         }
 
-        public async Task<OperationResult<Category>> Update(int id, Category requestModel)
+        public async Task<OperationResult<Category>> Update(int id, CategoryUpsert requestModel)
         {
             var result = new OperationResult<Category>();
             try

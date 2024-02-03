@@ -1,7 +1,10 @@
-﻿namespace DTO.CategoryDTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DTO.CategoryDTO
 {
-    public record CategoryCreate
+    public record CategoryUpsert
     {
+        [Required]
         public string CategoryName { get; init; }
     }
 }

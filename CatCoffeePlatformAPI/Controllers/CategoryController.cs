@@ -1,4 +1,5 @@
-﻿using BusinessObject.Model;
+﻿using System.ComponentModel.DataAnnotations;
+using BusinessObject.Model;
 using CatCoffeePlatformAPI.Controllers.Base;
 using DTO.CategoryDTO;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +21,7 @@ namespace CatCoffeePlatformAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(
             [FromQuery] int? categoryId,
-            [FromQuery]string? categoryName, 
+            [FromQuery] string? categoryName,
             [FromQuery] int? pageIndex = 0,
             [FromQuery] int? pageSize = 10)
         {
@@ -31,7 +32,7 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpPost]
-            public async Task<IActionResult> Create([FromBody] CategoryCreate category)
+            public async Task<IActionResult> Create([FromBody] CategoryUpsert category)
             {
                 var response = await _categoryRepo.Create(category);
                 return response.IsError
@@ -47,7 +48,7 @@ namespace CatCoffeePlatformAPI.Controllers
             }
 
             [HttpPut("{id}")]
-            public async Task<IActionResult> Update(int id, [FromBody] Category category)
+            public async Task<IActionResult> Update([Required]int id, [FromBody]CategoryUpsert category)
             {
                 var response = await _categoryRepo.Update(id, category);
                 return response.IsError ? HandleErrorResponse(response.Errors) : Ok(response.Payload);
