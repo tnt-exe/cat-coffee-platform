@@ -11,6 +11,5 @@ namespace Repository.Interface
         Task<OperationResult<CoffeeShop>> GetByID(int id);
         Task<OperationResult<CoffeeShopResponseDTO>> Update(CoffeeShopUpdate resource, int id);
         Task<OperationResult<object>> Deleted(int id);
-        Task<OperationResult<object>> CheckEmail(string email);
     }
 }
