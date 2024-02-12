@@ -2,8 +2,10 @@
 
 namespace DTO.TimeFrameDTO
 {
-    public record TimeFrameCreate
+    public record TimeFrameUpdate
     {
+        public int TimeFrameId { get; set; }
+
         [Required]
         public TimeOnly StartTime { get; set; }
 
@@ -13,7 +15,5 @@ namespace DTO.TimeFrameDTO
         [Required]
         [Range(1, 9999, ErrorMessage = "Invalid Price")]
         public decimal Price { get; set; }
-
-        public int CoffeeShopId { get; set; }
     }
 }
