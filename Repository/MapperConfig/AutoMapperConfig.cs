@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DAO.UnitOfWork;
 
 namespace Repository.MapperConfig
 {
