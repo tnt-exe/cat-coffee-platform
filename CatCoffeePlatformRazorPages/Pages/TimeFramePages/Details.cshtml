@@ -1,0 +1,43 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.TimeFramePages.DetailsModel
+
+@{
+    ViewData["Title"] = "Time Frame Details";
+}
+
+<h1>Time Frame Details</h1>
+
+<div>
+    <h4>TimeFrame</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeFrame.StartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeFrame.StartTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeFrame.EndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeFrame.EndTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeFrame.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TimeFrame.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeFrame.CoffeeShop)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeFrame.CoffeeShop)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.TimeFrame?.TimeFrameId" class="btn btn-primary">Edit</a> |
+    <a asp-page="./Index" class="btn btn-primary">Back</a>
+</div>
