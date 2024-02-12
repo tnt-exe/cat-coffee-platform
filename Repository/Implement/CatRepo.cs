@@ -23,7 +23,7 @@ namespace Repository.Implement
         {
             var result = new OperationResult<CatCreate>
             {
-                IsError = false,
+                IsError = false
             };
 
             try
@@ -46,7 +46,7 @@ namespace Repository.Implement
         {
             var result = new OperationResult<object>
             {
-                IsError = false,
+                IsError = false
             };
 
             try
@@ -73,15 +73,16 @@ namespace Repository.Implement
         {
             var result = new OperationResult<CatDto>
             {
-                IsError = false,
+                IsError = false
             };
 
             string[] includeProperties = { nameof(Area), nameof(CoffeeShop) };
-            var cat = await _unitOfWork.CatDAO.Get(filter: catEntity => catEntity.CatId == id && !catEntity.IsDeleted,
-                                            includeProperties: includeProperties)
-                                            .SingleOrDefaultAsync();
+            var cat = await _unitOfWork.CatDAO
+                .Get(filter: catEntity => catEntity.CatId == id && !catEntity.IsDeleted,
+                    includeProperties: includeProperties)
+                .FirstOrDefaultAsync();
 
-            if (cat == null)
+            if (cat is null)
             {
                 result.AddError(ErrorCode.NotFound, "No cat found");
                 return result;
@@ -96,16 +97,17 @@ namespace Repository.Implement
         {
             var result = new OperationResult<IEnumerable<CatDto>>
             {
-                IsError = false,
+                IsError = false
             };
 
             string[] includeProperties = { nameof(Area), nameof(CoffeeShop) };
-            var catListQueryable = _unitOfWork.CatDAO.Get(filter: catEntity => !catEntity.IsDeleted,
-                                                        includeProperties: includeProperties)
-                                                        .ToList();
+            var catListQueryable = await _unitOfWork.CatDAO
+                .Get(filter: catEntity => !catEntity.IsDeleted,
+                    includeProperties: includeProperties)
+                .ToListAsync();
             var catList = _mapper.Map<IEnumerable<CatDto>>(catListQueryable);
 
-            if (catList == null)
+            if (catList is null || !catList.Any())
             {
                 result.AddError(ErrorCode.NotFound, "No cat found");
                 return result;
@@ -120,26 +122,28 @@ namespace Repository.Implement
         {
             var result = new OperationResult<CatUpdate>
             {
-                IsError = false,
+                IsError = false
             };
 
             try
             {
-                var catEntity = await _unitOfWork.CatDAO.GetByIDAsync(catUpdate.CatId);
-                if (catEntity is null || catEntity.IsDeleted)
+                var catEntity = await _unitOfWork.CatDAO
+                    .Get(c => c.CatId == catUpdate.CatId
+                        && !c.IsDeleted)
+                    .FirstOrDefaultAsync();
+
+                if (catEntity is null)
                 {
                     result.AddError(ErrorCode.NotFound, "No cat found");
                     return result;
                 }
-                var catEntityUpdate = _mapper.Map<Cat>(catUpdate);
 
-                catEntityUpdate.IsDeleted = catEntity!.IsDeleted;
-                catEntityUpdate.CoffeeShopId = catEntity.CoffeeShopId;
+                _mapper.Map(catUpdate, catEntity);
 
-                _unitOfWork.CatDAO.Update(catEntityUpdate);
+                _unitOfWork.CatDAO.Update(catEntity);
                 await _unitOfWork.SaveAsync();
 
-                result.Payload = _mapper.Map<CatUpdate>(catEntityUpdate);
+                result.Payload = _mapper.Map<CatUpdate>(catEntity);
             }
             catch (Exception ex)
             {
