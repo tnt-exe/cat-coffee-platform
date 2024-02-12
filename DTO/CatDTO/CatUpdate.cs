@@ -2,7 +2,7 @@
 
 namespace DTO.CatDTO
 {
-    public class CatUpdate
+    public record CatUpdate
     {
         public int CatId { get; set; }
 

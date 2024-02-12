@@ -10,13 +10,14 @@ namespace CatCoffeePlatformAPI.Controllers
     public class CatsController : BaseController
     {
         private readonly ICatRepo _catRepo;
-
         public CatsController(ICatRepo catRepo)
         {
             _catRepo = catRepo;
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<CatDto>), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetCats()
         {
             var result = await _catRepo.GetCats();
@@ -26,7 +27,9 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCat(int id)
+        [ProducesResponseType(typeof(CatDto), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetCatById(int id)
         {
             var result = await _catRepo.GetCatById(id);
             return result.IsError
@@ -35,11 +38,14 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCat(int id, CatUpdate cat)
+        [ProducesResponseType(typeof(CatUpdate), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateCat(int id, CatUpdate cat)
         {
             if (id != cat.CatId)
             {
-                ModelState.AddModelError("CatId", "CatId is not match");
+                ModelState.AddModelError("CatId", "CatId is not valid");
                 return BadRequest(ModelState);
             }
             if (!ModelState.IsValid)
@@ -54,7 +60,9 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostCat(CatCreate cat)
+        [ProducesResponseType(typeof(CatCreate), 200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> CreateCat(CatCreate cat)
         {
             if (!ModelState.IsValid)
             {
@@ -68,12 +76,14 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteCat(int id)
         {
             var result = await _catRepo.DeleteCat(id);
             return result.IsError
                 ? HandleErrorResponse(result.Errors)
-                : Ok(result.Payload);
+                : NoContent();
         }
     }
 }
