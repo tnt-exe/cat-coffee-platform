@@ -17,8 +17,10 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
 
         public async Task OnGetAsync()
         {
-            var areaList = await _apiArea
-                .GetAsync<IEnumerable<AreaDto>>();
+            var apiResponse = await _apiArea
+                .GetAsync<ResponseBody<IEnumerable<AreaDto>>>();
+            var areaList = apiResponse!.Result;
+
             if (areaList is not null)
             {
                 Area = areaList;

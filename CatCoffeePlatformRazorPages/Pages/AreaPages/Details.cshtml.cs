@@ -23,7 +23,8 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
                 return NotFound();
             }
 
-            var area = await _apiArea.GetAsync<AreaDto>($"{id}");
+            var apiResponse = await _apiArea.GetAsync<ResponseBody<AreaDto>>($"{id}");
+            var area = apiResponse!.Result;
             if (area == null)
             {
                 return NotFound();
