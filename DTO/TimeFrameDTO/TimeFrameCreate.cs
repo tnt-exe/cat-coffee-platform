@@ -1,14 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DTO.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTO.TimeFrameDTO
 {
     public record TimeFrameCreate
     {
         [Required]
-        public TimeOnly StartTime { get; set; }
+        [TimeValidator]
+        public string? StartTime { get; set; }
 
         [Required]
-        public TimeOnly EndTime { get; set; }
+        [TimeValidator]
+        public string? EndTime { get; set; }
 
         [Required]
         [Range(1, 9999, ErrorMessage = "Invalid Price")]

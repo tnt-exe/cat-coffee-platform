@@ -12,9 +12,25 @@ namespace Repository.MapperConfig
             CreateMap<TimeFrame, TimeFrameDto>()
                 .ForMember(dest => dest.CoffeeShop,
                             opt => opt.MapFrom(src => src.CoffeeShop!.ShopName))
+                .ForMember(dest => dest.StartTime,
+                            opt => opt.MapFrom(src => src.StartTime.ToString("HH:mm")))
+                .ForMember(dest => dest.EndTime,
+                            opt => opt.MapFrom(src => src.EndTime.ToString("HH:mm")))
                 .ReverseMap();
-            CreateMap<TimeFrame, TimeFrameCreate>().ReverseMap();
-            CreateMap<TimeFrame, TimeFrameUpdate>().ReverseMap();
+
+            CreateMap<TimeFrameCreate, TimeFrame>()
+                .ForMember(dest => dest.StartTime,
+                            opt => opt.MapFrom(src => TimeOnly.Parse(src.StartTime!)))
+                .ForMember(dest => dest.EndTime,
+                            opt => opt.MapFrom(src => TimeOnly.Parse(src.EndTime!)))
+                .ReverseMap();
+
+            CreateMap<TimeFrameUpdate, TimeFrame>()
+                .ForMember(dest => dest.StartTime,
+                            opt => opt.MapFrom(src => TimeOnly.Parse(src.StartTime!)))
+                .ForMember(dest => dest.EndTime,
+                            opt => opt.MapFrom(src => TimeOnly.Parse(src.EndTime!)))
+                .ReverseMap();
         }
     }
 }

@@ -3,8 +3,8 @@
     public record TimeFrameDto
     {
         public int TimeFrameId { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
 
         public decimal Price { get; set; }
 

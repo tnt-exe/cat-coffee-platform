@@ -15,12 +15,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TimeFrame.StartTime" class="control-label"></label>
-                <input asp-for="TimeFrame.StartTime" class="form-control" />
+                <input asp-for="TimeFrame.StartTime" type="time" class="form-control" />
                 <span asp-validation-for="TimeFrame.StartTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TimeFrame.EndTime" class="control-label"></label>
-                <input asp-for="TimeFrame.EndTime" class="form-control" />
+                <input asp-for="TimeFrame.EndTime" type="time" class="form-control" />
                 <span asp-validation-for="TimeFrame.EndTime" class="text-danger"></span>
             </div>
             <div class="form-group">
