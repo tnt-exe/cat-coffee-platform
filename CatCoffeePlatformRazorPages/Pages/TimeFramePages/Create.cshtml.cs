@@ -49,11 +49,14 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
 
         private async Task _loadSelectList()
         {
-            //todo: fix error related to coffeeshop api call
-            var coffeeShopList = await _apiCoffeeShop
-                .GetAsync<IEnumerable<CoffeeShopResponseDTO>>();
+            var apiResponse = await _apiCoffeeShop
+                .GetAsync<ResponseBody<IEnumerable<CoffeeShopResponseDTO>>>();
+            var coffeeShopList = apiResponse!.Result;
 
-            ViewData["CoffeeShopId"] = new SelectList(coffeeShopList, "CoffeeShopId", "ShopName");
+            if (coffeeShopList is not null)
+            {
+                ViewData["CoffeeShopId"] = new SelectList(coffeeShopList, "CoffeeShopId", "ShopName");
+            }
         }
     }
 }

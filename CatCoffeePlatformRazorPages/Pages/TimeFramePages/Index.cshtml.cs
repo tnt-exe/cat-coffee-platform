@@ -18,8 +18,9 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
         public async Task OnGetAsync()
         {
 
-            var timeFrameList = await _apiTimeFrame
-                .GetAsync<IEnumerable<TimeFrameDto>>();
+            var apiResponse = await _apiTimeFrame
+                .GetAsync<ResponseBody<IEnumerable<TimeFrameDto>>>();
+            var timeFrameList = apiResponse!.Result;
             if (timeFrameList is not null)
             {
                 TimeFrame = timeFrameList;

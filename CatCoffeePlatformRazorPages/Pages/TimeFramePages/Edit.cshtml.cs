@@ -24,12 +24,13 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
                 return NotFound();
             }
 
-            var timeframe = await _apiTimeFrame.GetAsync<TimeFrameUpdate>($"{id}");
-            if (timeframe == null)
+            var apiResponse = await _apiTimeFrame.GetAsync<ResponseBody<TimeFrameUpdate>>($"{id}");
+            var timeFrame = apiResponse!.Result;
+            if (timeFrame == null)
             {
                 return NotFound();
             }
-            TimeFrame = timeframe;
+            TimeFrame = timeFrame;
 
             return Page();
         }
