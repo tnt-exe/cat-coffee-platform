@@ -7,8 +7,12 @@ namespace BusinessObject.Model
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TimeFrameId { get; set; }
+
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal Price { get; set; }
 
         public int CoffeeShopId { get; set; }
         public CoffeeShop? CoffeeShop { get; set; }

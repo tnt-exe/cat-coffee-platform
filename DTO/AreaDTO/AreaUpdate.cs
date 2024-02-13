@@ -2,8 +2,10 @@
 
 namespace DTO.AreaDTO
 {
-    public record AreaCreate
+    public record AreaUpdate
     {
+        public int AreaId { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string? AreaName { get; set; }
@@ -18,7 +20,5 @@ namespace DTO.AreaDTO
         [Required]
         [Range(1, 2024, ErrorMessage = "Invalid Slot number")]
         public int MaxSlots { get; set; }
-
-        public int CoffeeShopId { get; set; }
     }
 }

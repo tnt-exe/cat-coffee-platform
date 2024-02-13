@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DTO.CoffeeShopDTO
 {
@@ -13,8 +8,8 @@ namespace DTO.CoffeeShopDTO
         [Required]
         public string? ShopName { get; set; }
         public string? Address { get; set; }
-        public TimeOnly OpeningTime { get; set; }
-        public TimeOnly ClosingTime { get; set; }
+        public string? OpeningTime { get; set; }
+        public string? ClosingTime { get; set; }
 
         [Required]
         public string ContactNumber { get; set; } = "00-0000-000";

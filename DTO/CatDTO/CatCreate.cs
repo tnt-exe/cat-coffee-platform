@@ -2,7 +2,7 @@
 
 namespace DTO.CatDTO
 {
-    public class CatCreate
+    public record CatCreate
     {
         [Required]
         [MinLength(5)]
