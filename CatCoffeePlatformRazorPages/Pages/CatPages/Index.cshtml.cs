@@ -17,7 +17,8 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
 
         public async Task OnGetAsync()
         {
-            var catList = await _apiCat.GetAsync<IEnumerable<CatDto>>();
+            var apiResponse = await _apiCat.GetAsync<ResponseBody<IEnumerable<CatDto>>>();
+            var catList = apiResponse!.Result;
             if (catList is not null)
             {
                 Cat = catList;

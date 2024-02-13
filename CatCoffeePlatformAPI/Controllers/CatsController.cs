@@ -1,4 +1,5 @@
-﻿using CatCoffeePlatformAPI.Controllers.Base;
+﻿using CatCoffeePlatformAPI.Common;
+using CatCoffeePlatformAPI.Controllers.Base;
 using DTO.CatDTO;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
@@ -16,29 +17,37 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<CatDto>), 200)]
+        [ProducesResponseType(typeof(ResponseBody<IEnumerable<CatDto>>), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetCats()
         {
             var result = await _catRepo.GetCats();
             return result.IsError
                 ? HandleErrorResponse(result.Errors)
-                : Ok(result.Payload);
+                : Ok(new ResponseBody<IEnumerable<CatDto>>()
+                {
+                    Title = "Get cat list success",
+                    Result = result.Payload
+                });
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(CatDto), 200)]
+        [ProducesResponseType(typeof(ResponseBody<CatDto>), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetCatById(int id)
         {
             var result = await _catRepo.GetCatById(id);
             return result.IsError
                 ? HandleErrorResponse(result.Errors)
-                : Ok(result.Payload);
+                : Ok(new ResponseBody<CatDto>
+                {
+                    Title = "Get cat success",
+                    Result = result.Payload
+                });
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(CatUpdate), 200)]
+        [ProducesResponseType(typeof(ResponseBody<CatUpdate>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateCat(int id, CatUpdate cat)
@@ -56,11 +65,15 @@ namespace CatCoffeePlatformAPI.Controllers
             var result = await _catRepo.UpdateCat(cat);
             return result.IsError
                 ? HandleErrorResponse(result.Errors)
-                : Ok(result.Payload);
+                : Ok(new ResponseBody<CatUpdate>
+                {
+                    Title = "Update cat success",
+                    Result = result.Payload
+                });
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CatCreate), 200)]
+        [ProducesResponseType(typeof(ResponseBody<CatCreate>), 200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateCat(CatCreate cat)
         {
@@ -72,7 +85,11 @@ namespace CatCoffeePlatformAPI.Controllers
             var result = await _catRepo.CreateCat(cat);
             return result.IsError
                 ? HandleErrorResponse(result.Errors)
-                : Ok(result.Payload);
+                : Ok(new ResponseBody<CatCreate>
+                {
+                    Title = "Create cat success",
+                    Result = result.Payload
+                });
         }
 
         [HttpDelete("{id}")]

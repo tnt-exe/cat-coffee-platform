@@ -29,7 +29,8 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
                 return NotFound();
             }
 
-            var cat = await _apiCat.GetAsync<CatUpdate>($"{id}");
+            var apiResponse = await _apiCat.GetAsync<ResponseBody<CatUpdate>>($"{id}");
+            var cat = apiResponse!.Result;
             if (cat == null)
             {
                 return NotFound();
@@ -62,15 +63,19 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
 
         private async Task _loadSelectList()
         {
-            var areaList = await _apiArea.GetAsync<IEnumerable<AreaDto>>();
+            var apiResponse = await _apiArea.GetAsync<ResponseBody<IEnumerable<AreaDto>>>();
+            var areaList = apiResponse!.Result;
+
             var statusList = from CatStatus catStatus in Enum.GetValues(typeof(CatStatus))
                              select new
                              {
                                  HealthyStatus = (int)catStatus,
                                  StatusName = catStatus.ToString()
                              };
-
-            ViewData["AreaId"] = new SelectList(areaList, "AreaId", "AreaName");
+            if (areaList is not null)
+            {
+                ViewData["AreaId"] = new SelectList(areaList, "AreaId", "AreaName");
+            }
             ViewData["CatStatus"] = new SelectList(statusList, "HealthyStatus", "StatusName");
         }
     }

@@ -53,7 +53,9 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
 
         private async Task _loadSelectList()
         {
-            var areaList = await _apiArea.GetAsync<IEnumerable<AreaDto>>();
+            var apiResponse = await _apiArea.GetAsync<ResponseBody<IEnumerable<AreaDto>>>();
+            var areaList = apiResponse!.Result;
+
             var statusList = from CatStatus catStatus in Enum.GetValues(typeof(CatStatus))
                              select new
                              {
@@ -61,11 +63,18 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
                                  StatusName = catStatus.ToString()
                              };
 
-            //todo: fix coffeeshop api call
-            var coffeeShopListResponse = await _apiCoffeeShop.GetAsync<IEnumerable<CoffeeShopResponseDTO>>();
-            ViewData["CoffeeShopId"] = new SelectList(coffeeShopListResponse, "CoffeeShopId", "ShopName");
+            var coffeeShopResponse = await _apiCoffeeShop
+                .GetAsync<ResponseBody<IEnumerable<CoffeeShopResponseDTO>>>();
+            var coffeeShopList = coffeeShopResponse!.Result;
 
-            ViewData["AreaId"] = new SelectList(areaList, "AreaId", "AreaName");
+            if (areaList is not null)
+            {
+                ViewData["AreaId"] = new SelectList(areaList, "AreaId", "AreaName");
+            }
+            if (coffeeShopList is not null)
+            {
+                ViewData["CoffeeShopId"] = new SelectList(coffeeShopList, "CoffeeShopId", "ShopName");
+            }
             ViewData["CatStatus"] = new SelectList(statusList, "HealthyStatus", "StatusName");
         }
     }

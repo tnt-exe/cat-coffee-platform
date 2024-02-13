@@ -24,7 +24,8 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
                 return NotFound();
             }
 
-            var cat = await _apiCat.GetAsync<CatDto>($"{id}");
+            var apiResponse = await _apiCat.GetAsync<ResponseBody<CatDto>>($"{id}");
+            var cat = apiResponse!.Result;
 
             if (cat == null)
             {
