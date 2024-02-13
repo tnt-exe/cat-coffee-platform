@@ -54,19 +54,13 @@ namespace CatCoffeePlatformAPI.Controllers
             {
                 return BadRequest();
             }
-            var checkEmail = _coffeeShopRepo.CheckEmail(resource.Email ?? "");
-            if (checkEmail != null)
-            {
-                return BadRequest(new
-                {
-                    Titile = "Create fail",
-                    Errors = "Email Existed"
-                });
-            }
             var result = await _coffeeShopRepo.Create(resource);
             if (result.IsError)
             {
-                return BadRequest();
+                return BadRequest(new
+                {
+                    Title = "Create fail",
+                });
             }
             return Ok(new
             {
@@ -80,8 +74,6 @@ namespace CatCoffeePlatformAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var checkEmail = _coffeeShopRepo.CheckEmail(resource.Email ?? "");
-
                 var result = await _coffeeShopRepo.Update(resource, id);
                 if (result.IsError)
                 {

@@ -25,6 +25,12 @@ namespace Repository.Implement
             };
             try
             {
+                var existedEmail = await _unitOfWork.CoffeeShopDAO.Get(filter: s => s.Email == resource.Email).FirstOrDefaultAsync();
+                if (existedEmail is not null)
+                {
+                    result.AddError(ErrorCode.BadRequest, "Shop not found");
+                    return result;
+                }
                 var newShop = new CoffeeShop()
                 {
                     ShopName = resource.ShopName,
@@ -135,23 +141,6 @@ namespace Repository.Implement
                 result.AddError(ErrorCode.ServerError, ex.Message);
             }
             return result;
-        }
-
-        public async Task<OperationResult<object>> CheckEmail(string email)
-        {
-            var result = new OperationResult<object>
-            {
-                IsError = false,
-            };
-
-            var existedEmail = await _unitOfWork.CoffeeShopDAO.Get(filter: s => s.Email == email).FirstOrDefaultAsync();
-            if (existedEmail is not null)
-            {
-                result.AddError(ErrorCode.BadRequest, "Shop not found");
-                return result;
-            }
-            return result;
-
         }
     }
 }
