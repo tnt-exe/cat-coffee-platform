@@ -11,9 +11,10 @@ namespace BusinessObject.Model
         public DateOnly Date { get; set; }
         public int Slots { get; set; }
         [Column(TypeName = "money")]
-        public Decimal TotalMoney { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public decimal TotalMoney { get; set; }
+        public DateTime? PaymentDate { get; set; }
         public int Status { get; set; }
+        public bool Deleted { get; set; } = false;
 
         public int AreaId { get; set; }
         public Area? Area { get; set; }

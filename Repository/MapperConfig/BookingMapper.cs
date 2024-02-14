@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BusinessObject.Model;
+using DTO.BookingDTO;
 
 namespace Repository.MapperConfig
 {
@@ -6,7 +8,11 @@ namespace Repository.MapperConfig
     {
         void BookingMapper()
         {
-            //CreateMap
+            CreateMap<BookingDTO, Booking>();
+            CreateMap<BookingDTO_BookingProduct, BookingProduct>();
+
+            CreateMap<Booking, BookingResponseDTO>()
+                .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date.ToString("yyyy-MM-dd")));
         }
     }
 }
