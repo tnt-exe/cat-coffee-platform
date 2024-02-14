@@ -9,7 +9,7 @@ namespace Repository.MapperConfig
         void CategoryMapper()
         {
             //CreateMap
-            CreateMap<CategoryCreate,Category>().ReverseMap();
+            CreateMap<CategoryUpsert,Category>().ReverseMap();
         }
     }
 }

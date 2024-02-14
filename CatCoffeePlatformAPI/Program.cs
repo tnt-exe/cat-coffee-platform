@@ -16,6 +16,8 @@ using Repository.Implement;
 using Repository.Interface;
 using System.Data;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using DTO.Common;
 
 namespace CatCoffeePlatformAPI
 {
@@ -28,7 +30,7 @@ namespace CatCoffeePlatformAPI
             var Configuration = builder.Configuration;
 
             // Add services to the container.
-          
+
             // Add CORS
             builder.Services.AddCors(o =>
             {
@@ -126,7 +128,13 @@ namespace CatCoffeePlatformAPI
                 });
             });
 
-            builder.Services.AddControllers()
+            builder.Services.AddControllers(config =>
+            {
+                using (var serviceProvider = builder.Services.BuildServiceProvider()) {
+                    var readerFactory = serviceProvider.GetRequiredService<IHttpRequestStreamReaderFactory>();
+                    config.ModelBinderProviders.Insert(0, new ModelBinderProvider(config.InputFormatters, readerFactory));
+                }
+            })
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     options.InvalidModelStateResponseFactory = actionContext =>

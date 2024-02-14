@@ -1,0 +1,78 @@
+﻿@page
+@using BusinessObject.Enums
+@model CatCoffeePlatformRazorPages.Pages.CatPages.IndexModel
+
+@{
+    ViewData["Title"] = "Cat Index";
+}
+
+<h1>Cat Index</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create</a>
+</p>
+
+@if (Model.Cat is null || !Model.Cat.Any())
+{
+    <h3 class="alert alert-info">No Cats Found</h3>
+}
+else
+{
+    @if (TempData["cat-msg"] is not null)
+    {
+        <div class="alert alert-info">
+            @TempData["cat-msg"]
+        </div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cat Name</th>
+                <th>Description</th>
+                <th>Healthy Status</th>
+                <th>Area</th>
+                <th>Coffee Shop</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Cat)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CatName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @if (item.HealthyStatus == (int)CatStatus.Healthy)
+                        {
+                            <span class="badge bg-success">Healthy</span>
+                        }
+                        else if (item.HealthyStatus == (int)CatStatus.Sick)
+                        {
+                            <span class="badge bg-warning">Sick</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Dead</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Area)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShop)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.CatId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.CatId">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.CatId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

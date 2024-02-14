@@ -1,0 +1,61 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.TimeFramePages.IndexModel
+
+@{
+    ViewData["Title"] = "TimeFrame Index";
+}
+
+<h1>TimeFrame Index</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create</a>
+</p>
+
+@if (Model.TimeFrame is null || !Model.TimeFrame.Any())
+{
+    <h3 class="alert alert-info">No Time Frame Found</h3>
+}
+else
+{
+    @if (TempData["tf-msg"] is not null)
+    {
+        <div class="alert alert-info">
+            @TempData["tf-msg"]
+        </div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Price</th>
+                <th>Coffee Shop</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TimeFrame)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShop)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.TimeFrameId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.TimeFrameId">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

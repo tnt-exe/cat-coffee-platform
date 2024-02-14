@@ -8,9 +8,14 @@ namespace Repository.MapperConfig
     {
         void CoffeeShopMapper()
         {
-            CreateMap<CoffeeShop, CoffeeShopResponseDTO>();
-
-            CreateMap<CoffeeShop, CoffeeShopResponseDTO>().ForMember(dest => dest.ManagerEmail, opt => opt.MapFrom(src => src.Manager!.Email)).ReverseMap();
+            CreateMap<CoffeeShop, CoffeeShopResponseDTO>()
+                .ForMember(dest => dest.OpeningTime,
+                            opt => opt.MapFrom(src => src.OpeningTime.ToString("HH:mm")))
+                .ForMember(dest => dest.ClosingTime,
+                            opt => opt.MapFrom(src => src.ClosingTime.ToString("HH:mm")))
+                .ForMember(dest => dest.ManagerEmail, 
+                            opt => opt.MapFrom(src => src.Manager!.Email))
+                .ReverseMap();
         }
     }
 }

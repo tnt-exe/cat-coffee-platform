@@ -11,9 +11,9 @@ namespace Repository.Interface
              int? pageIndex = 0, int? pageSize = 10, string[]? includeProperties = null);
         Task<OperationResult<Category>> GetById(int id);
         Task<OperationResult<Category>> GetByFilter(Expression<Func<Category, bool>>? filter);
-        Task<OperationResult<Category>> Create(CategoryCreate requestModel);
+        Task<OperationResult<Category>> Create(CategoryUpsert requestModel);
         Task<OperationResult<bool>> Delete(int id);
-        Task<OperationResult<Category>> Update(int id, Category requestModel);
+        Task<OperationResult<Category>> Update(int id, CategoryUpsert requestModel);
         Task<OperationResult<Pagination<Category>>> GetAccountPaginationAsync(int pageIndex = 0, int pageSize = 10);
     }
 }
