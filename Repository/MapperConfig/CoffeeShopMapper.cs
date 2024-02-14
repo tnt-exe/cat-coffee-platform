@@ -9,6 +9,8 @@ namespace Repository.MapperConfig
         void CoffeeShopMapper()
         {
             CreateMap<CoffeeShop, CoffeeShopResponseDTO>();
+
+            CreateMap<CoffeeShop, CoffeeShopResponseDTO>().ForMember(dest => dest.ManagerEmail, opt => opt.MapFrom(src => src.Manager!.Email)).ReverseMap();
         }
     }
 }

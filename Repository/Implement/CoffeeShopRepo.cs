@@ -28,7 +28,7 @@ namespace Repository.Implement
                 var existedEmail = await _unitOfWork.CoffeeShopDAO.Get(filter: s => s.Email == resource.Email).FirstOrDefaultAsync();
                 if (existedEmail is not null)
                 {
-                    result.AddError(ErrorCode.BadRequest, "Shop not found");
+                    result.AddError(ErrorCode.BadRequest, "Email Aldready Existed");
                     return result;
                 }
                 var newShop = new CoffeeShop()
@@ -40,6 +40,7 @@ namespace Repository.Implement
                     ContactNumber = resource.ContactNumber,
                     Email = resource.Email,
                     Description = resource.Description,
+                    ManagerId = resource.ManagerId,
                     Deleted = false
                 };
                 await _unitOfWork.CoffeeShopDAO.Insert(newShop);
@@ -88,7 +89,8 @@ namespace Repository.Implement
 
         public async Task<OperationResult<IEnumerable<CoffeeShopResponseDTO>>> GetAllCoffeeShops()
         {
-            var shopList = await _unitOfWork.CoffeeShopDAO.Get(filter: s => !s.Deleted).ToListAsync();
+            string[] includeProperties = { nameof(CoffeeShop.Manager) };
+            var shopList = await _unitOfWork.CoffeeShopDAO.Get(filter: s => !s.Deleted, includeProperties: includeProperties).ToListAsync();
             var response = _mapper.Map<IEnumerable<CoffeeShopResponseDTO>>(shopList);
             var result = new OperationResult<IEnumerable<CoffeeShopResponseDTO>>()
             {
@@ -105,11 +107,10 @@ namespace Repository.Implement
             {
                 IsError = false,
             };
-            //string[] includeProperties = { nameof(CoffeeShop.Areas), nameof(CoffeeShop.Products), nameof(CoffeeShop.Cats), nameof(CoffeeShop.TimeFrames) };
             var shop = await _unitOfWork.CoffeeShopDAO.GetByIDAsync(id);
             if (shop == null)
             {
-                result.AddError(ErrorCode.NotFound, "Not Found Shop");
+                result.AddError(ErrorCode.NotFound, "Shop not found");
             }
             result.Payload = shop;
 

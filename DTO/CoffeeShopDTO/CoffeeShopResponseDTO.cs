@@ -24,5 +24,7 @@ namespace DTO.CoffeeShopDTO
         public string? Description { get; set; }
 
         public bool Deleted { get; set; }
+
+        public string? ManagerEmail { get; set; }
     }
 }
