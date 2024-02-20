@@ -13,6 +13,8 @@ namespace Repository.MapperConfig
                             opt => opt.MapFrom(src => src.OpeningTime.ToString("HH:mm")))
                 .ForMember(dest => dest.ClosingTime,
                             opt => opt.MapFrom(src => src.ClosingTime.ToString("HH:mm")))
+                .ForMember(dest => dest.ManagerEmail, 
+                            opt => opt.MapFrom(src => src.Manager!.Email))
                 .ReverseMap();
         }
     }

@@ -19,5 +19,8 @@ namespace DTO.CoffeeShopDTO
         [EmailAddress]
         public string? Email { get; set; }
         public string? Description { get; set; }
+
+        [Required]
+        public Guid ManagerId { get; set; }
     }
 }
