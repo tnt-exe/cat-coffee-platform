@@ -67,6 +67,7 @@ namespace CatCoffeePlatformRazorPages.Pages
                     userClaims.Add(new Claim("First Name", data.Result?.FirstName ?? "Undefined"));
                     userClaims.Add(new Claim("Last Name", data.Result?.LastName ?? "Undefined"));
                     userClaims.Add(new Claim("scope", data.Result?.Role.ToString() ?? "Undefined"));
+                    userClaims.Add(new Claim("token", data.Token ?? "Undefined"));
 
                     var userIdentity = new ClaimsIdentity(userClaims, "User Identity");
                     var userPrincipal = new ClaimsPrincipal(new[] { userIdentity });

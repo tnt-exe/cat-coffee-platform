@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
+using DTO.AreaDTO;
 using DTO.TimeFrameDTO;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
@@ -122,6 +124,12 @@ namespace Repository.Implement
             }
 
             return result;
+        }
+
+        public IQueryable<TimeFrameDto> GetDbSet()
+        {
+            var query = _unitOfWork.TimeFrameDAO.GetDbSet();
+            return query.ProjectTo<TimeFrameDto>(_mapper.ConfigurationProvider);
         }
     }
 }

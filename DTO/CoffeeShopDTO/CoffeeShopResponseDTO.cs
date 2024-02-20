@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace DTO.CoffeeShopDTO
 {
@@ -21,5 +22,10 @@ namespace DTO.CoffeeShopDTO
         public bool Deleted { get; set; }
 
         public string? ManagerEmail { get; set; }
+      
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

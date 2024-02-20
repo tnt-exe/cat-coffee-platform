@@ -80,5 +80,10 @@ namespace DAO.Generic
             _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
         }
+
+        public virtual IQueryable<TEntity> GetDbSet()
+        {
+            return _dbSet.AsNoTracking().IgnoreAutoIncludes().AsQueryable();
+        }
     }
 }

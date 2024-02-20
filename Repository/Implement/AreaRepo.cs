@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
@@ -121,6 +122,12 @@ namespace Repository.Implement
             }
 
             return result;
+        }
+
+        public IQueryable<AreaDto> GetDbSet()
+        {
+            var query = _unitOfWork.AreaDAO.GetDbSet();
+            return query.ProjectTo<AreaDto>(_mapper.ConfigurationProvider);
         }
     }
 }
