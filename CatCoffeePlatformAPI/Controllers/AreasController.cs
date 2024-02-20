@@ -2,6 +2,8 @@
 using CatCoffeePlatformAPI.Controllers.Base;
 using DTO.AreaDTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Repository.Interface;
 
 namespace CatCoffeePlatformAPI.Controllers
@@ -19,6 +21,7 @@ namespace CatCoffeePlatformAPI.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ResponseBody<IEnumerable<AreaDto>>), 200)]
         [ProducesResponseType(404)]
+        [ODataIgnored]
         public async Task<IActionResult> GetAreas()
         {
             var result = await _areaRepo.GetAreas();
@@ -90,6 +93,13 @@ namespace CatCoffeePlatformAPI.Controllers
                     Title = "Update area success",
                     Result = result.Payload
                 });
+        }
+
+        [HttpGet("odata")]
+        [EnableQuery]
+        public IActionResult GetAreasOData()
+        {
+            return Ok(_areaRepo.GetDbSet());
         }
     }
 }

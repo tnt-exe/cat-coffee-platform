@@ -12,7 +12,14 @@ namespace Repository.MapperConfig
             CreateMap<BookingDTO_BookingProduct, BookingProduct>();
 
             CreateMap<Booking, BookingResponseDTO>()
-                .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Date.ToString("yyyy-MM-dd")));
+                .ForMember(dest => dest.CoffeeShop, opt => opt.MapFrom(src => src.CoffeeShop))
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+                .ForMember(dest => dest.Area, opt => opt.MapFrom(src => src.Area))
+                .ForMember(dest => dest.TimeFrame, opt => opt.MapFrom(src => src.TimeFrame));
+            CreateMap<CoffeeShop, BookingResponseDTO_CoffeeShop>();
+            CreateMap<Area, BookingResponseDTO_Area>();
+            CreateMap<TimeFrame, BookingResponseDTO_TimeFrame>();
+            CreateMap<User, BookingResponseDTO_User>();
         }
     }
 }

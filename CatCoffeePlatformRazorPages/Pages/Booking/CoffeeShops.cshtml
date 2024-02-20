@@ -1,0 +1,82 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.Booking.CoffeeShopsModel
+
+@{
+    ViewData["Title"] = "CoffeeShops";
+}
+
+<h1>Coffee Shops</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form method="post" asp-page="areas" id="submitform">
+    <input type="hidden" id="coffeeShopInput" name="CoffeeShopJson"/>
+    @foreach (var item in Model.CoffeeShops)
+    {
+        <div class="border border-2 border - primary padding-css coffeeShop" onclick="chooseShop(@item.ToString())">
+            <div class="coffeeShop_picture">
+                <img />
+            </div>
+            <div class="coffeeShop_description">
+                <h2>@item.ShopName</h2>
+                <div class="coffeeShop_description_items">
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-solid fa-location-dot"></i> @item.Address
+                    </p>
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-regular fa-clock"></i> @item.OpeningTime - @item.ClosingTime
+                    </p>
+                </div>
+                <div class="coffeeShop_description_items">
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-solid fa-phone"></i> @item.ContactNumber
+                    </p>
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-regular fa-envelope"></i> @item.Email
+                    </p>
+                </div>
+                <h4>
+                    @item.Description
+                </h4>
+            </div>
+        </div>
+    }
+</form>
+
+<script>
+    function chooseShop(shop){
+        console.log("Click on shop: " + shop.ShopName);
+        let jsonString = JSON.stringify(shop);
+        document.getElementById("coffeeShopInput").value = jsonString;
+        document.getElementById("submitform").submit();
+    }
+</script>
+
+<style>
+    .coffeeShop {
+        display: flex;
+        flex-direction: row;
+        margin: 30px 20px;
+        min-height: 220px;
+    }
+    .coffeeShop_picture {
+        flex: 1;
+        padding: 4px 16px;
+    }
+    .coffeeShop_description {
+        flex: 2;
+        padding: 4px 16px;
+    }
+    .coffeeShop_description_items {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .coffeeShop_description_item + .coffeeShop_description_item {
+        margin-left: 20px;
+    }
+</style>

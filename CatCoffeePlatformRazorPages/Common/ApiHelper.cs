@@ -104,5 +104,17 @@ namespace CatCoffeePlatformRazorPages.Common
                 .DeleteAsync(_apiUrl + id);
             return response.IsSuccessStatusCode;
         }
+
+        // For OData
+        public async Task<T?> GetODataAsync<T>(string? route = "")
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{_apiUrl}?{route}");
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(data, GetJsonSerializerOptions());
+            }
+            return default;
+        }
     }
 }

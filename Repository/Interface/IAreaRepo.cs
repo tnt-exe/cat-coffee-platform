@@ -9,5 +9,6 @@ namespace Repository.Interface
         Task<OperationResult<AreaDto>> GetAreaById(int id);
         Task<OperationResult<AreaCreate>> CreateArea(AreaCreate areaCreate);
         Task<OperationResult<AreaUpdate>> UpdateArea(AreaUpdate areaUpdate);
+        IQueryable<AreaDto> GetDbSet();
     }
 }

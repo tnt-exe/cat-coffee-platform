@@ -1,7 +1,10 @@
-﻿namespace DTO.TimeFrameDTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DTO.TimeFrameDTO
 {
     public record TimeFrameDto
     {
+        [Key]
         public int TimeFrameId { get; set; }
         public string? StartTime { get; set; }
         public string? EndTime { get; set; }

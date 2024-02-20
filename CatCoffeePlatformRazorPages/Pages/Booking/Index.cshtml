@@ -1,0 +1,79 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.Booking.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().BookingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().Slots)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().TotalMoney)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().PaymentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookings.First().CoffeeShop)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Bookings)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slots)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalMoney)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User!.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoffeeShop!.ShopName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.BookingId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.BookingId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.BookingId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

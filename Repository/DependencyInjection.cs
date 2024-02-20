@@ -36,7 +36,10 @@ public static class DependencyInjection
 
         services.AddSingleton<IDesignTimeDbContextFactory<ApplicationDbContext>, DbContextFactory>();
 
-        services.AddAutoMapper(typeof(AutoMapperConfig).Assembly);
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile(new AutoMapperConfig());
+        });
         return services;
     }
 }
