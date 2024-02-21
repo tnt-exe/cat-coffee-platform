@@ -1,9 +1,23 @@
 ﻿@page
 @model CatCoffeePlatformRazorPages.Pages.Booking.AreasModel
+@using System.Text.Json;
+@using DTO.TimeFrameDTO;
 
 @{
     ViewData["Title"] = "Areas";
 }
+
+<div class="popup-container">
+    <div class="popup-box">
+        <h2>Book slots</h2>
+        <input id="bookedSlots" min="1" type="number" step="1" value="1" />
+        <p style="color:red" id="bookedSlotsValidation"></p>
+        <div class="popup-button">
+            <button class="book-btn">Book</button>
+            <button class="cancel-btn" onclick="cancelBtn()">Cancel</button>
+        </div>
+    </div>
+</div>
 
 <div style="position: fixed; top: 15%; right: 10%; width: 25%;">
     @{
@@ -28,6 +42,7 @@
     }
 </div>
 
+@Html.Hidden("BookedTimeFrameId", Model.BookedTimeFrameId)
 
 <h1>Coffee Shop</h1>
 <div class="border border-2 border - primary padding-css coffeeShop">
@@ -58,9 +73,23 @@
     </div>
 </div>
 
+<input type="date" value="@Model.BookedDate.ToString("yyyy-MM-dd")" id="bookedDate" onchange="chooseDate()" />
+
+<div class="wrap-layout">
+    @foreach(var item in Model.TimeFrames){
+        <div class="wrap-layout_item @(item.TimeFrameId == Model.BookedTimeFrameId ? "booked_timeframe" : "")"
+         id="timeFrame-@item.TimeFrameId" 
+            onclick="chooseTimeFrame(@item.ToString())">
+            @item.StartTime - @item.EndTime
+        </div>
+    }
+</div>
+
 <h1>Areas</h1>
 @foreach (var item in Model.Areas) {
-    <div class="border border-2 border - primary padding-css coffeeShop" onclick="chooseShop(@item.ToString())">
+    <div class="border border-2 border - primary padding-css coffeeShop @(item.AvailableSlots <= 0 ? "cannot-booked-area" : "")" 
+        id="areaId-@item.AreaId" 
+        onclick="@(item.AvailableSlots > 0 ? $"chooseArea({item.ToString()}, {Model.CoffeeShop?.ToString()}, {item.AvailableSlots})" : "null")">
         <div class="coffeeShop_picture">
             <img />
         </div>
@@ -69,8 +98,8 @@
             <p>
                 <i class="fa-solid fa-dollar-sign"></i> @item.PricePerHour
             </p>
-            <p>
-                <i class="fa-solid fa-check"></i> @item.AvailableSlots
+            <p class="available-slots">
+                Available Slots: @item.AvailableSlots
             </p>
             <h4>
                 @item.Description
@@ -79,8 +108,214 @@
     </div>
 }
 
+<form method="post" asp-page="products" id="submitform">
+    <input type="hidden" id="coffeeShopInput" name="CoffeeShopJson" />
+    <input type="hidden" id="bookedDateInput" name="BookedDate"/>
+    <input type="hidden" id="timeFrameInput" name="TimeFrameId" />
+    <input type="hidden" id="areaInput" name="AreaJson" />
+    <input type="hidden" id="bookedSlotsInput" name="BookedSlots" />
+</form>
+
+<script>
+    const bookedSlotUrl = "https://localhost:7039/odata/booking?count=true&top=0&filter=Date eq ";
+    var bookedDateElement = document.getElementById("bookedDate");
+    const popupContainer = document.querySelector('.popup-container');
+
+    function cancelBtn(){
+        popupContainer.classList.remove('active');
+        $('#bookedSlotsValidation').html("");
+    }
+
+    function bookBtn(maxSlots){
+        var bookedSlots = document.getElementById("bookedSlots").value;
+        if(bookedSlots < 0 || bookedSlots > maxSlots){
+            $('#bookedSlotsValidation').html('Invalid input( min: ' + 0 + ', max: ' + maxSlots + ')');
+        }
+        else{
+            document.getElementById("bookedSlotsInput").value = bookedSlots;
+            document.getElementById("submitform").submit();
+        }
+    }
+
+    function chooseArea(area, coffeeShop, availableSlots){
+        var bookBtnPopup = document.querySelector('.book-btn');
+        var bookedDate = bookedDateElement.value;
+        var bookedTimeFrameId = document.getElementById("BookedTimeFrameId").value;
+        let jsonStringArea = JSON.stringify(area);
+        var jsonStringCoffeeShop = JSON.stringify(coffeeShop)
+        document.getElementById("areaInput").value = jsonStringArea;
+        document.getElementById("coffeeShopInput").value = jsonStringCoffeeShop;
+        document.getElementById("timeFrameInput").value = bookedTimeFrameId;
+        document.getElementById("bookedDateInput").value = bookedDate;
+
+        $("#bookedSlots").attr({
+            "max": availableSlots
+        })
+
+        bookBtnPopup.onclick = function(){
+            bookBtn(availableSlots);
+        };
+
+        popupContainer.classList.add('active');
+    }
+
+    function chooseTimeFrame(timeFrame){
+        var bookedDate = bookedDateElement.value;
+        var bookedTimeFrameId = document.getElementById("BookedTimeFrameId").value;
+        var bookedTimeFrame = document.getElementById("timeFrame-" + bookedTimeFrameId);
+        var bookingTimeFrame = document.getElementById("timeFrame-" + timeFrame.TimeFrameId);
+
+        bookedTimeFrame.classList.remove("booked_timeframe");
+        bookingTimeFrame.classList.add("booked_timeframe");
+
+        document.getElementById("BookedTimeFrameId").value = timeFrame.TimeFrameId;
+
+        @foreach(var area in Model.Areas){
+            <text>
+                fetch(bookedDate, @area.AreaId, timeFrame.TimeFrameId).then(count => {
+                    var outerDiv = document.getElementById("areaId-@area.AreaId");
+                    var availableSlotsElement = outerDiv.querySelector(".available-slots");
+                    var availableSlots = @area.MaxSlots - count;
+                    if(availableSlots <= 0){
+                        availableSlots = 0;
+                        outerDiv.classList.add("cannot-booked-area");
+                        outerDiv.onclick = null;
+                    }
+                    else{
+                        outerDiv.classList.remove("cannot-booked-area");
+                        outerDiv.onclick = function () {
+                            chooseArea(@Html.Raw(area.ToString()), @Html.Raw(Model.CoffeeShop?.ToString()), availableSlots);
+                        }
+                    }
+                    availableSlotsElement.textContent = "Available Slots: " + availableSlots;
+                }).catch(error => {
+                    console.log(error);
+                });
+            </text>
+        }
+    }
+
+    function chooseDate(){
+        var bookedDate = bookedDateElement.value;
+        var bookedTimeFrame = document.getElementById("BookedTimeFrameId").value;
+        @foreach(var area in Model.Areas){
+            <text>
+                fetch(bookedDate, @area.AreaId, bookedTimeFrame).then(count => {
+                    var outerDiv = document.getElementById("areaId-@area.AreaId");
+                    var availableSlotsElement = outerDiv.querySelector(".available-slots");
+                    var availableSlots = @area.MaxSlots - count;
+                    if(availableSlots <= 0){
+                        availableSlots = 0;
+                        outerDiv.classList.add("cannot-booked-area");
+                        outerDiv.onclick = null;
+                    }
+                    else
+                    {
+                        outerDiv.classList.remove("cannot-booked-area");
+                        outerDiv.onclick = function () {
+                            chooseArea(@Html.Raw(area.ToString()), @Html.Raw(Model.CoffeeShop?.ToString()), availableSlots);
+                        }
+                    }
+                    availableSlotsElement.textContent = "Available Slots: " + availableSlots;
+                }).catch(error => {
+                    console.log(error);
+                });
+            </text>
+        }
+    }
+
+    function fetch(date, areaId, timeFrameId){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: bookedSlotUrl + date + " and AreaId eq " + areaId + " and TimeFrameId eq " + timeFrameId,
+                success: function (data) {
+                    var bookedSlots = data["@(Model.CountKeyResult)"];
+                    resolve(bookedSlots);
+                },
+                error: function(error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+</script>
 
 <style>
+    .popup-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .popup-container.active {
+        opacity: 1;
+        pointer-events: auto;
+        transition: .4s ease;
+    }
+
+    .popup-container .popup-box {
+        width: 500px;
+        background: #f2f2f2;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        transform: scale(0);
+    }
+
+    .popup-container.active .popup-box {
+        transform: scale(1);
+        transition: .4 ease;
+        transition-delay: .25s;
+    }
+
+    .popup-box h2 {
+        color: #333;
+        line-height: 1;
+    }
+
+    .popup-box input {
+        margin: 12px 0 20px;
+    }
+
+    .popup-box .popup-button {
+        width: 100%;
+        height: 45px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .popup-button .book-btn {
+        min-width: 90px;
+        background-color: #6e78ff;
+        border-radius: 6px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .popup-button .cancel-btn {
+        min-width: 90px;
+        background-color: #ee7474;
+        border-radius: 6px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+
     .coffeeShop {
         display: flex;
         flex-direction: row;
@@ -107,5 +342,38 @@
 
     .coffeeShop_description_item + .coffeeShop_description_item {
         margin-left: 20px;
+    }
+
+
+
+    .wrap-layout {
+        margin-top: 28px;
+        padding: 12px 0 32px 0;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+    .wrap-layout_item {
+        margin-top: 5px;
+        padding: 12px;
+        min-width: 80px;
+        min-height: 20px;
+        color: black;
+        text-align: start;
+        line-height: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        background-color: #d8d8d8;
+    }
+    .wrap-layout_item + .wrap-layout_item {
+        margin-left: 20px;
+    }
+
+    .booked_timeframe {
+        background-color: #97d885;
+    }
+
+    .cannot-booked-area:hover {
+        background-color: #f38b8b;
     }
 </style>

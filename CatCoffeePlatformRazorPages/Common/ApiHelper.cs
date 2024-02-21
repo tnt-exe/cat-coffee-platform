@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text.Json;
 
 namespace CatCoffeePlatformRazorPages.Common
@@ -7,6 +8,7 @@ namespace CatCoffeePlatformRazorPages.Common
     {
         private readonly HttpClient _client;
         private readonly string _apiUrl;
+        private readonly string _odataUrl;
         private readonly bool _serializeOption;
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace CatCoffeePlatformRazorPages.Common
                 .Build();
 
             _apiUrl = config.GetSection("ApiUrl").Value + ApiResource + "/";
+            _odataUrl = config.GetSection("ODataUrl").Value + ApiResource;
         }
 
         private JsonSerializerOptions GetJsonSerializerOptions()
@@ -106,15 +109,34 @@ namespace CatCoffeePlatformRazorPages.Common
         }
 
         // For OData
-        public async Task<T?> GetODataAsync<T>(string? route = "")
+        public async Task<T?> GetODataAsync<T>(string? route = "", bool odataUrl = false)
         {
-            HttpResponseMessage response = await _client.GetAsync($"{_apiUrl}?{route}");
+            string url = "";
+            if (odataUrl)
+            {
+                url = _odataUrl;
+            }
+            else
+            {
+                url = _apiUrl;
+            }
+            HttpResponseMessage response = await _client.GetAsync($"{url}?{route}");
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<T>(data, GetJsonSerializerOptions());
             }
             return default;
+        }
+
+        public async Task<string?> GetODataAsync(string? route = "")
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{_odataUrl}?{route}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            return null;
         }
     }
 }

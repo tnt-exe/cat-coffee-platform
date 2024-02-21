@@ -5,6 +5,81 @@
     ViewData["Title"] = "Products";
 }
 
+<div style="position: fixed; top: 15%; right: 10%; width: 25%;">
+    @{
+        if (ViewData["warning"] != null)
+        {
+            <div class="alert alert-info">
+                @ViewData["warning"]
+            </div>
+        }
+        var data = (List<string>?)ViewData["errors"];
+        if (data != null)
+        {
+            <div style="margin-top:20px">
+                @foreach (var item in data)
+                {
+                    <div class="alert alert-danger" style="margin-top:10px">
+                        @item
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+<h1>Coffee Shop</h1>
+<div class="border border-2 border - primary padding-css coffeeShop">
+    <div class="coffeeShop_picture">
+        <img />
+    </div>
+    <div class="coffeeShop_description">
+        <h2>@(Model.CoffeeShop?.ShopName ?? "")</h2>
+        <div class="coffeeShop_description_items">
+            <p class="coffeeShop_description_item">
+                <i class="fa-solid fa-location-dot"></i> @(Model.CoffeeShop?.Address ?? "")
+            </p>
+            <p class="coffeeShop_description_item">
+                <i class="fa-regular fa-clock"></i> @(Model.CoffeeShop?.OpeningTime ?? "") - @(Model.CoffeeShop?.ClosingTime ?? "")
+            </p>
+        </div>
+        <div class="coffeeShop_description_items">
+            <p class="coffeeShop_description_item">
+                <i class="fa-solid fa-phone"></i> @(Model.CoffeeShop?.ContactNumber ?? "")
+            </p>
+            <p class="coffeeShop_description_item">
+                <i class="fa-regular fa-envelope"></i> @(Model.CoffeeShop?.Email ?? "")
+            </p>
+        </div>
+        <h4>
+            @(Model.CoffeeShop?.Description ?? "")
+        </h4>
+    </div>
+</div>
+
+<h1>Areas</h1>
+<div class="border border-2 border - primary padding-css coffeeShop">
+    <div class="coffeeShop_picture">
+        <img />
+    </div>
+    <div class="coffeeShop_description">
+        <h2>@(Model.Area?.AreaName ?? "")</h2>
+        <p>
+            <i class="fa-solid fa-dollar-sign"></i> @(Model.Area?.PricePerHour ?? 0)
+        </p>
+        <p>
+            Booked Date: @(Model.BookedDate?.ToString("yyyy-MM-dd") ?? "Error")
+        </p>
+        <p>
+            Booked Slots: @(Model.Area?.AvailableSlots ?? 0)
+        </p>
+        <h4>
+            @(Model.Area?.Description ?? "")
+        </h4>
+    </div>
+</div>
+
+
 <h1>Products</h1>
 
 <p>
