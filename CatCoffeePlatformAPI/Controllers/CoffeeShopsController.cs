@@ -1,4 +1,6 @@
-﻿using BusinessObject.Model;
+﻿using AutoMapper;
+using BusinessObject.Model;
+using CatCoffeePlatformAPI.Common;
 using DAO.Helper;
 using DTO.CoffeeShopDTO;
 using Microsoft.AspNetCore.Http;
@@ -13,9 +15,11 @@ namespace CatCoffeePlatformAPI.Controllers
     public class CoffeeShopsController : ControllerBase
     {
         private readonly ICoffeeShopRepo _coffeeShopRepo;
-        public CoffeeShopsController(ICoffeeShopRepo coffeeShopRepo)
+        private readonly IMapper _mapper;
+        public CoffeeShopsController(ICoffeeShopRepo coffeeShopRepo, IMapper mapper)
         {
             _coffeeShopRepo = coffeeShopRepo;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllCoffeeShops()
@@ -25,7 +29,7 @@ namespace CatCoffeePlatformAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(new
+            return Ok(new ResponseBody<IEnumerable<CoffeeShopResponseDTO>>
             {
                 Title = "Get Successfully",
                 Result = result.Payload
@@ -36,11 +40,12 @@ namespace CatCoffeePlatformAPI.Controllers
         public async Task<IActionResult> GetCoffeeShopByID(int id)
         {
             var result = await _coffeeShopRepo.GetByID(id);
+
             if (result.IsError)
             {
                 return NotFound();
             }
-            return Ok(new
+            return Ok(new ResponseBody<CoffeeShopResponseDTO>
             {
                 Title = "Get Successfully",
                 Result = result.Payload
@@ -62,7 +67,7 @@ namespace CatCoffeePlatformAPI.Controllers
                     Title = "Create fail",
                 });
             }
-            return Ok(new
+            return Ok(new ResponseBody<CoffeeShopResponseDTO>
             {
                 Title = "Create Successfully",
                 Result = result.Payload

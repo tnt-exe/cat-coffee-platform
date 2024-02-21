@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatCoffeePlatformAPI", "CatCoffeePlatformAPI\CatCoffeePlatformAPI.csproj", "{62C7B04A-FA98-432F-9DED-EC64C79146F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatCoffeePlatformRazorPages", "CatCoffeePlatformRazorPages\CatCoffeePlatformRazorPages.csproj", "{8371FE47-F0D5-415A-BBC2-BB8111284CA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatCoffeePlatformRazorPages", "CatCoffeePlatformRazorPages\CatCoffeePlatformRazorPages.csproj", "{8371FE47-F0D5-415A-BBC2-BB8111284CA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
