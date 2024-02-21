@@ -8,34 +8,41 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 using DAO.Context;
+using DTO.CoffeeShopDTO;
+using CatCoffeePlatformRazorPages.Common;
 
 namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 {
     public class EditModel : PageModel
     {
-        private readonly DAO.Context.ApplicationDbContext _context;
+        private readonly ApiHelper _apiShop;
 
-        public EditModel(DAO.Context.ApplicationDbContext context)
+        public EditModel()
         {
-            _context = context;
+            _apiShop = new ApiHelper(ApiResources.CoffeeShops);
         }
 
         [BindProperty]
-        public CoffeeShop CoffeeShop { get; set; } = default!;
+        public CoffeeShopResponseDTO CoffeeShop { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.CoffeeShops == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var coffeeshop =  await _context.CoffeeShops.FirstOrDefaultAsync(m => m.CoffeeShopId == id);
+            var apiResponse = await _apiShop.GetAsync<ResponseBody<CoffeeShopResponseDTO>>($"{id}");
+            var coffeeshop = apiResponse!.Result;
+
             if (coffeeshop == null)
             {
                 return NotFound();
             }
-            CoffeeShop = coffeeshop;
+            else
+            {
+                CoffeeShop = coffeeshop;
+            }
             return Page();
         }
 
@@ -48,30 +55,17 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
                 return Page();
             }
 
-            _context.Attach(CoffeeShop).State = EntityState.Modified;
 
-            try
+            var result = await _apiShop.PutAsync($"{CoffeeShop.CoffeeShopId}", CoffeeShop);
+            if (!result)
             {
-                await _context.SaveChangesAsync();
+                TempData["shop-msg"] = "Update shop success";
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CoffeeShopExists(CoffeeShop.CoffeeShopId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            TempData["shop-msg"] = "Update shop Fail";
+            return Page();
 
-            return RedirectToPage("./Index");
         }
 
-        private bool CoffeeShopExists(int id)
-        {
-          return (_context.CoffeeShops?.Any(e => e.CoffeeShopId == id)).GetValueOrDefault();
-        }
     }
 }

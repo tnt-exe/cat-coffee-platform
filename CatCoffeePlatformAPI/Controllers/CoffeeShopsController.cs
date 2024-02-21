@@ -15,11 +15,9 @@ namespace CatCoffeePlatformAPI.Controllers
     public class CoffeeShopsController : ControllerBase
     {
         private readonly ICoffeeShopRepo _coffeeShopRepo;
-        private readonly IMapper _mapper;
-        public CoffeeShopsController(ICoffeeShopRepo coffeeShopRepo, IMapper mapper)
+        public CoffeeShopsController(ICoffeeShopRepo coffeeShopRepo)
         {
             _coffeeShopRepo = coffeeShopRepo;
-            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllCoffeeShops()
@@ -82,26 +80,25 @@ namespace CatCoffeePlatformAPI.Controllers
                 var result = await _coffeeShopRepo.Update(resource, id);
                 if (result.IsError)
                 {
-                    return NotFound(new
+                    return NotFound(new ResponseBody<CoffeeShopResponseDTO>
                     {
-                        Titile = "Update Fail",
-                        Errors = "Shop not found"
+                        Title = "Update Fail",
                     });
                 }
 
-                return Ok(new
+                return Ok(new ResponseBody<CoffeeShopResponseDTO>
                 {
                     Title = "Update Successfully",
                     Result = result.Payload
                 });
             }
-            return BadRequest(new
+            return BadRequest(new ResponseBody<CoffeeShopResponseDTO>
             {
                 Title = "Update Fail",
             });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCoffeeShop(int id)
         {
             var result = await _coffeeShopRepo.Deleted(id);

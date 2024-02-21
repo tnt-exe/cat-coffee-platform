@@ -136,7 +136,7 @@ namespace Repository.Implement
                 }
 
                 existedShop.Deleted = true;
-
+                _unitOfWork.CoffeeShopDAO.Update(existedShop);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)

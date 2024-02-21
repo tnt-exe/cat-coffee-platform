@@ -55,9 +55,9 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="CoffeeShop.ManagerId" class="control-label"></label>
-                <input asp-for="CoffeeShop.ManagerId" class="form-control" />
-                <span asp-validation-for="CoffeeShop.ManagerId" class="text-danger"></span>
+                <label asp-for="CoffeeShop.ManagerEmail" class="control-label"></label>
+                <input asp-for="CoffeeShop.ManagerEmail" class="form-control" />
+                <span asp-validation-for="CoffeeShop.ManagerEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -65,7 +65,12 @@
         </form>
     </div>
 </div>
-
+@if (TempData["shop-msg"] is not null)
+{
+    <div class="alert alert-info">
+        @TempData["shop-msg"]
+    </div>
+}
 <div>
     <a asp-page="./Index">Back to List</a>
 </div>

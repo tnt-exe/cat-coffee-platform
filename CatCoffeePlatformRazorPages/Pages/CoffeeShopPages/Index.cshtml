@@ -10,6 +10,12 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+@if (TempData["shop-msg"] is not null)
+{
+    <div class="alert alert-info">
+        @TempData["shop-msg"]
+    </div>
+}
 <table class="table">
     <thead>
         <tr>

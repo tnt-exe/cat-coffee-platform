@@ -7,35 +7,38 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 using DAO.Context;
+using CatCoffeePlatformRazorPages.Common;
+using DTO.CoffeeShopDTO;
 
 namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 {
     public class DeleteModel : PageModel
     {
-        private readonly DAO.Context.ApplicationDbContext _context;
+        private readonly ApiHelper _apiShop;
 
-        public DeleteModel(DAO.Context.ApplicationDbContext context)
+        public DeleteModel()
         {
-            _context = context;
+            _apiShop = new ApiHelper(ApiResources.CoffeeShops);
         }
 
         [BindProperty]
-      public CoffeeShop CoffeeShop { get; set; } = default!;
+        public CoffeeShopResponseDTO CoffeeShop { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.CoffeeShops == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var coffeeshop = await _context.CoffeeShops.FirstOrDefaultAsync(m => m.CoffeeShopId == id);
+            var apiResponse = await _apiShop.GetAsync<ResponseBody<CoffeeShopResponseDTO>>($"{id}");
+            var coffeeshop = apiResponse!.Result;
 
             if (coffeeshop == null)
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 CoffeeShop = coffeeshop;
             }
@@ -44,20 +47,18 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.CoffeeShops == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var coffeeshop = await _context.CoffeeShops.FindAsync(id);
-
-            if (coffeeshop != null)
+            var result = await _apiShop.DeleteAsync(id.Value);
+            if (!result)
             {
-                CoffeeShop = coffeeshop;
-                _context.CoffeeShops.Remove(CoffeeShop);
-                await _context.SaveChangesAsync();
+                TempData["shop-msg"] = "Delete shop success";
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            TempData["shop-msg"] = "Delete shop Fail";
+            return Page();
         }
     }
 }

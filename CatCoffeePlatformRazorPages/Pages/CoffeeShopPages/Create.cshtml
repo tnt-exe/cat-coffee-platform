@@ -8,6 +8,12 @@
 <h1>Create</h1>
 
 <h4>CoffeeShop</h4>
+@if (TempData["shop-msg"] is not null)
+{
+    <div class="alert alert-info">
+        @TempData["shop-msg"]
+    </div>
+}
 <hr />
 <div class="row">
     <div class="col-md-4">

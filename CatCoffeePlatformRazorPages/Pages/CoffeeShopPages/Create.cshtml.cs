@@ -46,8 +46,10 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 
             if (!result)
             {
+                TempData["shop-msg"] = "Create Shop Success";
                 return RedirectToPage("./Index");
             }
+            TempData["shop-msg"] = "Create Shop Fail";
             return Page();
         }
     }
