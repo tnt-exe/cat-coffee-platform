@@ -7,10 +7,6 @@
 
 <h1>Coffee Shops</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-
 <form method="post" asp-page="areas" id="submitform">
     <input type="hidden" id="coffeeShopInput" name="CoffeeShopJson"/>
     @foreach (var item in Model.CoffeeShops)
