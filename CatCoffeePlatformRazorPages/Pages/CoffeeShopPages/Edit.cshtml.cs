@@ -57,7 +57,7 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 
 
             var result = await _apiShop.PutAsync($"{CoffeeShop.CoffeeShopId}", CoffeeShop);
-            if (!result)
+            if (result)
             {
                 TempData["shop-msg"] = "Update shop success";
                 return RedirectToPage("./Index");

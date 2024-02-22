@@ -105,11 +105,6 @@ namespace CatCoffeePlatformRazorPages.Common
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            HttpResponseMessage response = await _client
-                .DeleteAsync(_apiUrl + id);
-            return response.IsSuccessStatusCode;
-        }
+
     }
 }

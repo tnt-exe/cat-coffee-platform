@@ -72,7 +72,7 @@ namespace CatCoffeePlatformAPI.Controllers
             });
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCoffeeShop(CoffeeShopUpdate resource, int id)
         {
             if (ModelState.IsValid)
@@ -80,17 +80,10 @@ namespace CatCoffeePlatformAPI.Controllers
                 var result = await _coffeeShopRepo.Update(resource, id);
                 if (result.IsError)
                 {
-                    return NotFound(new ResponseBody<CoffeeShopResponseDTO>
-                    {
-                        Title = "Update Fail",
-                    });
+                    return NotFound();
                 }
 
-                return Ok(new ResponseBody<CoffeeShopResponseDTO>
-                {
-                    Title = "Update Successfully",
-                    Result = result.Payload
-                });
+                return Ok(result.Payload);
             }
             return BadRequest(new ResponseBody<CoffeeShopResponseDTO>
             {

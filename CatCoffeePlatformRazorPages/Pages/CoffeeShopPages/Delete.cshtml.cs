@@ -51,8 +51,8 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
             {
                 return NotFound();
             }
-            var result = await _apiShop.DeleteAsync(id.Value);
-            if (!result)
+            var result = await _apiShop.DeleteAsync($"{id}");
+            if (result)
             {
                 TempData["shop-msg"] = "Delete shop success";
                 return RedirectToPage("./Index");

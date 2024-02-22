@@ -75,7 +75,7 @@ namespace Repository.Implement
                 existedShop.ContactNumber = resource.ContactNumber;
                 existedShop.Email = resource.Email;
                 existedShop.Description = resource.Description;
-                existedShop.Deleted = resource.Deleted;
+                existedShop.ManagerId = resource.ManagerId;
 
                 _unitOfWork.CoffeeShopDAO.Update(existedShop);
                 await _unitOfWork.SaveAsync();
