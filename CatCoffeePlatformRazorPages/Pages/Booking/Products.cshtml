@@ -9,21 +9,21 @@
     @{
         if (ViewData["warning"] != null)
         {
-                                                                                                                            <div class="alert alert-info">
-                                                                                                                                @ViewData["warning"]
-                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                        <div class="alert alert-info">
+                                                                                                                                                                                                                                                                                                            @ViewData["warning"]
+                                                                                                                                                                                                                                                                                                        </div>
         }
         var data = (List<string>?)ViewData["errors"];
         if (data != null)
         {
-                                                                                                                            <div style="margin-top:20px">
-                                                                                                                                @foreach (var item in data)
+                                                                                                                                                                                                                                                                                                        <div style="margin-top:20px">
+                                                                                                                                                                                                                                                                                                            @foreach (var item in data)
                 {
-                                                                                                                                    <div class="alert alert-danger" style="margin-top:10px">
-                                                                                                                                        @item
-                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                <div class="alert alert-danger" style="margin-top:10px">
+                                                                                                                                                                                                                                                                                                                    @item
+                                                                                                                                                                                                                                                                                                                </div>
                 }
-                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                        </div>
         }
     }
 </div>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="product_others">
                     <p style="font-weight:500; font-size:20px">@(item.Price)đ/@(item.Unit)</p>
-                    <button type="button" class="btn btn-primary" style="max-width:100px; font-weight:700; font-size:20px;">Add</button>
+                    <button type="button" class="btn btn-primary" style="max-width:100px; font-weight:700; font-size:20px;" onclick="addProduct('@(item.ProductName)', @item.Price, @item.ProductId)">Add</button>
                 </div>
             </div>
             <div class="border border-1 border - primary padding-css"></div>
@@ -112,10 +112,13 @@
                 <p style="font-weight:500; font-size:20px">Rental price</p>
                 <p style="font-weight:500; font-size:20px">@(Model.TotalRentalPrice)đ</p>
             </div>
-            <div id="bill_item_product" class="border border-1 border - primary padding-css"></div>
+            <div class="border border-1 border - primary padding-css"></div>
+
+            <div id="bill_item_product"></div>
+
             <div class="item_information">
                 <p style="font-weight:700; font-size:20px">Total</p>
-                <p style="font-weight:700; font-size:20px">@(Model.TotalRentalPrice)đ</p>
+                <p id="total_price" style="font-weight:700; font-size:20px">@(Model.TotalRentalPrice)đ</p>
             </div>
             <div style="margin-top:40px;">
                 <button class="btn btn-primary" style="width:250px; font-weight:700; font-size:20px; margin:auto; display:block;">Checkout</button>
@@ -125,8 +128,81 @@
 </div>
 
 <script>
-    function addProduct(){
-        var productItem = document.getElementById("bill_item_product");
+    function addProduct(productName, price, id){
+        var existedProduct = document.getElementById("product_item_" + id);
+        if(existedProduct == null){
+            var productNameElement = document.createElement('p');
+            var productNameNode = document.createTextNode(productName);
+            productNameElement.style.fontWeight = '500';
+            productNameElement.style.fontSize = '20px';
+            productNameElement.appendChild(productNameNode);
+
+            var productPriceElement = document.createElement('p');
+            var productPriceNode = document.createTextNode(price + "đ");
+            productPriceElement.style.fontWeight = 500;
+            productPriceElement.style.fontSize = '20px';
+            productPriceElement.appendChild(productPriceNode);
+            productPriceElement.setAttribute("id", "product_item_price_" + id);
+
+            var seperateLine = document.createElement('DIV');
+            seperateLine.className = "border border-1 border - primary padding-css";
+
+            var item = document.createElement('DIV');
+            item.className = "item_information";
+            item.appendChild(productNameElement);
+            item.appendChild(productPriceElement);
+
+            var itemQuantity = document.createElement('DIV');
+            itemQuantity.className = "number_input";
+            var decrementButton = document.createElement('button');
+            decrementButton.className = "left_button";
+            decrementButton.innerHTML = '-';
+            decrementButton.onclick = function(){ 
+                decrementQuantity(id, price);
+            }
+            var incrementButton = document.createElement('button');
+            incrementButton.className = "right_button";
+            incrementButton.innerHTML = '+';
+            incrementButton.onclick = function(){
+                incrementQuantity(id, price);
+            }
+            var inputQuantity = document.createElement('input');
+            inputQuantity.value = "1";
+            inputQuantity.setAttribute("type", "text");
+            inputQuantity.setAttribute("id", "product_item_quantity_" + id);
+            itemQuantity.appendChild(decrementButton);
+            itemQuantity.appendChild(inputQuantity);
+            itemQuantity.appendChild(incrementButton);
+
+            var productItem = document.createElement('DIV');
+            productItem.setAttribute("id", "product_item_" + id);
+            productItem.appendChild(item);
+            productItem.appendChild(itemQuantity);
+            productItem.appendChild(seperateLine);
+
+            var productItemList = document.getElementById("bill_item_product");
+            productItemList.appendChild(productItem);
+
+            var totalPriceElement = document.getElementById('total_price');
+            var totalPriceString = totalPriceElement.childNodes[0].nodeValue;
+            var totalPrice = Number(totalPriceString.replace("đ",""));
+            var newTotalPrice = totalPrice + price;
+            var totalPriceNode = document.createTextNode(newTotalPrice);
+            totalPriceElement.childNodes[0].remove();
+            totalPriceElement.appendChild(totalPriceNode);
+        }
+    }
+
+    function incrementQuantity(id, price) {
+        let quantityInput = document.getElementById('product_item_quantity_' + id);
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    }
+
+    function decrementQuantity(id, price) {
+        let quantityInput = document.getElementById('product_item_quantity_' + id);
+        if (parseInt(quantityInput.value) > 0) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
     }
 </script>
 
@@ -215,5 +291,52 @@
 
     .coffeeShop_description_item + .coffeeShop_description_item {
         margin-left: 20px;
+    }
+
+    .number_input {
+      display: flex;
+      width: max-content;
+      height: 100%;
+      margin-bottom: 10px;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #a7a5a5;
+      border-radius: 12px;
+    }
+
+    .number_input button,
+    .number_input input {
+      border: none;
+      min-width: 50px;
+    }
+
+    .number_input button{
+        background-color: #a7a5a5;
+        color: white;
+        font-weight: 700;
+        font-size: 25px;
+        padding: 0 0 0 0;
+    }
+
+    .number_input input{
+        font-weight: 500;
+        font-size: 20px;
+    }
+
+    .number_input .left_button {
+      border-color: #a7a5a5;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    .number_input .right_button {
+      border-color: #8f8d8d;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .number_input input {
+      width: 40px;
+      text-align: center;
     }
 </style>

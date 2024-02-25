@@ -92,7 +92,7 @@ namespace CatCoffeePlatformAPI
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddCookie("cookie")
+            //.AddCookie("cookie")
             .AddJwtBearer(x =>
             {
                 var keyManager = new KeyManager();
