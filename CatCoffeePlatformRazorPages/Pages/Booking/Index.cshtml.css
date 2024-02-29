@@ -1,0 +1,35 @@
+﻿.button_booking {
+    display: block;
+    padding: 8px 20px;
+    background-color: #a4d587;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    border: none;
+    margin: 0 0 64px 0;
+    border-radius: 4px;
+}
+
+th {
+    text-transform: uppercase;
+}
+
+.main {
+}
+
+    .main h2 {
+        font-size: 32px;
+    }
+
+    .main table {
+        font-size: 14px;
+    }
+
+        .main table tbody > tr {
+        }
+
+
+
+    .main table {
+    }

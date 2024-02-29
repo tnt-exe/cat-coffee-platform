@@ -4,6 +4,8 @@
     ViewData["Title"] = "Login page";
 }
 
+<link rel="stylesheet" href="~/CatCoffeePlatformRazorPages.styles.css" asp-append-version="true" />
+
 <div style="position: fixed; top: 15%; right: 10%; width: 25%;">
     @{
         if (ViewData["warning"] != null)
@@ -34,7 +36,7 @@
         <div class="main_content_container">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
-                <p>Email</p>
+                <p>Username</p>
                 <input style="border: 1px solid #ddd; padding: 6px 10px; width: 100%" asp-for="UserLogin.UserName" />
                 <span asp-validation-for="UserLogin.UserName" class="text-danger"></span>
             </div>

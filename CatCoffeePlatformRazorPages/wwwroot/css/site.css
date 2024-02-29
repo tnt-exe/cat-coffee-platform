@@ -1,18 +1,85 @@
-html {
-  font-size: 14px;
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+section {
+    padding: 64px;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.nav_button {
+    text-align: center;
+    padding: 12px 14px;
+    border: none;
+    border: 1px solid #a4d587;
+    border-radius: 8px;
+    color: #a4d587;
+    font-weight: 500;
+    text-decoration: none;
+    background-color: white;
 }
 
-body {
-  margin-bottom: 60px;
+    .nav_button:hover {
+        color: white;
+        background-color: #a4d587;
+        transition-duration: 0.4s;
+    }
+
+footer {
+    display: flex;
+    align-items: start;
+    justify-content: space-around;
+    padding: 72px 0;
+    background-color: #F7F7F7;
 }
+
+
+    footer .main {
+        width: 450px;
+        color: #3A3A3A;
+    }
+
+        footer .main a {
+            font-size: 2rem;
+            text-decoration: none;
+            color: #3A3A3A;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        footer .main p {
+            font-size: 0.85rem;
+        }
+
+    footer .navigation {
+    }
+
+        footer .navigation h2 {
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        footer .navigation p a {
+            text-decoration: none;
+            color: #3A3A3A;
+        }
+
+    footer .share {
+    }
+
+        footer .share h2 {
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+    footer .contact {
+    }
+
+        footer .contact h2 {
+            display: inline-block;
+            margin-bottom: 16px;
+        }

@@ -37,7 +37,9 @@ namespace DTO.BookingDTO
         public int? CoffeeShopId { get; set; }
         public string? ShopName { get; set; }
         public string? Address { get; set; }
+        [JsonConverter(typeof(TimeOnlyConverter))]
         public TimeOnly? OpeningTime { get; set; }
+        [JsonConverter(typeof(TimeOnlyConverter))]
         public TimeOnly? ClosingTime { get; set; }
         public string? ContactNumber { get; set; }
         public string? Email { get; set; }
@@ -56,7 +58,9 @@ namespace DTO.BookingDTO
     public class BookingResponseDTO_TimeFrame
     {
         public int? TimeFrameId { get; set; }
+        [JsonConverter(typeof(TimeOnlyConverter))]
         public TimeOnly? StartTime { get; set; }
+        [JsonConverter(typeof(TimeOnlyConverter))]
         public TimeOnly? EndTime { get; set; }
         public decimal? Price { get; set; }
     }
