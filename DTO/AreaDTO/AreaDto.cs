@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTO.AreaDTO
@@ -18,5 +19,10 @@ namespace DTO.AreaDTO
 
         [JsonIgnore]
         public int AvailableSlots { get; set; } = 0;
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

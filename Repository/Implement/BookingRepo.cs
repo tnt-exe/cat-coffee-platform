@@ -215,6 +215,7 @@ namespace Repository.Implement
                 .Get(where)
                 .Include(b => b.User)
                 .Include(b => b.CoffeeShop)
+                .Include(b => b.Area)
                 .AsNoTracking()
                 .Skip((startPage - 1) * quantityResult)
                 .Take((endPage - startPage + 1) * quantityResult)

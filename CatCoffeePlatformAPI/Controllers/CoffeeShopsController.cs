@@ -1,4 +1,6 @@
-﻿using BusinessObject.Model;
+﻿using AutoMapper;
+using BusinessObject.Model;
+using CatCoffeePlatformAPI.Common;
 using DAO.Helper;
 using DTO.CoffeeShopDTO;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +27,7 @@ namespace CatCoffeePlatformAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(new
+            return Ok(new ResponseBody<IEnumerable<CoffeeShopResponseDTO>>
             {
                 Title = "Get Successfully",
                 Result = result.Payload
@@ -36,11 +38,12 @@ namespace CatCoffeePlatformAPI.Controllers
         public async Task<IActionResult> GetCoffeeShopByID(int id)
         {
             var result = await _coffeeShopRepo.GetByID(id);
+
             if (result.IsError)
             {
                 return NotFound();
             }
-            return Ok(new
+            return Ok(new ResponseBody<CoffeeShopResponseDTO>
             {
                 Title = "Get Successfully",
                 Result = result.Payload
@@ -62,14 +65,14 @@ namespace CatCoffeePlatformAPI.Controllers
                     Title = "Create fail",
                 });
             }
-            return Ok(new
+            return Ok(new ResponseBody<CoffeeShopResponseDTO>
             {
                 Title = "Create Successfully",
                 Result = result.Payload
             });
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCoffeeShop(CoffeeShopUpdate resource, int id)
         {
             if (ModelState.IsValid)
@@ -77,26 +80,18 @@ namespace CatCoffeePlatformAPI.Controllers
                 var result = await _coffeeShopRepo.Update(resource, id);
                 if (result.IsError)
                 {
-                    return NotFound(new
-                    {
-                        Titile = "Update Fail",
-                        Errors = "Shop not found"
-                    });
+                    return NotFound();
                 }
 
-                return Ok(new
-                {
-                    Title = "Update Successfully",
-                    Result = result.Payload
-                });
+                return Ok(result.Payload);
             }
-            return BadRequest(new
+            return BadRequest(new ResponseBody<CoffeeShopResponseDTO>
             {
                 Title = "Update Fail",
             });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCoffeeShop(int id)
         {
             var result = await _coffeeShopRepo.Deleted(id);

@@ -1,0 +1,85 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+@if (TempData["shop-msg"] is not null)
+{
+    <div class="alert alert-info">
+        @TempData["shop-msg"]
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ShopName
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                OpeningTime
+            </th>
+            <th>
+                ClosingTime
+            </th>
+            <th>
+                ContactNumber
+            </th>
+            <th>
+                Shop Email
+            </th>
+            <th>
+                Description
+            </th>
+            
+            <th>
+                Manager Email
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CoffeeShop) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OpeningTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosingTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerEmail)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.CoffeeShopId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.CoffeeShopId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.CoffeeShopId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

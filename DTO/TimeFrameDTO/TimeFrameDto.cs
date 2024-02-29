@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace DTO.TimeFrameDTO
 {
@@ -13,5 +14,10 @@ namespace DTO.TimeFrameDTO
 
         public int CoffeeShopId { get; set; }
         public string? CoffeeShop { get; set; }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

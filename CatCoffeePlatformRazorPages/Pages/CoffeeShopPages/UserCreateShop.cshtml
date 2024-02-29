@@ -1,0 +1,62 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.UserCreateShopModel
+@{
+}
+<h1>Create</h1>
+
+<h4>CoffeeShop</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.ShopName" class="control-label"></label>
+                <input asp-for="CoffeeShop.ShopName" class="form-control" />
+                <span asp-validation-for="CoffeeShop.ShopName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.Address" class="control-label"></label>
+                <input asp-for="CoffeeShop.Address" class="form-control" />
+                <span asp-validation-for="CoffeeShop.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.OpeningTime" class="control-label"></label>
+                <input asp-for="CoffeeShop.OpeningTime" type="time" class="form-control" />
+                <span asp-validation-for="CoffeeShop.OpeningTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.ClosingTime" class="control-label"></label>
+                <input asp-for="CoffeeShop.ClosingTime" type="time" class="form-control" />
+                <span asp-validation-for="CoffeeShop.ClosingTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.ContactNumber" class="control-label"></label>
+                <input asp-for="CoffeeShop.ContactNumber" class="form-control" />
+                <span asp-validation-for="CoffeeShop.ContactNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.Email" class="control-label"></label>
+                <input asp-for="CoffeeShop.Email" class="form-control" />
+                <span asp-validation-for="CoffeeShop.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoffeeShop.Description" class="control-label"></label>
+                <input asp-for="CoffeeShop.Description" class="form-control" />
+                <span asp-validation-for="CoffeeShop.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
