@@ -14,6 +14,7 @@ using CatCoffeePlatformRazorPages.Common;
 using System.Text.Json;
 using System.Net.Http.Headers;
 using DTO.UserDTO;
+using System.Security.Claims;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
@@ -23,8 +24,9 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         private readonly ApiHelper _apiProduct;
         private readonly ApiHelper _apiTimeFrame;
         private string ProductUrl = "";
+        private IHttpContextAccessor httpContextAccessor;
 
-        public ProductsModel()
+        public ProductsModel(IHttpContextAccessor httpContextAccessor)
         {
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -32,6 +34,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             _apiProduct = new ApiHelper("product");
             _apiTimeFrame = new ApiHelper(ApiResources.TimeFrames);
             ProductUrl = "https://localhost:7039/api/Product";
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public CoffeeShopResponseDTO? CoffeeShop { get; set; }
@@ -50,12 +53,26 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         [BindProperty]
         public int? BookedSlots { get; set; } = 0;
         public decimal TotalRentalPrice { get; set; }
+        public Guid UserId { get; set; }
+        public string Token { get; set; } = "";
 
         public IList<Product> Products { get;set; } = new List<Product>();
 
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var isAuthenticated = httpContextAccessor.HttpContext?.User.Claims.Any(c => c.Type == ClaimTypes.NameIdentifier) ?? false;
+            if (!isAuthenticated)
+            {
+                return RedirectToPage("../login");
+            }
+            else
+            {
+                var userId = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "00000000-0000-0000-0000-000000000000";
+                UserId = new Guid(userId);
+                Token = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "token")?.Value ?? "";
+            }
+
             var errors = new List<string>();
             if(CoffeeShopJson is null)
             {

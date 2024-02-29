@@ -7,6 +7,7 @@ namespace CatCoffeePlatformRazorPages.Common
     public class ApiHelper
     {
         private readonly HttpClient _client;
+        private readonly string _apiQueryUrl;
         private readonly string _apiUrl;
         private readonly string _odataUrl;
         private readonly bool _serializeOption;
@@ -29,6 +30,7 @@ namespace CatCoffeePlatformRazorPages.Common
                 .AddJsonFile("appsettings.json")
                 .Build();
 
+            _apiQueryUrl = config.GetSection("ApiUrl").Value + ApiResource;
             _apiUrl = config.GetSection("ApiUrl").Value + ApiResource + "/";
             _odataUrl = config.GetSection("ODataUrl").Value + ApiResource;
         }
@@ -106,6 +108,17 @@ namespace CatCoffeePlatformRazorPages.Common
             HttpResponseMessage response = await _client
                 .DeleteAsync(_apiUrl + id);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<T?> GetQueryAsync<T>(string queryString)
+        {
+            HttpResponseMessage response = await _client.GetAsync(_apiQueryUrl + "?" + queryString);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(data, GetJsonSerializerOptions());
+            }
+            return default;
         }
 
         // For OData
