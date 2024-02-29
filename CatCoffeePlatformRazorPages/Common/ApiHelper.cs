@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text.Json;
 
 namespace CatCoffeePlatformRazorPages.Common
@@ -6,7 +7,9 @@ namespace CatCoffeePlatformRazorPages.Common
     public class ApiHelper
     {
         private readonly HttpClient _client;
+        private readonly string _apiQueryUrl;
         private readonly string _apiUrl;
+        private readonly string _odataUrl;
         private readonly bool _serializeOption;
 
         /// <summary>
@@ -27,7 +30,9 @@ namespace CatCoffeePlatformRazorPages.Common
                 .AddJsonFile("appsettings.json")
                 .Build();
 
+            _apiQueryUrl = config.GetSection("ApiUrl").Value + ApiResource;
             _apiUrl = config.GetSection("ApiUrl").Value + ApiResource + "/";
+            _odataUrl = config.GetSection("ODataUrl").Value + ApiResource;
         }
 
         private JsonSerializerOptions GetJsonSerializerOptions()
@@ -105,6 +110,46 @@ namespace CatCoffeePlatformRazorPages.Common
             return response.IsSuccessStatusCode;
         }
 
+        public async Task<T?> GetQueryAsync<T>(string queryString)
+        {
+            HttpResponseMessage response = await _client.GetAsync(_apiQueryUrl + "?" + queryString);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(data, GetJsonSerializerOptions());
+            }
+            return default;
+        }
 
+        // For OData
+        public async Task<T?> GetODataAsync<T>(string? route = "", bool odataUrl = false)
+        {
+            string url = "";
+            if (odataUrl)
+            {
+                url = _odataUrl;
+            }
+            else
+            {
+                url = _apiUrl;
+            }
+            HttpResponseMessage response = await _client.GetAsync($"{url}?{route}");
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(data, GetJsonSerializerOptions());
+            }
+            return default;
+        }
+
+        public async Task<string?> GetODataAsync(string? route = "")
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{_odataUrl}?{route}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
+            return null;
+        }
     }
 }

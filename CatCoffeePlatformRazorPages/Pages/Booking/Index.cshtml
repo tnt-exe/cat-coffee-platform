@@ -1,0 +1,68 @@
+﻿@page
+@using BusinessObject.Enums;
+@model CatCoffeePlatformRazorPages.Pages.Booking.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="main">
+    <form asp-page="CoffeeShops" method="get">
+        @Html.AntiForgeryToken()
+        <button class="button_booking" type="submit">
+            Booking Now
+        </button>
+    </form>
+
+    <h2>Booking History</h2>
+
+    <table class="table table-striped d-sm-table">
+        <thead>
+            <tr>
+                <th>Created</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Slots</th>
+                <th>Total Money</th>
+                <th>Payment Date</th>
+                <th>Status</th>
+                <th>Coffee Shop</th>
+                <th>Area</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Bookings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookingDate)
+                    </td>
+                    <td>
+                        @item.Date.ToString("yyyy-MM-dd")
+                    </td>
+                    <td>
+                        @(item.TimeFrame?.StartTime?.ToString("HH:mm:ss") ?? "None") - @(item.TimeFrame?.EndTime?.ToString("HH:mm:ss") ?? "None")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Slots)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalMoney)
+                    </td>
+                    <td>
+                        @(item.PaymentDate?.ToString("yyyy-MM-dd HH:mm:ss") ?? "None")
+                    </td>
+                    <td>
+                        @(((BookingStatus)(item.Status ?? 0)).GetStringValue() ?? "None")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShop!.ShopName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Area!.AreaName)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

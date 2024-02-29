@@ -18,6 +18,12 @@ using System.Data;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using DTO.Common;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
+using Microsoft.AspNetCore.OData;
+using DTO.BookingDTO;
+using DTO.TimeFrameDTO;
+using DTO.AreaDTO;
 
 namespace CatCoffeePlatformAPI
 {
@@ -86,7 +92,7 @@ namespace CatCoffeePlatformAPI
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddCookie("cookie")
+            //.AddCookie("cookie")
             .AddJwtBearer(x =>
             {
                 var keyManager = new KeyManager();
@@ -167,7 +173,15 @@ namespace CatCoffeePlatformAPI
                     o.JsonSerializerOptions.DictionaryKeyPolicy = null;
                 })
                 .AddNewtonsoftJson(option =>
-                    option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                    option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddOData(options => options
+                    .AddRouteComponents("odata", GetEdmModel())
+                    .Count()
+                    .Filter()
+                    .Expand()
+                    .Select()
+                    .OrderBy()
+                    .SetMaxTop(null));
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -251,6 +265,20 @@ namespace CatCoffeePlatformAPI
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static IEdmModel GetEdmModel()
+        {
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<AreaDto>("Areas");
+            builder.EntitySet<TimeFrameDto>("TimeFrames");
+            builder.EntitySet<BookingResponseDTO>("Booking");
+
+            // Defining the composite key
+            /*var entityConfig = builder.EntitySet<BookingDTO>("Bookings").EntityType;
+            entityConfig.HasKey(c => new { c.KeyProperty1, c.KeyProperty2 });*/
+
+            return builder.GetEdmModel();
         }
     }
 }

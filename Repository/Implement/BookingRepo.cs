@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
-using BusinessObject.Enums;
+using AutoMapper.QueryableExtensions;
 using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
 using DTO.BookingDTO;
-using DTO.UserDTO;
+using Microsoft.AspNetCore.OData.Extensions;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.Edm;
 using Repository.Interface;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -15,7 +18,13 @@ namespace Repository.Implement
     public class BookingRepo : IBookingRepo
     {
         private readonly UnitOfWork _unitOfWork;
+
+        // This mapper will use the configuration that we defined at AutoMapperConfig class, the class which is used by injected AutoMapper
         private IMapper _mapper;
+
+        // This mapper is for other configuration stored in other class (for purpose of using ProjectTo)
+        private IMapper _projectToMapper;
+
         private readonly IValidateGet _validateGet;
 
         public BookingRepo(UnitOfWork unitOfWork, IMapper mapper, IValidateGet validateGet)
@@ -23,6 +32,12 @@ namespace Repository.Implement
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validateGet = validateGet;
+
+            MapperConfiguration config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new BookingProjectToProfile());
+            });
+            _projectToMapper = new Mapper(config);
         }
 
         public async Task<OperationResult<BookingResponseDTO>> Create(BookingDTO resource) 
@@ -198,6 +213,9 @@ namespace Repository.Implement
 
             var bookings = await _unitOfWork.BookingDAO
                 .Get(where)
+                .Include(b => b.User)
+                .Include(b => b.CoffeeShop)
+                .Include(b => b.Area)
                 .AsNoTracking()
                 .Skip((startPage - 1) * quantityResult)
                 .Take((endPage - startPage + 1) * quantityResult)
@@ -205,6 +223,116 @@ namespace Repository.Implement
 
             result.Payload = _mapper.Map<IEnumerable<BookingResponseDTO>>(bookings);
             return result;
+        }
+
+        public IQueryable<BookingResponseDTO> GetDbSet(ODataQueryOptions<BookingResponseDTO>? queryOptions)
+        {
+            var query = _unitOfWork.BookingDAO.GetDbSet();
+            if (queryOptions is not null)
+            {
+                IQueryable result = query.ProjectTo<BookingResponseDTO>(_projectToMapper.ConfigurationProvider);
+
+                var settings = new ODataQuerySettings();
+                var filter = queryOptions.Filter;
+                var orderBy = queryOptions.OrderBy;
+                var skip = queryOptions.Skip;
+                var top = queryOptions.Top;
+                var selectExpand = queryOptions.SelectExpand;
+
+                if (filter is not null)
+                {
+                    if (filter.RawValue.ToLower().Contains("date eq"))
+                    {
+                        var filterStrings = queryOptions.Filter.RawValue.Split(" and ");
+                        var dateFilterString = filterStrings?.Where(f => f.ToLower().Contains("date eq")).FirstOrDefault()?.Replace("Date eq ", "").Trim();
+                        if (DateOnly.TryParse(dateFilterString, out var date))
+                        {
+                            var pe = Expression.Parameter(typeof(BookingResponseDTO), "b");
+                            var expression = Expression.Equal(Expression.Property(pe, nameof(BookingResponseDTO.Date)), Expression.Constant(date));
+                            Expression<Func<BookingResponseDTO, bool>> where = Expression.Lambda<Func<BookingResponseDTO, bool>>(expression, pe);
+                            result = result.Cast<BookingResponseDTO>().Where(where);
+                        }
+                        var acceptFilter = filterStrings?.Where(f => !f.ToLower().Contains("date eq")) ?? Enumerable.Empty<string>();
+                        string? newFilterString = null;
+                        if (acceptFilter.Count() == 1)
+                        {
+                            newFilterString = acceptFilter.First();
+                        }
+                        else if(acceptFilter.Count() > 1)
+                        {
+                            newFilterString = String.Join(" and ", acceptFilter);
+                        }
+
+                        if(newFilterString is not null)
+                        {
+                            var newFilter = new FilterQueryOption(newFilterString, queryOptions.Context,
+                            new Microsoft.OData.UriParser.ODataQueryOptionParser(
+                                model: queryOptions.Context.Model,
+                                targetEdmType: queryOptions.Context.NavigationSource.EntityType(),
+                                targetNavigationSource: queryOptions.Context.NavigationSource,
+                                queryOptions: new Dictionary<string, string> { { "$filter", newFilterString } },
+                                container: queryOptions.Context.RequestContainer
+                        ));
+
+                            result = newFilter.ApplyTo(result, settings);
+                        }
+                    }
+                    else
+                    {
+                        result = filter.ApplyTo(result, settings);
+                    }
+                }
+
+                if (queryOptions.Count?.Value == true)
+                {
+                    queryOptions.Request.ODataFeature().TotalCount = ((IQueryable<BookingResponseDTO>)result).Select(b => b.Slots).Sum();
+                }
+                if (orderBy != null)
+                    result = orderBy.ApplyTo(result, settings);
+                if (skip != null)
+                    result = skip.ApplyTo(result, settings);
+                if (top != null)
+                    result = top.ApplyTo(result, settings);
+
+                // This is used to change the existed values
+                // add the NextLink if one exists
+                /*if (queryOptions.Request.ODataFeature().NextLink != null)
+                {
+                    originalRequest.ODataFeature().NextLink = queryOptions.Request.ODataFeature().NextLink;
+                }
+                // add the TotalCount if one exists
+                if (queryOptions.Request.ODataFeature().TotalCount != null)
+                {
+                    originalRequest.ODataFeature().TotalCount = queryOptions.Request.ODataFeature().TotalCount;
+                }*/
+
+                /*if (selectExpand != null)
+                {
+                    result = selectExpand.ApplyTo(result, settings);
+                    return result.Cast<object>();
+                }
+                else
+                {
+                    return result.Cast<BookingResponseDTO>();
+                }*/
+
+                return result.Cast<BookingResponseDTO>();
+            }
+
+
+            return query.ProjectTo<BookingResponseDTO>(_projectToMapper.ConfigurationProvider);
+        }
+
+        private class BookingProjectToProfile : Profile
+        {
+            public BookingProjectToProfile()
+            {
+                CreateMap<Booking, BookingResponseDTO>()
+                    .ForMember(dest => dest.Area, opt => opt.Ignore())
+                    .ForMember(dest => dest.TimeFrame, opt => opt.Ignore())
+                    .ForMember(dest => dest.User, opt => opt.Ignore())
+                    .ForMember(dest => dest.CoffeeShop, opt => opt.Ignore());
+            }
         }
     }
 }

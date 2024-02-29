@@ -1,0 +1,458 @@
+﻿@page
+@model CatCoffeePlatformRazorPages.Pages.Booking.ProductsModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div style="position: fixed; top: 15%; right: 10%; width: 25%;">
+    @{
+        if (ViewData["warning"] != null)
+        {
+                                                                                                                                                                                                                                                                                                                                                                                            <div class="alert alert-info">
+                                                                                                                                                                                                                                                                                                                                                                                                @ViewData["warning"]
+                                                                                                                                                                                                                                                                                                                                                                                            </div>
+        }
+        var data = (List<string>?)ViewData["errors"];
+        if (data != null)
+        {
+                                                                                                                                                                                                                                                                                                                                                                                            <div style="margin-top:20px">
+                                                                                                                                                                                                                                                                                                                                                                                                @foreach (var item in data)
+                {
+                                                                                                                                                                                                                                                                                                                                                                                                    <div class="alert alert-danger" style="margin-top:10px">
+                                                                                                                                                                                                                                                                                                                                                                                                        @item
+                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                }
+                                                                                                                                                                                                                                                                                                                                                                                            </div>
+        }
+    }
+</div>
+
+<section class="main">
+    <div class="border border-2 border - primary padding-css coffeeShop">
+        <h2>Coffee Shop</h2>
+        <div class="coffeeShop_items">
+            <div class="coffeeShop_picture">
+                <img />
+            </div>
+            <div class="coffeeShop_description">
+                <h3>@(Model.CoffeeShop?.ShopName ?? "")</h3>
+                <div class="coffeeShop_description_items">
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-solid fa-location-dot"></i> @(Model.CoffeeShop?.Address ?? "")
+                    </p>
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-regular fa-clock"></i> @(Model.CoffeeShop?.OpeningTime ?? "") - @(Model.CoffeeShop?.ClosingTime ?? "")
+                    </p>
+                </div>
+                <div class="coffeeShop_description_items">
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-solid fa-phone"></i> @(Model.CoffeeShop?.ContactNumber ?? "")
+                    </p>
+                    <p class="coffeeShop_description_item">
+                        <i class="fa-regular fa-envelope"></i> @(Model.CoffeeShop?.Email ?? "")
+                    </p>
+                </div>
+                <h4>
+                    @(Model.CoffeeShop?.Description ?? "")
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="border border-2 border - primary padding-css coffeeShop">
+        <h2>Areas</h2>
+        <div class="coffeeShop_items">
+            <div class="coffeeShop_picture">
+                <img />
+            </div>
+            <div class="coffeeShop_description">
+                <h3>@(Model.Area?.AreaName ?? "")</h3>
+                <p>
+                    <i class="fa-solid fa-money-bill"></i> @(Model.Area?.PricePerHour ?? 0) đ / hour
+                </p>
+                <p>
+                    Booked Date: @(Model.BookedDate?.ToString("yyyy-MM-dd") ?? "Error")
+                </p>
+                <p>
+                    Time Frame: @(Model.TimeFrame?.StartTime ?? "") - @(Model.TimeFrame?.EndTime ?? "")
+                </p>
+                <p>
+                    Booked Slots: @(Model.BookedSlots ?? 0)
+                </p>
+                <h4>
+                    @(Model.Area?.Description ?? "")
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="products_and_bill">
+        <div class="shadow-lg p-3 mb-5 bg-white rounded products_item">
+            @foreach (var item in Model.Products)
+            {
+                <div class="product_item">
+                    <div class="product_picture">
+                        <img />
+                    </div>
+                    <div class="product_description">
+                        <h3>@item.ProductName</h3>
+                        <p style="color:gray">Descriptions</p>
+                    </div>
+                    <div class="product_others">
+                        <p style="font-weight:500; font-size:20px">@(item.Price)đ/@(item.Unit)</p>
+                        <button type="button" class="btn btn-primary" style="max-width:100px; font-weight:700; font-size:20px;" onclick="addProduct('@(item.ProductName)', @item.Price, @item.ProductId)">Add</button>
+                    </div>
+                </div>
+                <div class="border border-1 border - primary padding-css"></div>
+            }
+        </div>
+        <div class="shadow-lg p-3 mb-5 bg-white rounded bill_item">
+            <div>
+                <h2 style="font-weight:700;">Bills</h2>
+                <div class="item_information">
+                    <p style="font-weight:500; font-size:20px">Rental price</p>
+                    <p style="font-weight:500; font-size:20px">@(Model.TotalRentalPrice)đ</p>
+                </div>
+                <div class="border border-1 border - primary padding-css"></div>
+
+                <div id="bill_item_product"></div>
+
+                <div class="item_information">
+                    <p style="font-weight:700; font-size:20px">Total</p>
+                    <p id="total_price" style="font-weight:700; font-size:20px">@(Model.TotalRentalPrice)đ</p>
+                </div>
+                <div style="margin-top:40px;">
+                    <button onclick="checkOut()" class="btn btn-primary" style="width:250px; font-weight:700; font-size:20px; margin:auto; display:block;">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form method="get" asp-page="index" id="submitform">
+</form>
+
+<script>
+    const map = new Map();
+    const bookingUrl = "https://localhost:7039/api/Bookings";
+
+    function addProduct(productName, price, id){
+        var existedProduct = document.getElementById("product_item_" + id);
+        if(existedProduct == null){
+            var productNameElement = document.createElement('p');
+            var productNameNode = document.createTextNode(productName);
+            productNameElement.style.fontWeight = '500';
+            productNameElement.style.fontSize = '20px';
+            productNameElement.appendChild(productNameNode);
+
+            var productPriceElement = document.createElement('p');
+            var productPriceNode = document.createTextNode(price + "đ");
+            productPriceElement.style.fontWeight = 500;
+            productPriceElement.style.fontSize = '20px';
+            productPriceElement.appendChild(productPriceNode);
+            productPriceElement.setAttribute("id", "product_item_price_" + id);
+
+            var seperateLine = document.createElement('DIV');
+            seperateLine.className = "border border-1 border - primary padding-css";
+
+            var item = document.createElement('DIV');
+            item.className = "item_information";
+            item.appendChild(productNameElement);
+            item.appendChild(productPriceElement);
+
+            var itemQuantity = document.createElement('DIV');
+            itemQuantity.className = "number_input";
+            var decrementButton = document.createElement('button');
+            decrementButton.className = "left_button";
+            decrementButton.innerHTML = '-';
+            decrementButton.onclick = function(){ 
+                decrementQuantity(id, price);
+            }
+            var incrementButton = document.createElement('button');
+            incrementButton.className = "right_button";
+            incrementButton.innerHTML = '+';
+            incrementButton.onclick = function(){
+                incrementQuantity(id, price);
+            }
+            var inputQuantity = document.createElement('input');
+            inputQuantity.value = "1";
+            inputQuantity.setAttribute("type", "text");
+            inputQuantity.setAttribute("id", "product_item_quantity_" + id);
+            itemQuantity.appendChild(decrementButton);
+            itemQuantity.appendChild(inputQuantity);
+            itemQuantity.appendChild(incrementButton);
+
+            var productItem = document.createElement('DIV');
+            productItem.setAttribute("id", "product_item_" + id);
+            productItem.appendChild(item);
+            productItem.appendChild(itemQuantity);
+            productItem.appendChild(seperateLine);
+
+            var productItemList = document.getElementById("bill_item_product");
+            productItemList.appendChild(productItem);
+
+            var totalPriceElement = document.getElementById('total_price');
+            var totalPriceString = totalPriceElement.childNodes[0].nodeValue;
+            var totalPrice = Number(totalPriceString.replace("đ",""));
+            var newTotalPrice = totalPrice + price;
+            var totalPriceNode = document.createTextNode(newTotalPrice + "đ");
+            totalPriceElement.childNodes[0].remove();
+            totalPriceElement.appendChild(totalPriceNode);
+
+            map.set(id, 1);
+        }
+    }
+
+    function incrementQuantity(id, price) {
+        let quantityInput = document.getElementById('product_item_quantity_' + id);
+        var quantity = parseInt(quantityInput.value) + 1;
+        quantityInput.value = quantity;
+        var totalPriceElement = document.getElementById('total_price');
+        var totalPriceString = totalPriceElement.childNodes[0].nodeValue;
+        var totalPrice = Number(totalPriceString.replace("đ", ""));
+        var newTotalPrice = totalPrice + price;
+        var totalPriceNode = document.createTextNode(newTotalPrice + "đ");
+        totalPriceElement.childNodes[0].remove();
+        totalPriceElement.appendChild(totalPriceNode);
+        
+        var productTotalPriceElement = document.getElementById("product_item_price_" + id);
+        var productTotalPriceString = productTotalPriceElement.childNodes[0].nodeValue;
+        var productTotalPrice = Number(productTotalPriceString.replace("đ", ""));
+        var newProductTotalPrice = productTotalPrice + price;
+        var productTotalPriceNode = document.createTextNode(newProductTotalPrice + "đ");
+        productTotalPriceElement.childNodes[0].remove();
+        productTotalPriceElement.appendChild(productTotalPriceNode);
+
+        map.set(id, quantity);
+    }
+
+    function decrementQuantity(id, price) {
+        let quantityInput = document.getElementById('product_item_quantity_' + id);
+        if (parseInt(quantityInput.value) > 1) {
+            var quantity = parseInt(quantityInput.value) - 1;
+            quantityInput.value = quantity
+            var productTotalPriceElement = document.getElementById("product_item_price_" + id);
+            var productTotalPriceString = productTotalPriceElement.childNodes[0].nodeValue;
+            var productTotalPrice = Number(productTotalPriceString.replace("đ", ""));
+            var newProductTotalPrice = productTotalPrice - price;
+            var productTotalPriceNode = document.createTextNode(newProductTotalPrice + "đ");
+            productTotalPriceElement.childNodes[0].remove();
+            productTotalPriceElement.appendChild(productTotalPriceNode);
+
+            map.set(id, quantity);
+        }
+        else{
+            var existedProduct = document.getElementById("product_item_" + id);
+            if (existedProduct != null){
+                existedProduct.remove();
+                map.delete(id);
+            }
+        }
+
+        var totalPriceElement = document.getElementById('total_price');
+        var totalPriceString = totalPriceElement.childNodes[0].nodeValue;
+        var totalPrice = Number(totalPriceString.replace("đ", ""));
+        var newTotalPrice = totalPrice - price;
+        var totalPriceNode = document.createTextNode(newTotalPrice + "đ");
+        totalPriceElement.childNodes[0].remove();
+        totalPriceElement.appendChild(totalPriceNode);
+    }
+
+    function checkOut(){
+        var totalPriceElement = document.getElementById('total_price');
+        var totalPriceString = totalPriceElement.childNodes[0].nodeValue;
+        var totalPrice = Number(totalPriceString.replace("đ", ""));
+
+        let bookingProducts = [];
+        map.forEach((value, key, map) => {
+            var totalPriceElement = document.getElementById("product_item_price_" + key);
+            var totalPriceString = totalPriceElement.childNodes[0].nodeValue;
+            var totalPrice = Number(totalPriceString.replace("đ", ""));
+            var newBookingProduct = {
+                Quantity: value,
+                ProductId: key,
+                TotalPrice: totalPrice
+            }
+            bookingProducts.push(newBookingProduct);
+        });
+
+        let booking = 
+        {
+            Date: '@(Model.BookedDate?.ToString("yyyy-MM-dd") ?? "")',
+            Slots : @Model.BookedSlots,
+            TotalMoney : totalPrice,
+            AreaId : @(Model.Area?.AreaId ?? 0),
+            TimeFrameId : @(Model.TimeFrameId ?? 0),
+            CoffeeShopId : @(Model.CoffeeShop?.CoffeeShopId ?? 0),
+            UserId : '@(Model.UserId.ToString())',
+            BookingProducts : bookingProducts
+        }
+
+        fetch(booking).then((data, status, response) => {
+            document.getElementById("submitform").submit();
+        })
+            .catch(error => {
+                console.log(error.responseJSON.errors);
+            });;
+    }
+
+    function fetch(booking){
+        console.log(JSON.stringify(booking));
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                Headers: {
+                    accept: "application/json",
+                },
+                contentType: "application/json",
+                type: 'post',
+                url: bookingUrl,
+                data: JSON.stringify(booking),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + '@(Model.Token)');
+                },
+                success: function (data, status, response) {
+                    resolve(data, status, response);
+                },
+                error: function(error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+</script>
+
+<style>
+    .products_and_bill {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .products_and_bill .products_item {
+        flex: 2;
+        margin-right: 15px;
+    }
+
+    .products_and_bill .bill_item {
+        flex: 1;
+        padding: 10px;
+    }
+
+    .bill_item .item_information {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+    
+    .product_item {
+        display: flex;
+        flex-direction: row;
+        padding: 10px;
+        min-height: 150px
+    }
+
+    .product_item .product_picture {
+        flex: 2;
+    }
+
+    .product_item .product_description {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        flex: 3;
+    }
+
+    .product_item .product_others {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 150px;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .coffeeShop {
+        display: flex;
+        flex-direction: column;
+        margin: 30px 20px;
+        min-height: 240px;
+    }
+
+    .coffeeShop h2 {
+        text-align:center;
+    }
+
+    .coffeeShop .coffeeShop_items {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .coffeeShop_picture {
+        flex: 1;
+        padding: 4px 16px;
+    }
+
+    .coffeeShop_description {
+        flex: 2;
+        padding: 4px 16px;
+    }
+
+    .coffeeShop_description_items {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .coffeeShop_description_item + .coffeeShop_description_item {
+        margin-left: 20px;
+    }
+
+    .number_input {
+      display: flex;
+      width: max-content;
+      height: 100%;
+      margin-bottom: 10px;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #a7a5a5;
+      border-radius: 12px;
+    }
+
+    .number_input button,
+    .number_input input {
+      border: none;
+      min-width: 50px;
+    }
+
+    .number_input button{
+        background-color: #a7a5a5;
+        color: white;
+        font-weight: 700;
+        font-size: 25px;
+        padding: 0 0 0 0;
+    }
+
+    .number_input input{
+        font-weight: 500;
+        font-size: 20px;
+    }
+
+    .number_input .left_button {
+      border-color: #a7a5a5;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    .number_input .right_button {
+      border-color: #8f8d8d;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .number_input input {
+      width: 40px;
+      text-align: center;
+    }
+</style>

@@ -1,7 +1,12 @@
-﻿namespace DTO.AreaDTO
+﻿using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.ComponentModel.DataAnnotations;
+
+namespace DTO.AreaDTO
 {
     public record AreaDto
     {
+        [Key]
         public int AreaId { get; set; }
         public string? AreaName { get; set; }
 
@@ -11,5 +16,13 @@
 
         public int CoffeeShopId { get; set; }
         public string? CoffeeShop { get; set; }
+
+        [JsonIgnore]
+        public int AvailableSlots { get; set; } = 0;
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }

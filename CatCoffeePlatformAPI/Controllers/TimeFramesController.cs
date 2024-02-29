@@ -2,6 +2,8 @@
 using CatCoffeePlatformAPI.Controllers.Base;
 using DTO.TimeFrameDTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Repository.Interface;
 
 namespace CatCoffeePlatformAPI.Controllers
@@ -19,6 +21,7 @@ namespace CatCoffeePlatformAPI.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ResponseBody<IEnumerable<TimeFrameDto>>), 200)]
         [ProducesResponseType(404)]
+        [ODataIgnored]
         public async Task<IActionResult> GetTimeFrames()
         {
             var result = await _timeFrameRepo.GetTimeFrames();
@@ -90,6 +93,13 @@ namespace CatCoffeePlatformAPI.Controllers
                     Title = "Update timeframe success",
                     Result = result.Payload
                 });
+        }
+
+        [HttpGet("odata")]
+        [EnableQuery]
+        public IActionResult GetAreasOData()
+        {
+            return Ok(_timeFrameRepo.GetDbSet());
         }
     }
 }

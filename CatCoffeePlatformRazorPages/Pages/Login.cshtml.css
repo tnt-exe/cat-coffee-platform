@@ -1,0 +1,42 @@
+﻿.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 650px;
+    margin: 64px auto;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 32px;
+}
+
+    .main h2 {
+        font-weight: 700;
+        font-size: 32px;
+        color: #a4d587;
+    }
+
+.main_content_container {
+}
+
+    .main_content_container p {
+        padding: 0;
+        margin: 0;
+        font-size: 12px;
+        color: #B0B0B0;
+        text-transform: uppercase;
+    }
+
+    .main_content_container div {
+        margin-bottom: 24px;
+    }
+
+    .main_content_container button {
+        padding: 8px 12px;
+        outline: none;
+        border: 1px solid #ddd;
+        background-color: #a4d587;
+        border-radius: 8px;
+        color: white;
+        width: 100%;
+    }
