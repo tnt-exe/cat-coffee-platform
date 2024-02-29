@@ -15,6 +15,9 @@ using System.Text.Json;
 using System.Net.Http.Headers;
 using DTO.UserDTO;
 using System.Security.Claims;
+using Microsoft.Extensions.Options;
+using Stripe;
+using Stripe.Checkout;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
@@ -25,8 +28,9 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         private readonly ApiHelper _apiTimeFrame;
         private string ProductUrl = "";
         private IHttpContextAccessor httpContextAccessor;
+        private readonly StripeSetting _stripeSetting;
 
-        public ProductsModel(IHttpContextAccessor httpContextAccessor)
+        public ProductsModel(IHttpContextAccessor httpContextAccessor, IOptions<StripeSetting> stripeSetting)
         {
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -35,6 +39,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             _apiTimeFrame = new ApiHelper(ApiResources.TimeFrames);
             ProductUrl = "https://localhost:7039/api/Product";
             this.httpContextAccessor = httpContextAccessor;
+            _stripeSetting = stripeSetting.Value;
         }
 
         public CoffeeShopResponseDTO? CoffeeShop { get; set; }
@@ -52,11 +57,12 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         public DateOnly? BookedDate { get; set; }
         [BindProperty]
         public int? BookedSlots { get; set; } = 0;
+        [BindProperty]
         public decimal TotalRentalPrice { get; set; }
         public Guid UserId { get; set; }
         public string Token { get; set; } = "";
 
-        public IList<Product> Products { get;set; } = new List<Product>();
+        public IList<BusinessObject.Model.Product> Products { get; set; } = new List<BusinessObject.Model.Product>();
 
 
         public async Task<IActionResult> OnPostAsync()
@@ -74,19 +80,19 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             }
 
             var errors = new List<string>();
-            if(CoffeeShopJson is null)
+            if (CoffeeShopJson is null)
             {
                 errors.Add("Coffee Shop information not found");
             }
-            if(AreaJson is null)
+            if (AreaJson is null)
             {
                 errors.Add("Area information not found");
             }
-            if(TimeFrameId is null)
+            if (TimeFrameId is null)
             {
                 errors.Add("Time frame not found");
             }
-            if(BookedDate is null)
+            if (BookedDate is null)
             {
                 errors.Add("Booked date not found");
             }
@@ -105,7 +111,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             var area = JsonSerializer.Deserialize<AreaDto>(AreaJson ?? "");
             var timeFrameResponse = await _apiTimeFrame.GetAsync<ResponseBody<TimeFrameDto>>(TimeFrameId.ToString() ?? "");
             var timeFrame = timeFrameResponse?.Result;
-            IList<Product> products = new List<Product>();
+            IList<BusinessObject.Model.Product> products = new List<BusinessObject.Model.Product>();
 
             var productsResponse = await client.GetAsync($"{ProductUrl}?shopId={shop?.CoffeeShopId ?? 0}");
             string productsResponseMessage = await productsResponse.Content.ReadAsStringAsync();
@@ -115,16 +121,16 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             };
             if (productsResponse.IsSuccessStatusCode)
             {
-                products = JsonSerializer.Deserialize<List<Product>>(productsResponseMessage, options) ?? Enumerable.Empty<Product>().ToList();
+                products = JsonSerializer.Deserialize<List<BusinessObject.Model.Product>>(productsResponseMessage, options) ?? Enumerable.Empty<BusinessObject.Model.Product>().ToList();
             }
 
-            if(shop is null || area is null || timeFrame is null)
+            if (shop is null || area is null || timeFrame is null)
             {
                 ViewData["warning"] = "Load data failed";
                 return Page();
             }
 
-            if(!TimeOnly.TryParse(timeFrame.StartTime, out var startTime)
+            if (!TimeOnly.TryParse(timeFrame.StartTime, out var startTime)
                 || !TimeOnly.TryParse(timeFrame.EndTime, out var endTime))
             {
                 ViewData["warning"] = "Load bill failed";
@@ -152,6 +158,38 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             Products = products;
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostPayOrderAsync()
+        {
+            var currency = "VND";
+            var successUrl = "https://localhost:7031/Booking/StripeSuccess";
+            var cancelUrl = "https://localhost:7031/Booking/StripeCancel";
+            StripeConfiguration.ApiKey = _stripeSetting.SecretKey;
+            var options2 = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions> {
+            new SessionLineItemOptions {
+                PriceData = new SessionLineItemPriceDataOptions {
+                    Currency = currency,
+                    UnitAmount = Convert.ToInt32(TotalRentalPrice) * 100, // Amount in the smallest currency unit (e.g., cents)
+                    ProductData = new SessionLineItemPriceDataProductDataOptions {
+                        Name = "Product Name",
+                        Description = "Product Description"
+                    }
+                },
+                Quantity = 1
+            }
+        },
+                Mode = "payment",
+                SuccessUrl = successUrl,
+                CancelUrl = cancelUrl
+            };
+
+            var service = new SessionService();
+            var session = service.Create(options2);
+            return Redirect(session.Url);
         }
     }
 }

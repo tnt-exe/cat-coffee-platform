@@ -20,7 +20,7 @@ namespace CatCoffeePlatformRazorPages.Pages
 
         public IEnumerable<CoffeeShopResponseDTO> CoffeeShops { get; set; } = default!;
 
-        public async Task OnGetAsync()
+/*        public async Task OnGetAsync()
         {
             var apiResponse = await _apiCoffeeShop
                 .GetAsync<ResponseBody<IEnumerable<CoffeeShopResponseDTO>>>();
@@ -30,6 +30,6 @@ namespace CatCoffeePlatformRazorPages.Pages
             {
                 CoffeeShops = list;
             }
-        }
+        }*/
     }
 }
