@@ -8,7 +8,6 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
-
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", config =>
     {
