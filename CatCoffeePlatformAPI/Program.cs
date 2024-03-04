@@ -37,6 +37,8 @@ namespace CatCoffeePlatformAPI
 
             // Add services to the container.
 
+            builder.Services.AddGrpc();
+
             // Add CORS
             builder.Services.AddCors(o =>
             {
@@ -256,6 +258,8 @@ namespace CatCoffeePlatformAPI
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
+
             app.UseCors("All");
 
             app.UseAuthentication();
@@ -263,6 +267,13 @@ namespace CatCoffeePlatformAPI
             app.UseAuthorization();
             
             app.MapControllers();
+
+            app.UseEndpoints(e =>
+            {
+                e.MapGrpcService<BookingCRUDService>();
+
+                e.MapControllers();
+            });
 
             app.Run();
         }

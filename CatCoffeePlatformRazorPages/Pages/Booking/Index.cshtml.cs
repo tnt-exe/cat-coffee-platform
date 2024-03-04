@@ -6,6 +6,9 @@ using BusinessObject.Model;
 using DTO.AreaDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Grpc.Net.Client;
+using CatCoffeePlatformRazorPages.Protos;
+using BookingObject = CatCoffeePlatformRazorPages.Protos.Booking;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
@@ -20,8 +23,10 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public IEnumerable<BookingResponseDTO> Bookings { get;set; } = new List<BookingResponseDTO>();
 
+
+        #region get
+        public IEnumerable<BookingResponseDTO> Bookings { get; set; } = new List<BookingResponseDTO>();
         public async Task<IActionResult> OnGetAsync()
         {
             var isAuthenticated = httpContextAccessor.HttpContext?.User.Claims.Any(c => c.Type == ClaimTypes.NameIdentifier) ?? false;
@@ -43,5 +48,22 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
 
             return Page();
         }
+        #endregion
+
+
+        #region gRPC
+        /*public IEnumerable<BookingObject> Bookings { get; set; } = new List<BookingObject>();
+        public IActionResult OnGet()
+        {
+            var channel = GrpcChannel.ForAddress("https://localhost:7039");
+            var client = new BookingCRUD.BookingCRUDClient(channel);
+
+            Bookingss bookings = client.SelectAll(new Empty());
+
+            Bookings = bookings.Items;
+
+            return Page();
+        }*/
+        #endregion
     }
 }

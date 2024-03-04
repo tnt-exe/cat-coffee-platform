@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "CatCoffeePlatformRazorPages.Protos";
+
+package booking;
+
+service BookingCRUD {
+	rpc SelectAll(Empty) returns (Bookingss);
+	rpc SelectById(BookingFilter) returns (Booking);
+}
+
+message Empty {
+}
+
+message Booking{
+	int32 bookingId = 1;
+	string bookingDate = 2;
+	string date = 3;
+	int32 slots = 4;
+	double totalMoney = 5;
+	string paymentDate = 6;
+	int32 status = 7;
+	int32 areaId = 8;
+	int32 timeFrameId = 9;
+	string userId = 10;
+	int32 coffeeShopId = 11;
+}
+
+message Bookingss{
+	repeated Booking items = 1;
+}
+
+message BookingFilter{
+	int32 bookingId = 1;
+}
