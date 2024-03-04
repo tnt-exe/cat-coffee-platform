@@ -31,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Bookings)
+            @*@foreach (var item in Model.Bookings)
             {
                 <tr>
                     <td>
@@ -60,6 +60,37 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Area!.AreaName)
+                    </td>
+                </tr>
+            }*@
+
+
+            @foreach (var item in Model.Bookings)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookingDate)
+                    </td>
+                    <td>
+                        @item.Date
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Slots)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalMoney)
+                    </td>
+                    <td>
+                        @item.PaymentDate
+                    </td>
+                    <td>
+                        @(((BookingStatus)item.Status).GetStringValue() ?? "None")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShopId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AreaId)
                     </td>
                 </tr>
             }
