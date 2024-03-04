@@ -1,5 +1,6 @@
 using BusinessObject.Enums;
 using CatCoffeePlatformAPI.Permission;
+using CatCoffeePlatformRazorPages.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,6 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
-
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", config =>
     {
@@ -39,6 +39,8 @@ builder.Services.AddAuthorization(options =>
         policy.Requirements.Add(new HasScopeRequirement(((int)Role.Manager).ToString(), Configuration["Jwt:Issuer"]!));
     });
 });
+
+builder.Services.Configure<StripeSetting>(Configuration.GetSection("StripeSettings")); 
 
 var app = builder.Build();
 

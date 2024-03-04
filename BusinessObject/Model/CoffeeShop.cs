@@ -37,6 +37,5 @@ namespace BusinessObject.Model
         public IEnumerable<Cat> Cats { get; set; } = new List<Cat>();
 
         public IEnumerable<TimeFrame> TimeFrames { get; set; } = new List<TimeFrame>();
-
     }
 }

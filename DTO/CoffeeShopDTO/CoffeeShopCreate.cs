@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DTO.Helper;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTO.CoffeeShopDTO
 {
@@ -8,7 +9,11 @@ namespace DTO.CoffeeShopDTO
         [Required]
         public string? ShopName { get; set; }
         public string? Address { get; set; }
+        [Required]
+        [TimeValidator]
         public string? OpeningTime { get; set; }
+        [Required]
+        [TimeValidator]
         public string? ClosingTime { get; set; }
 
         [Required]
@@ -19,5 +24,8 @@ namespace DTO.CoffeeShopDTO
         [EmailAddress]
         public string? Email { get; set; }
         public string? Description { get; set; }
+
+        [Required]
+        public Guid ManagerId { get; set; }
     }
 }

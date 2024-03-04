@@ -8,7 +8,7 @@ namespace Repository.Interface
     {
         Task<OperationResult<IEnumerable<CoffeeShopResponseDTO>>> GetAllCoffeeShops();
         Task<OperationResult<CoffeeShopResponseDTO>> Create(CoffeeShopCreate resource);
-        Task<OperationResult<CoffeeShop>> GetByID(int id);
+        Task<OperationResult<CoffeeShopResponseDTO>> GetByID(int id);
         Task<OperationResult<CoffeeShopResponseDTO>> Update(CoffeeShopUpdate resource, int id);
         Task<OperationResult<object>> Deleted(int id);
     }

@@ -22,6 +22,7 @@ namespace DTO.CoffeeShopDTO
         [Required]
         public string? Email { get; set; }
         public string? Description { get; set; }
-        public bool Deleted { get; set; }
+        public Guid ManagerId { get; set; }
+
     }
 }

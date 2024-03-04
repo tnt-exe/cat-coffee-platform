@@ -28,7 +28,7 @@ namespace Repository.Implement
                 var existedEmail = await _unitOfWork.CoffeeShopDAO.Get(filter: s => s.Email == resource.Email).FirstOrDefaultAsync();
                 if (existedEmail is not null)
                 {
-                    result.AddError(ErrorCode.BadRequest, "Shop not found");
+                    result.AddError(ErrorCode.BadRequest, "Email Aldready Existed");
                     return result;
                 }
                 var newShop = new CoffeeShop()
@@ -40,6 +40,7 @@ namespace Repository.Implement
                     ContactNumber = resource.ContactNumber,
                     Email = resource.Email,
                     Description = resource.Description,
+                    ManagerId = resource.ManagerId,
                     Deleted = false
                 };
                 await _unitOfWork.CoffeeShopDAO.Insert(newShop);
@@ -74,7 +75,7 @@ namespace Repository.Implement
                 existedShop.ContactNumber = resource.ContactNumber;
                 existedShop.Email = resource.Email;
                 existedShop.Description = resource.Description;
-                existedShop.Deleted = resource.Deleted;
+                existedShop.ManagerId = resource.ManagerId;
 
                 _unitOfWork.CoffeeShopDAO.Update(existedShop);
                 await _unitOfWork.SaveAsync();
@@ -88,7 +89,8 @@ namespace Repository.Implement
 
         public async Task<OperationResult<IEnumerable<CoffeeShopResponseDTO>>> GetAllCoffeeShops()
         {
-            var shopList = await _unitOfWork.CoffeeShopDAO.Get(filter: s => !s.Deleted).ToListAsync();
+            string[] includeProperties = { nameof(CoffeeShop.Manager) };
+            var shopList = await _unitOfWork.CoffeeShopDAO.Get(filter: s => !s.Deleted, includeProperties: includeProperties).ToListAsync();
             var response = _mapper.Map<IEnumerable<CoffeeShopResponseDTO>>(shopList);
             var result = new OperationResult<IEnumerable<CoffeeShopResponseDTO>>()
             {
@@ -99,17 +101,18 @@ namespace Repository.Implement
             return result;
         }
 
-        public async Task<OperationResult<CoffeeShop>> GetByID(int id)
+        public async Task<OperationResult<CoffeeShopResponseDTO>> GetByID(int id)
         {
-            var result = new OperationResult<CoffeeShop>
+            var result = new OperationResult<CoffeeShopResponseDTO>
             {
                 IsError = false,
             };
-            //string[] includeProperties = { nameof(CoffeeShop.Areas), nameof(CoffeeShop.Products), nameof(CoffeeShop.Cats), nameof(CoffeeShop.TimeFrames) };
-            var shop = await _unitOfWork.CoffeeShopDAO.GetByIDAsync(id);
+            string[] includeProperties = { nameof(CoffeeShop.Manager) };
+            var shopEnity = await _unitOfWork.CoffeeShopDAO.Get(filter: s => s.CoffeeShopId == id, includeProperties: includeProperties).SingleOrDefaultAsync();
+            var shop = _mapper.Map<CoffeeShopResponseDTO>(shopEnity);
             if (shop == null)
             {
-                result.AddError(ErrorCode.NotFound, "Not Found Shop");
+                result.AddError(ErrorCode.NotFound, "Shop not found");
             }
             result.Payload = shop;
 
@@ -133,7 +136,7 @@ namespace Repository.Implement
                 }
 
                 existedShop.Deleted = true;
-
+                _unitOfWork.CoffeeShopDAO.Update(existedShop);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
