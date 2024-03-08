@@ -1,14 +1,14 @@
 ﻿@page
+@using BusinessObject.Enums;
 @model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.DetailsModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>CoffeeShop Details</h1>
 
 <div>
-    <h4>CoffeeShop</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -66,3 +66,195 @@
     <a asp-page="./Edit" asp-route-id="@Model.CoffeeShop?.CoffeeShopId">Edit</a> |
     <a asp-page="./Index">Back to List</a>
 </div>
+<br/>
+<br />
+
+<hr />
+<br/>
+<br />
+<h1>Cat In Shop</h1>
+<br />
+@if (Model.Cat is null || !Model.Cat.Any())
+{
+    <h3 class="alert alert-info">No Cats Found</h3>
+}
+else
+{
+    @if (TempData["cat-msg"] is not null)
+    {
+        <div class="alert alert-info">
+            @TempData["cat-msg"]
+        </div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cat Name</th>
+                <th>Description</th>
+                <th>Healthy Status</th>
+                <th>Area</th>
+                <th>Coffee Shop</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Cat)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CatName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @if (item.HealthyStatus == (int)CatStatus.Healthy)
+                        {
+                            <span class="badge bg-success">Healthy</span>
+                        }
+                        else if (item.HealthyStatus == (int)CatStatus.Sick)
+                        {
+                            <span class="badge bg-warning">Sick</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Dead</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Area)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShop)
+                    </td>
+                    <td>
+                        <a asp-page="../CatPages/Edit" asp-route-id="@item.CatId">Edit</a> |
+                        <a asp-page="../CatPages/Details" asp-route-id="@item.CatId">Details</a> |
+                        <a asp-page="../CatPages/Delete" asp-route-id="@item.CatId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<br />
+<br />
+
+<hr />
+<br />
+<br />
+<h1>Area</h1>
+<br />
+
+
+@if (Model.Area is null || !Model.Area.Any())
+{
+    <h3 class="alert alert-info">No Areas Found</h3>
+}
+else
+{
+    @if (TempData["area-msg"] is not null)
+    {
+        <div class="alert alert-info">
+            @TempData["area-msg"]
+        </div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Area Name</th>
+                <th>Description</th>
+                <th>Price Per Hour</th>
+                <th>Max Slots</th>
+                <th>Coffee Shop</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Area)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AreaName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PricePerHour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaxSlots)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShop)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.AreaId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.AreaId">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<br />
+<br />
+
+<hr />
+<br />
+<br />
+<h1>Time Frames</h1>
+<br />
+
+@if (Model.TimeFrame is null || !Model.TimeFrame.Any())
+{
+    <h3 class="alert alert-info">No Time Frame Found</h3>
+}
+else
+{
+    @if (TempData["tf-msg"] is not null)
+    {
+        <div class="alert alert-info">
+            @TempData["tf-msg"]
+        </div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Price</th>
+                <th>Coffee Shop</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TimeFrame)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CoffeeShop)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.TimeFrameId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.TimeFrameId">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
