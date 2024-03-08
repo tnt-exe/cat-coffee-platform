@@ -13,8 +13,13 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         {
             _stripeSettings = stripeSettings.Value;
         }
-        public async Task<IActionResult> OnGet()
+
+        [BindProperty]
+        public int BookingId { get; set; }
+
+        public async Task<IActionResult> OnGet(int BookingId)
         {
+            this.BookingId = BookingId;
             return Page();
         }
     }

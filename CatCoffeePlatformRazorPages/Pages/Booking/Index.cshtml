@@ -31,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            @*@foreach (var item in Model.Bookings)
+            @foreach (var item in Model.Bookings)
             {
                 <tr>
                     <td>
@@ -62,10 +62,10 @@
                         @Html.DisplayFor(modelItem => item.Area!.AreaName)
                     </td>
                 </tr>
-            }*@
+            }
 
 
-            @foreach (var item in Model.Bookings)
+            @*@foreach (var item in Model.Bookings)
             {
                 <tr>
                     <td>
@@ -93,7 +93,7 @@
                         @Html.DisplayFor(modelItem => item.AreaId)
                     </td>
                 </tr>
-            }
+            }*@
         </tbody>
     </table>
 </section>

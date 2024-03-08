@@ -18,6 +18,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
+using DTO.BookingDTO;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
@@ -26,6 +27,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         private readonly HttpClient client = null!;
         private readonly ApiHelper _apiProduct;
         private readonly ApiHelper _apiTimeFrame;
+        private readonly ApiHelper _apiBooking;
         private string ProductUrl = "";
         private IHttpContextAccessor httpContextAccessor;
         private readonly StripeSetting _stripeSetting;
@@ -37,6 +39,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             client.DefaultRequestHeaders.Accept.Add(contentType);
             _apiProduct = new ApiHelper("product");
             _apiTimeFrame = new ApiHelper(ApiResources.TimeFrames);
+            _apiBooking = new ApiHelper(ApiResources.Bookings);
             ProductUrl = "https://localhost:7039/api/Product";
             this.httpContextAccessor = httpContextAccessor;
             _stripeSetting = stripeSetting.Value;
@@ -61,6 +64,8 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         public decimal TotalRentalPrice { get; set; }
         public Guid UserId { get; set; }
         public string Token { get; set; } = "";
+        [BindProperty]
+        public int? BookingId { get; set; }
 
         public IList<BusinessObject.Model.Product> Products { get; set; } = new List<BusinessObject.Model.Product>();
 
@@ -162,26 +167,38 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
 
         public async Task<IActionResult> OnPostPayOrderAsync()
         {
+            var apiResponse = await _apiBooking.GetAsync<ResponseBody<BookingResponseDTO>>(BookingId.ToString() ?? "0");
+            var existedBooking = apiResponse?.Result;
+            if (existedBooking is null)
+            {
+                ViewData["warning"] = "Checkout is not complete";
+                ViewData["errors"] = new string[1]
+                {
+                    "Booking information not found"
+                };
+                return Page();
+            }
+
             var currency = "VND";
-            var successUrl = "https://localhost:7031/Booking/StripeSuccess";
-            var cancelUrl = "https://localhost:7031/Booking/StripeCancel";
+            var successUrl = $"https://localhost:7031/Booking/StripeSuccess?BookingId={existedBooking.BookingId}";
+            var cancelUrl = $"https://localhost:7031/Booking/StripeCancel?BookingId={existedBooking.BookingId}";
             StripeConfiguration.ApiKey = _stripeSetting.SecretKey;
             var options2 = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
                 LineItems = new List<SessionLineItemOptions> {
-            new SessionLineItemOptions {
-                PriceData = new SessionLineItemPriceDataOptions {
-                    Currency = currency,
-                    UnitAmount = Convert.ToInt32(TotalRentalPrice) * 100, // Amount in the smallest currency unit (e.g., cents)
-                    ProductData = new SessionLineItemPriceDataProductDataOptions {
-                        Name = "Product Name",
-                        Description = "Product Description"
+                    new SessionLineItemOptions {
+                        PriceData = new SessionLineItemPriceDataOptions {
+                            Currency = currency,
+                            UnitAmount = Convert.ToInt32(TotalRentalPrice), // Amount in the smallest currency unit (e.g., cents)
+                            ProductData = new SessionLineItemPriceDataProductDataOptions {
+                                Name = "Product Name",
+                                Description = "Product Description"
+                            }
+                        },
+                    Quantity = 1
                     }
                 },
-                Quantity = 1
-            }
-        },
                 Mode = "payment",
                 SuccessUrl = successUrl,
                 CancelUrl = cancelUrl

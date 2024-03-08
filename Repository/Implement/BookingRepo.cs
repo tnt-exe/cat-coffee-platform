@@ -4,6 +4,7 @@ using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
 using DTO.BookingDTO;
+using DTO.UserDTO;
 using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
@@ -40,24 +41,24 @@ namespace Repository.Implement
             _projectToMapper = new Mapper(config);
         }
 
-        public async Task<OperationResult<BookingResponseDTO>> Create(BookingDTO resource) 
+        public async Task<OperationResult<BookingResponseDTO>> Create(BookingDTO resource)
         {
             var result = new OperationResult<BookingResponseDTO>()
             {
                 IsError = false
             };
 
-            if(resource.AreaId is null || resource.TimeFrameId is null || resource.UserId is null || resource.CoffeeShopId is null)
+            if (resource.AreaId is null || resource.TimeFrameId is null || resource.UserId is null || resource.CoffeeShopId is null)
             {
                 result.AddError(ErrorCode.BadRequest, "Invalid input");
                 return result;
             }
 
-            if(resource.BookingProducts.Count() > 0)
+            if (resource.BookingProducts.Count() > 0)
             {
-                foreach(var product in resource.BookingProducts)
+                foreach (var product in resource.BookingProducts)
                 {
-                    if(product.Quantity is null || product.ProductId is null)
+                    if (product.Quantity is null || product.ProductId is null)
                     {
                         result.AddError(ErrorCode.BadRequest, "Invalid input");
                         return result;
@@ -65,7 +66,7 @@ namespace Repository.Implement
                 }
             }
 
-            if(resource.Slots is null || resource.Slots == 0)
+            if (resource.Slots is null || resource.Slots == 0)
             {
                 result.AddError(ErrorCode.BadRequest, "Please choose the number of slots");
                 return result;
@@ -81,7 +82,7 @@ namespace Repository.Implement
 
             var bookedSlots = _unitOfWork.BookingDAO.Get(b => b.AreaId == resource.AreaId && b.TimeFrameId == resource.TimeFrameId && b.Date == resource.Date).Sum(b => b.Slots);
 
-            if((bookedSlots + resource.Slots) > maxSlot)
+            if ((bookedSlots + resource.Slots) > maxSlot)
             {
                 result.AddError(ErrorCode.BadRequest, $"Only {maxSlot - bookedSlots} slots are available");
                 return result;
@@ -107,7 +108,7 @@ namespace Repository.Implement
             catch (DbUpdateException ex)
             {
                 var innerException = ex.InnerException?.Message;
-                if(innerException != null && innerException.Contains("conflicted with the FOREIGN KEY constraint"))
+                if (innerException != null && innerException.Contains("conflicted with the FOREIGN KEY constraint"))
                 {
                     if (innerException.Contains(nameof(Booking.AreaId)))
                     {
@@ -168,42 +169,42 @@ namespace Repository.Implement
 
             expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.Deleted)), Expression.Constant(false)));
 
-            if(slots is not null)
+            if (slots is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.Slots)), Expression.Constant(slots)));
             }
 
-            if(date is not null)
+            if (date is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.Date)), Expression.Constant(date)));
             }
 
-            if(totalMoney is not null)
+            if (totalMoney is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.TotalMoney)), Expression.Constant(totalMoney)));
             }
 
-            if(status is not null)
+            if (status is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.Status)), Expression.Constant(status)));
             }
 
-            if(areaId is not null)
+            if (areaId is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.AreaId)), Expression.Constant(areaId)));
             }
 
-            if(timeFrameId is not null)
+            if (timeFrameId is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.TimeFrameId)), Expression.Constant(timeFrameId)));
             }
 
-            if(userId is not null)
+            if (userId is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.UserId)), Expression.Constant(userId)));
             }
 
-            if(coffeeShopId is not null)
+            if (coffeeShopId is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(Booking.CoffeeShopId)), Expression.Constant(coffeeShopId)));
             }
@@ -216,12 +217,146 @@ namespace Repository.Implement
                 .Include(b => b.User)
                 .Include(b => b.CoffeeShop)
                 .Include(b => b.Area)
+                .Include(b => b.TimeFrame)
                 .AsNoTracking()
                 .Skip((startPage - 1) * quantityResult)
                 .Take((endPage - startPage + 1) * quantityResult)
                 .ToArrayAsync();
 
             result.Payload = _mapper.Map<IEnumerable<BookingResponseDTO>>(bookings);
+            return result;
+        }
+
+        public async Task<OperationResult<BookingResponseDTO>> GetById(int id)
+        {
+            var result = new OperationResult<BookingResponseDTO>()
+            {
+                IsError = false
+            };
+
+            var existedBooking = await _unitOfWork.BookingDAO
+                .Get(b => b.BookingId == id && !b.Deleted)
+                .Include(b => b.User)
+                .Include(b => b.CoffeeShop)
+                .Include(b => b.Area)
+                .Include(b => b.TimeFrame)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            if (existedBooking is null)
+            {
+                result.AddError(ErrorCode.NotFound, "Booking not found");
+                return result;
+            }
+
+            result.Payload = _mapper.Map<BookingResponseDTO>(existedBooking);
+            return result;
+        }
+
+        public async Task<OperationResult<object>> Delete(int id)
+        {
+            var result = new OperationResult<object>()
+            {
+                IsError = false
+            };
+
+            var existedBooking = await _unitOfWork.BookingDAO.Get(b => b.BookingId == id && !b.Deleted).FirstOrDefaultAsync();
+            if (existedBooking is null)
+            {
+                result.AddError(ErrorCode.BadRequest, "Booking not found");
+                return result;
+            }
+
+            existedBooking.Deleted = true;
+
+            try
+            {
+                var updateResult = await _unitOfWork.SaveChangesAsync();
+                if (updateResult)
+                {
+                    return result;
+                }
+                else
+                {
+                    result.AddError(ErrorCode.BadRequest, "Delete failed");
+                    return result;
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                result.AddError(ErrorCode.BadRequest, ex.Message);
+                return result;
+            }
+            catch (OperationCanceledException ex)
+            {
+                result.AddError(ErrorCode.BadRequest, "The operation has been cancelled");
+                result.AddError(ErrorCode.BadRequest, ex.Message);
+                return result;
+            }
+        }
+
+        public async Task<OperationResult<BookingResponseDTO>> Update(BookingDTO resource, int id)
+        {
+            var result = new OperationResult<BookingResponseDTO>()
+            {
+                IsError = false
+            };
+
+            var existedBooking = await _unitOfWork.BookingDAO.GetByIDAsync(id);
+            if (existedBooking is null)
+            {
+                result.AddError(ErrorCode.NotFound, "Booking not found");
+                return result;
+            }
+
+            existedBooking.TotalMoney = resource.TotalMoney ?? existedBooking.TotalMoney;
+            existedBooking.Status = resource.Status ?? existedBooking.Status;
+
+            if(resource.Date != null || 
+               resource.TimeFrameId != null ||
+               resource.Slots != null)
+            {
+                var existedArea = await _unitOfWork.AreaDAO.GetByIDAsync(existedBooking.AreaId);
+                if(existedArea is null)
+                {
+                    result.AddError(ErrorCode.NotFound, "Area not found");
+                    return result;
+                }
+
+                existedBooking.Date = resource.Date ?? existedBooking.Date;
+                existedBooking.TimeFrameId = resource.TimeFrameId ?? existedBooking.TimeFrameId;
+                existedBooking.Slots = resource.Slots ?? existedBooking.Slots;
+
+                var bookedSlots = _unitOfWork.BookingDAO.Get(b => b.BookingId != existedBooking.BookingId && b.AreaId == existedBooking.AreaId && b.TimeFrameId == existedBooking.TimeFrameId && b.Date == existedBooking.Date).Sum(b => b.Slots);
+                var availableSlots = existedArea.MaxSlots - bookedSlots;
+                if(existedBooking.Slots > availableSlots)
+                {
+                    result.AddError(ErrorCode.BadRequest, $"Only {availableSlots} slots available");
+                    return result;
+                }
+            }
+
+            try
+            {
+                var updateResult = await _unitOfWork.SaveChangesAsync();
+                if (updateResult)
+                {
+                    result.Payload = _mapper.Map<BookingResponseDTO>(existedBooking);
+                }
+                else
+                {
+                    result.AddError(ErrorCode.BadRequest, "Update failed");
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                result.AddError(ErrorCode.BadRequest, ex.Message);
+            }
+            catch (OperationCanceledException ex)
+            {
+                result.AddError(ErrorCode.BadRequest, "The operation has been cancelled");
+                result.AddError(ErrorCode.BadRequest, ex.Message);
+            }
+
             return result;
         }
 

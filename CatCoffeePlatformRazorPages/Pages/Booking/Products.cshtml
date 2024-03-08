@@ -15,21 +15,21 @@
     @{
         if (ViewData["warning"] != null)
         {
-            <div class="alert alert-info">
-                @ViewData["warning"]
-            </div>
+                <div class="alert alert-info">
+                    @ViewData["warning"]
+                </div>
         }
         var data = (List<string>?)ViewData["errors"];
         if (data != null)
         {
-            <div style="margin-top:20px">
-                @foreach (var item in data)
+                <div style="margin-top:20px">
+                    @foreach (var item in data)
                 {
-                    <div class="alert alert-danger" style="margin-top:10px">
-                        @item
-                    </div>
+                        <div class="alert alert-danger" style="margin-top:10px">
+                            @item
+                        </div>
                 }
-            </div>
+                </div>
         }
     }
 </div>
@@ -138,6 +138,7 @@
 
 <form method="post" asp-page-handler="PayOrder" id="submitform">
     <input type="hidden" asp-for="@Model.TotalRentalPrice" id="FinalTotalPrice" />
+    <input type="hidden" asp-for="@Model.BookingId" id="BookingId" />
 </form>
 
 <script>
@@ -296,18 +297,22 @@
             BookingProducts: bookingProducts
         }
 
-        fetch(booking).then((data, status, response) => {
+        fetch(booking).then((data, textStatus, xhr) => {
+            var createdBooking = data["result"];
+            var id = createdBooking.bookingId;
+            var totalPrice = createdBooking.totalMoney;
             var inputTotalPrice = document.getElementById("FinalTotalPrice");
             inputTotalPrice.value = totalPrice;
+            var bookedId = document.getElementById("BookingId");
+            bookedId.value = id;
             document.getElementById("submitform").submit();
         })
-            .catch(error => {
-                console.log(error.responseJSON.errors);
+            .catch((xhr, errorThrow) => {
+                console.log(errorThrow);
             });;
     }
 
     function fetch(booking) {
-        console.log(JSON.stringify(booking));
         return new Promise((resolve, reject) => {
             $.ajax({
                 Headers: {
@@ -320,11 +325,11 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader('Authorization', 'Bearer ' + '@(Model.Token)');
                 },
-                success: function (data, status, response) {
-                    resolve(data, status, response);
+                success: function (data, textStatus, xhr) {
+                    resolve(data, textStatus, xhr);
                 },
-                error: function (error) {
-                    reject(error);
+                error: function (xhr, textStatus, errorThrow) {
+                    reject(xhr, errorThrow);
                 }
             });
         });

@@ -95,6 +95,93 @@ public class BookingsController : ControllerBase
             Errors = ModelState.Values.SelectMany(m => m.Errors.Select(e => e.ErrorMessage))
         });
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBookingById(int id)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _bookingRepo.GetById(id);
+            if (result.IsError)
+            {
+                return BadRequest(new
+                {
+                    Title = "Get failed",
+                    Errors = result.Errors.Select(e => e.Message)
+                });
+            }
+
+            return Ok(new
+            {
+                Result = result.Payload
+            });
+        }
+
+        return BadRequest(new
+        {
+            Title = "Get failed",
+            Errors = ModelState.Values.SelectMany(m => m.Errors.Select(e => e.ErrorMessage))
+        });
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteBooking(int id)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _bookingRepo.Delete(id);
+            if (result.IsError)
+            {
+                return BadRequest(new
+                {
+                    Title = "Delete failed",
+                    Errors = result.Errors.Select(e => e.Message)
+                });
+            }
+
+            return Ok(new
+            {
+                Title = "Delete successfully",
+            });
+        }
+
+        return BadRequest(new
+        {
+            Title = "Delete failed",
+            Errors = ModelState.Values.SelectMany(m => m.Errors.Select(e => e.ErrorMessage))
+        });
+    }
+
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateBooking([FromBody] BookingDTO resource, int id)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _bookingRepo.Update(resource, id);
+            if (result.IsError)
+            {
+                return BadRequest(new
+                {
+                    Title = "Update failed",
+                    Errors = result.Errors.Select(e => e.Message)
+                });
+            }
+
+            return Ok(new
+            {
+                Title = "Update successfully",
+                Result = result.Payload
+            });
+        }
+
+        return BadRequest(new
+        {
+            Title = "Update failed",
+            Errors = ModelState.Values.SelectMany(m => m.Errors.Select(e => e.ErrorMessage))
+        });
+    }
 }
 
 public class BookingController : ODataController

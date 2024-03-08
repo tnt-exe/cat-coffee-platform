@@ -19,9 +19,14 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         public Guid OrderItemId { get; set; }
 
         [BindProperty]
+        public int BookingId { get; set; }
+
+        [BindProperty]
         public decimal Price { get; set; }
-        public async Task<IActionResult> OnGet()
+
+        public async Task<IActionResult> OnGet(int BookingId)
         {
+            this.BookingId = BookingId;
             return Page(); // Return to the original page after handling the payment success
         }
     }
