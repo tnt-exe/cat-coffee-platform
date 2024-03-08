@@ -1,8 +1,9 @@
 ﻿@inject IHttpContextAccessor HttpContextAccessor
+@using BusinessObject.Enums;
 @{
     var isAuthenticated = HttpContextAccessor.HttpContext?.User.Claims.Any() ?? false;
     //var isAdmin = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Contains("Admin")) ?? false;
-    var isManager = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Contains("Manager")) ?? false;
+    var isManager = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Manager).ToString())) ?? false;
 }
 
 <!DOCTYPE html>
@@ -109,7 +110,7 @@
             }
         </ul>
 
-        <div class="col-md-3 text-info text-end">
+        <div class="text-info text-end">
             @if (!isAuthenticated)
             {
                 <a asp-page="/Login" class="nav_button">Sign-in</a>
