@@ -134,6 +134,20 @@ namespace CatCoffeePlatformAPI
                 {
                     policy.Requirements.Add(new HasScopeRequirement(((int)Role.Manager).ToString(), Configuration["Jwt:Issuer"]!));
                 });
+
+                options.AddPolicy("Staff Manager Admin", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        return context.User.HasClaim(claim =>
+
+                            (claim.Type == "scope") &&
+                            (claim.Value.Equals(((int)Role.Staff).ToString()) ||
+                            claim.Value.Equals(((int)Role.Manager).ToString()) ||
+                            claim.Value.Equals(((int)Role.Administrator).ToString()))
+                        );
+                    });
+                });
             });
 
             builder.Services.AddControllers(config =>

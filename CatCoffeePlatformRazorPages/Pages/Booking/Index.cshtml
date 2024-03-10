@@ -26,6 +26,7 @@
                 <th>Total Money</th>
                 <th>Payment Date</th>
                 <th>Status</th>
+                <th>Payment Status</th>
                 <th>Coffee Shop</th>
                 <th>Area</th>
             </tr>
@@ -54,6 +55,9 @@
                     </td>
                     <td>
                         @(((BookingStatus)(item.Status ?? 0)).GetStringValue() ?? "None")
+                    </td>
+                    <td>
+                        @(Enum.GetName(typeof(PaymentStatus), item.PaymentStatus ?? 0))
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CoffeeShop!.ShopName)

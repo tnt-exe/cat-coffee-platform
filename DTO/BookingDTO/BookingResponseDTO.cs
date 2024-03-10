@@ -21,6 +21,7 @@ namespace DTO.BookingDTO
         public int? Slots { get; set; }
         public Decimal? TotalMoney { get; set; }
         public DateTime? PaymentDate { get; set; }
+        public int? PaymentStatus { get; set; }
         public int? Status { get; set; }
         public int? AreaId { get; set; }
         public BookingResponseDTO_Area? Area { get; set; }

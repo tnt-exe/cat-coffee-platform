@@ -13,6 +13,7 @@ namespace BusinessObject.Model
         [Column(TypeName = "money")]
         public decimal TotalMoney { get; set; }
         public DateTime? PaymentDate { get; set; }
+        public int PaymentStatus { get; set; }
         public int Status { get; set; }
         public bool Deleted { get; set; } = false;
 

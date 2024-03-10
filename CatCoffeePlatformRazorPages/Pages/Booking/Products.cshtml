@@ -294,7 +294,9 @@
             TimeFrameId: @(Model.TimeFrameId ?? 0),
             CoffeeShopId: @(Model.CoffeeShop?.CoffeeShopId ?? 0),
             UserId: '@(Model.UserId.ToString())',
-            BookingProducts: bookingProducts
+            BookingProducts: bookingProducts,
+            Status: 0,
+            PaymentStatus: 0
         }
 
         fetch(booking).then((data, textStatus, xhr) => {
