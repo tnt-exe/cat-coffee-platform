@@ -17,6 +17,9 @@ namespace BusinessObject.Model
         public byte? Role { get; set; }
         public byte? Status { get; set; }
 
+        [Column(TypeName = "money")]
+        public decimal Balance { get; set; }
+
         public bool Deleted { get; set; } = false;
 
         public int? CoffeeShopId { get; set; }

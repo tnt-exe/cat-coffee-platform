@@ -24,21 +24,21 @@
     @{
         if (ViewData["warning"] != null)
         {
-                                                                                                                                                    <div class="alert alert-info">
-                                                                                                                                                        @ViewData["warning"]
-                                                                                                                                                    </div>
+                                                                                                                                                                <div class="alert alert-info">
+                                                                                                                                                                    @ViewData["warning"]
+                                                                                                                                                                </div>
         }
         var data = (List<string>?)ViewData["errors"];
         if (data != null)
         {
-                                                                                                                                                    <div style="margin-top:20px">
-                                                                                                                                                        @foreach (var item in data)
+                                                                                                                                                                <div style="margin-top:20px">
+                                                                                                                                                                    @foreach (var item in data)
                 {
-                                                                                                                                                            <div class="alert alert-danger" style="margin-top:10px">
-                                                                                                                                                                @item
-                                                                                                                                                            </div>
+                                                                                                                                                                        <div class="alert alert-danger" style="margin-top:10px">
+                                                                                                                                                                            @item
+                                                                                                                                                                        </div>
                 }
-                                                                                                                                                    </div>
+                                                                                                                                                                </div>
         }
     }
 </div>
@@ -101,7 +101,7 @@
 
     @foreach (var item in Model.Areas)
     {
-        <div style="cursor: pointer; margin-left:10px; margin-bottom:50px; padding: 12px 20px;" class="border border-2 border - primary padding-css shadow p-3 mb-5 bg-white rounded coffeeShop @(item.AvailableSlots <= 0 ? "cannot-booked-area" : "")"
+        <div class="border border-2 border - primary padding-css shadow p-3 mb-5 rounded coffeeShop @(item.AvailableSlots <= 0 ? "cannot-booked-area" : "")"
          id="areaId-@item.AreaId"
          onclick="@(item.AvailableSlots > 0 ? $"chooseArea({item.ToString()}, {Model.CoffeeShop?.ToString()}, {item.AvailableSlots})" : "null")">
             <div class="coffeeShop_picture">
@@ -217,14 +217,14 @@
                             chooseArea(@Html.Raw(area.ToString()), @Html.Raw(Model.CoffeeShop?.ToString()), availableSlots);
                         }
                     }
-                    availableSlotsElement.textContent = "Available Slots: " + availableSlots;
+                    availableSlotsElement.textContent = "Available Seats: " + availableSlots;
                 }).catch(error => {
                     console.log(error);
                 });
             </text>
         }
 
-        var timeFrameValue = document.getElementById("timeFrame-" + bookedTimeFrameId).innerHTML;
+        var timeFrameValue = document.getElementById("timeFrame-" + timeFrame.TimeFrameId).innerHTML;
         $("#booking_schedule_summary").text(bookedDate + " " + timeFrameValue);
     }
 
@@ -249,7 +249,7 @@
                             chooseArea(@Html.Raw(area.ToString()), @Html.Raw(Model.CoffeeShop?.ToString()), availableSlots);
                         }
                     }
-                    availableSlotsElement.textContent = "Available Slots: " + availableSlots;
+                    availableSlotsElement.textContent = "Available Seats: " + availableSlots;
                 }).catch(error => {
                     console.log(error);
                 });
@@ -361,10 +361,19 @@
         display: flex;
         flex-direction: row;
         min-height: 220px;
+        cursor: pointer; 
+        margin-left:10px; 
+        margin-bottom:50px; 
+        padding: 12px 20px;
+    }
+
+    .coffeeShop.cannot-booked-area:hover {
+        background-color: #c25b5b;
     }
 
     .coffeeShop_picture {
         flex: 1;
+        padding: 0 0;
     }
 
     .coffeeShop_description {
@@ -427,10 +436,6 @@
 
     .booked_timeframe {
         background-color: #68b067;
-    }
-
-    .coffeeShop.cannot-booked-area:hover {
-        background-color: #f38b8b;
     }
 
     .booking_schedule {

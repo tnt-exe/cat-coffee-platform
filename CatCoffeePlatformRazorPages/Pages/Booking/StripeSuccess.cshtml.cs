@@ -33,7 +33,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             string strData = JsonSerializer.Serialize(new
             {
                 Status = (int)BookingStatus.OnWaiting,
-                PaymentStatus = (int)PaymentStatus.UnPaid,
+                PaymentStatus = (int)PaymentStatus.Paid,
                 PaymentDate = DateTime.UtcNow
             });
             var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
