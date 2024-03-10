@@ -31,6 +31,7 @@ namespace Repository.Implement
                     result.AddError(ErrorCode.BadRequest, "Email Aldready Existed");
                     return result;
                 }
+
                 var newShop = new CoffeeShop()
                 {
                     ShopName = resource.ShopName,
@@ -44,6 +45,11 @@ namespace Repository.Implement
                     Deleted = false
                 };
                 await _unitOfWork.CoffeeShopDAO.Insert(newShop);
+                await _unitOfWork.SaveAsync();
+                var existedUser = await _unitOfWork.UserDAO.GetByIDAsync(resource.ManagerId);
+                var existedShop = await _unitOfWork.CoffeeShopDAO.Get(s => s.ManagerId.Equals(resource.ManagerId)).SingleOrDefaultAsync();
+                existedUser.ManagerShopId = existedShop!.CoffeeShopId;
+                _unitOfWork.UserDAO.Update(existedUser);
                 await _unitOfWork.SaveAsync();
                 result.Payload = _mapper.Map<CoffeeShopResponseDTO>(newShop);
             }
@@ -143,6 +149,24 @@ namespace Repository.Implement
             {
                 result.AddError(ErrorCode.ServerError, ex.Message);
             }
+            return result;
+        }
+
+        public async Task<OperationResult<CoffeeShopResponseDTO>> GetByManagerID(Guid id)
+        {
+            var result = new OperationResult<CoffeeShopResponseDTO>
+            {
+                IsError = false,
+            };
+            string[] includeProperties = { nameof(CoffeeShop.Manager) };
+            var shopEnity = await _unitOfWork.CoffeeShopDAO.Get(filter: s => s.ManagerId.Equals(id), includeProperties: includeProperties).SingleOrDefaultAsync();
+            var shop = _mapper.Map<CoffeeShopResponseDTO>(shopEnity);
+            if (shop == null)
+            {
+                result.AddError(ErrorCode.NotFound, "Shop not found");
+            }
+            result.Payload = shop;
+
             return result;
         }
     }

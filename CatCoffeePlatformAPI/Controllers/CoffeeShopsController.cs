@@ -50,6 +50,23 @@ namespace CatCoffeePlatformAPI.Controllers
             });
         }
 
+        [HttpGet]
+        [Route("get-by-manager-id/{idManager}")]
+        public async Task<IActionResult> GetCoffeeShopByManagerID(Guid idManager)
+        {
+            var result = await _coffeeShopRepo.GetByManagerID(idManager);
+
+            if (result.IsError)
+            {
+                return NotFound();
+            }
+            return Ok(new ResponseBody<CoffeeShopResponseDTO>
+            {
+                Title = "Get Successfully",
+                Result = result.Payload
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateNewCoffeeShop(CoffeeShopCreate resource)
         {
