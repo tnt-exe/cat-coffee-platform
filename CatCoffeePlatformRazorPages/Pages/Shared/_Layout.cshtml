@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CatCoffeePlatformRazorPages</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CatCoffeePlatformRazorPages.styles.css" asp-append-version="true" />
@@ -82,84 +82,88 @@
         </script>
     }
 
-    <header style="padding: 0 148px; background-color: #F7F7F7;" class="d-flex align-items-center justify-content-between my-2">
-        <a asp-page="/Home" class="text-decoration-none fs-3 text-dark fw-bold">
-            <i class="fa-solid fa-mug-saucer"></i> CCoffee
-        </a>
-
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a asp-page="/Home" class="nav-link px-2 link-secondary px-4" data-target="Home"><i class="fa-solid fa-house me-2"></i>Home</a></li>
-            @if (isManager)
-            {
-                <li><a asp-page="/CoffeeShopPages/Details" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
-            }
-            else
-            {
-                <li><a asp-page="/CoffeeShopPages/Index" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
-            }
-            
-            
-            <li><a asp-page="/Booking/Index" class="nav-link px-2 link-secondary px-4" data-target="Booking"><i class="fa-solid fa-calendar"></i>Booking</a></li>
-            @if (isManager)
-            {
-                <li><a asp-page="/Cat/Index" class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
-                <li><a asp-page="/TimeFrame/Index" class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
-                <li><a asp-page="/Area/Index" class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
-                <li><a asp-page="/Product/Index" class="nav-link px-2 link-secondary px-4" data-target="Product"><i class="fa-brands fa-product-hunt"></i>Product</a></li>
-                <li><a asp-page="/Category/Index" class="nav-link px-2 link-secondary px-4" data-target="Category"><i class="fa-solid fa-table-list"></i>Category</a></li>
-            }
-        </ul>
-
-        <div class="text-info text-end">
-            @if (!isAuthenticated)
-            {
-                <a asp-page="/Login" class="nav_button">Sign-in</a>
-            }
-            else
-            {
-                <form method="post" action="/logout">
-                    <button type="submit" class="nav_button"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </form>
-            }
-        </div>
-    </header>
-
-    <div style="position: relative">
-        @RenderBody()
-    </div>
-
-    <footer>
-        <div class="main">
-            <a asp-page="/Home">
-                <i class="fa-solid fa-feather-pointed"></i> CCoffee
+    <div class="container-fluid">        
+        <header style="padding: 0 148px; background-color: #F7F7F7;" class="d-flex align-items-center justify-content-between my-2">
+            <a asp-page="/Home" class="text-decoration-none fs-3 text-dark fw-bold">
+                <i class="fa-solid fa-mug-saucer"></i> CCoffee
             </a>
-            <p>At CCoffee Platform, we provide a web platform for booking a reservation on cat coffee shop, offering the most convenient and fastest way to get most suitable, comfortable seats.</p>
-            <p>&copy; 2024 - Group9 Cat Coffee Shop Platform</p>
-            <p>Designed team: FromTeam9</p>
-        </div>
 
-        <div class="navigation">
-            <h2>Navigation</h2>
-            <p><a asp-page="/Home">Home</a></p>
-            <p><a asp-page="/CoffeeShop/Index">Coffee Shop</a></p>
-            <p><a asp-page="/Booking/Index">Booking</a></p>
-            <p> <a asp-page="/Profile">Profile</a></p>
-        </div>
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a asp-page="/Home" class="nav-link px-2 link-secondary px-4" data-target="Home"><i class="fa-solid fa-house me-2"></i>Home</a></li>
+                @if (isManager)
+                {
+                    <li><a asp-page="/CoffeeShopPages/Details" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
+                }
+                else
+                {
+                    <li><a asp-page="/CoffeeShopPages/Index" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
+                }
+                
+                
+                <li><a asp-page="/Booking/Index" class="nav-link px-2 link-secondary px-4" data-target="Booking"><i class="fa-solid fa-calendar"></i>Booking</a></li>
+                @if (isManager)
+                {
+                    <li><a asp-page="/Cat/Index" class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
+                    <li><a asp-page="/TimeFrame/Index" class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
+                    <li><a asp-page="/Area/Index" class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
+                    <li><a asp-page="/Product/Index" class="nav-link px-2 link-secondary px-4" data-target="Product"><i class="fa-brands fa-product-hunt"></i>Product</a></li>
+                    <li><a asp-page="/Category/Index" class="nav-link px-2 link-secondary px-4" data-target="Category"><i class="fa-solid fa-table-list"></i>Category</a></li>
+                }
+            </ul>
 
-        <div class="share">
-            <h2>Stay Connect</h2>
-            <p><i class="fa-brands fa-square-facebook me-2"></i>facebook</p>
-            <p><i class="fa-brands fa-square-github me-2"></i>github</p>
-            <p><i class="fa-brands fa-instagram me-2"></i>instagram</p>
-        </div>
+            <div class="text-info text-end">
+                @if (!isAuthenticated)
+                {
+                    <a asp-page="/Login" class="nav_button">Sign-in</a>
+                }
+                else
+                {
+                    <form method="post" action="/logout">
+                        <button type="submit" class="nav_button"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </form>
+                }
+            </div>
+        </header>
 
-        <div class="contact">
-            <h2>Contact us</h2>
-            <p><i class="fa-solid fa-phone me-2"></i>phone</p>
-            <p><i class="fa-solid fa-at me-2 me-2"></i>email</p>
-            <p><i class="fa-solid fa-location-dot me-2"></i>NVH Sinh vien Khu Dai hoc quoc gia</p>
-        </div>
-    </footer>
+        <main class="main">
+            <div style="position: relative">
+                @RenderBody()
+            </div>
+        </main>
+
+        <footer>
+            <div class="main">
+                <a asp-page="/Home">
+                    <i class="fa-solid fa-feather-pointed"></i> CCoffee
+                </a>
+                <p>At CCoffee Platform, we provide a web platform for booking a reservation on cat coffee shop, offering the most convenient and fastest way to get most suitable, comfortable seats.</p>
+                <p>&copy; 2024 - Group9 Cat Coffee Shop Platform</p>
+                <p>Designed team: FromTeam9</p>
+            </div>
+
+            <div class="navigation">
+                <h2>Navigation</h2>
+                <p><a asp-page="/Home">Home</a></p>
+                <p><a asp-page="/CoffeeShop/Index">Coffee Shop</a></p>
+                <p><a asp-page="/Booking/Index">Booking</a></p>
+                <p> <a asp-page="/Profile">Profile</a></p>
+            </div>
+
+            <div class="share">
+                <h2>Stay Connect</h2>
+                <p><i class="fa-brands fa-square-facebook me-2"></i>facebook</p>
+                <p><i class="fa-brands fa-square-github me-2"></i>github</p>
+                <p><i class="fa-brands fa-instagram me-2"></i>instagram</p>
+            </div>
+
+            <div class="contact">
+                <h2>Contact us</h2>
+                <p><i class="fa-solid fa-phone me-2"></i>phone</p>
+                <p><i class="fa-solid fa-at me-2 me-2"></i>email</p>
+                <p><i class="fa-solid fa-location-dot me-2"></i>NVH Sinh vien Khu Dai hoc quoc gia</p>
+            </div>
+        </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -168,7 +172,6 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
 
 <style>
     #toast1 {
@@ -245,10 +248,29 @@
         color: #2f86eb;
     }
 
-    .footer{
-        display: absolute;
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-fluid {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .main {
+        flex: 1;
+    }
+
+    footer {
+        background-color: #f7f7f7;
+        padding: 20px;
+        text-align: center;
+        position: relative;
         bottom: 0;
-        right: 0; 
-        left: 0;
     }
 </style>
