@@ -5,45 +5,50 @@
     ViewData["Title"] = "Area Details";
 }
 
-<h1>Area Details</h1>
+<h1>Details for @Model.Area.AreaName</h1>
 
-<div>
-    <h4>Area</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
+<div class="container-fluid">
+    <dl class="dl-horizontal">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Area.AreaName)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Area.AreaName)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Area.Description)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Area.Description)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Area.PricePerHour)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Area.PricePerHour)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Area.MaxSlots)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Area.MaxSlots)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.Area.CoffeeShop)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             @Html.DisplayFor(model => model.Area.CoffeeShop)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Area?.AreaId" class="btn btn-primary">Edit</a> |
-    <a asp-page="./Index" class="btn btn-primary">Back</a>
+    <div class="card-footer">
+        <a asp-page="./Edit" asp-route-id="@Model.Area?.AreaId" class="btn btn-primary">Edit</a> |
+        <a asp-page="./Index" class="btn btn-primary">Back</a>
+    </div>
 </div>
+<style>
+    .info-card {
+        width: 400px;
+        margin-top: 100px;
+    }
+</style>

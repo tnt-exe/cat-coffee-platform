@@ -5,12 +5,9 @@
     ViewData["Title"] = "Area Edit";
 }
 
-<h1>Area Edit</h1>
-
-<h4>Area</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <h1 class="text-center">Edit</h1>
+    <div class="col-md-4 mx-auto">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Area.AreaId" />
@@ -34,16 +31,36 @@
                 <input asp-for="Area.MaxSlots" class="form-control" />
                 <span asp-validation-for="Area.MaxSlots" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="align-items: center;">
                 <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+                <a asp-page="./Index" class="btn btn-primary">Back</a>
+            </div>            
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index" class="btn btn-primary">Back</a>
-</div>
+<style>
+    .row {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+
+    .text-danger {
+        color: red;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
