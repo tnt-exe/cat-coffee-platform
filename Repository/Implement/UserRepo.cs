@@ -176,24 +176,38 @@ namespace Repository.Implement
 
             if(resource.CoffeeShopId is not null)
             {
-                var existedCoffeeShop = await _unitOfWork.CoffeeShopDAO.Get(c => c.CoffeeShopId.Equals(resource.CoffeeShopId)).AsNoTracking().FirstOrDefaultAsync();
-                if (existedCoffeeShop is not null)
+                if(resource.CoffeeShopId <= 0)
                 {
-                    result.AddError(ErrorCode.BadRequest, "Coffee Shop not found");
-                    return result;
+                    existedUser.CoffeeShopId = null;
                 }
-                existedUser.CoffeeShopId = resource.CoffeeShopId;
+                else
+                {
+                    var existedCoffeeShop = await _unitOfWork.CoffeeShopDAO.Get(c => c.CoffeeShopId.Equals(resource.CoffeeShopId)).AsNoTracking().FirstOrDefaultAsync();
+                    if (existedCoffeeShop is not null)
+                    {
+                        result.AddError(ErrorCode.BadRequest, "Coffee Shop not found");
+                        return result;
+                    }
+                    existedUser.CoffeeShopId = resource.CoffeeShopId;
+                }
             }
 
             if (resource.ManagerShopId is not null)
             {
-                var existedCoffeeShop = await _unitOfWork.CoffeeShopDAO.Get(c => c.CoffeeShopId.Equals(resource.ManagerShopId)).AsNoTracking().FirstOrDefaultAsync();
-                if (existedCoffeeShop is not null)
+                if (resource.ManagerShopId <= 0)
                 {
-                    result.AddError(ErrorCode.BadRequest, "Coffee Shop not found");
-                    return result;
+                    existedUser.ManagerShopId = null;
                 }
-                existedUser.CoffeeShopId = resource.CoffeeShopId;
+                else
+                {
+                    var existedCoffeeShop = await _unitOfWork.CoffeeShopDAO.Get(c => c.CoffeeShopId.Equals(resource.ManagerShopId)).AsNoTracking().FirstOrDefaultAsync();
+                    if (existedCoffeeShop is not null)
+                    {
+                        result.AddError(ErrorCode.BadRequest, "Coffee Shop not found");
+                        return result;
+                    }
+                    existedUser.ManagerShopId = resource.CoffeeShopId;
+                }
             }
 
             existedUser.FirstName = resource.FirstName ?? existedUser.FirstName;

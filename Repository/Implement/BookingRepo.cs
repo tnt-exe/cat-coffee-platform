@@ -240,6 +240,7 @@ namespace Repository.Implement
                 .Include(b => b.CoffeeShop)
                 .Include(b => b.Area)
                 .Include(b => b.TimeFrame)
+                .Include(nameof(Booking.BookingProducts) + "." + nameof(BookingProduct.Product))
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             if (existedBooking is null)
@@ -310,8 +311,10 @@ namespace Repository.Implement
 
             existedBooking.TotalMoney = resource.TotalMoney ?? existedBooking.TotalMoney;
             existedBooking.Status = resource.Status ?? existedBooking.Status;
+            existedBooking.PaymentStatus = resource.PaymentStatus ?? existedBooking.PaymentStatus;
+            existedBooking.PaymentDate = resource.PaymentDate ?? existedBooking.PaymentDate;
 
-            if(resource.Date != null || 
+            if (resource.Date != null || 
                resource.TimeFrameId != null ||
                resource.Slots != null)
             {

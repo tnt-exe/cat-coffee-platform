@@ -22,8 +22,8 @@ public enum BookingStatus
     [StringValueAttribute("Finished")]
     OnFinished = 3,
 
-    [StringValueAttribute("UnPaid")]
-    UnPaid = 4
+    [StringValueAttribute("Cancel")]
+    Cancel = 4
 }
 
 public static class BookingStatusExtensions

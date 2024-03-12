@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,38 +7,38 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Model;
 using DAO.Context;
+using DTO.BookingDTO;
+using CatCoffeePlatformRazorPages.Common;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
     public class DetailsModel : PageModel
     {
-        private readonly DAO.Context.ApplicationDbContext _context;
+        private readonly ApiHelper _bookingApi;
 
-        public DetailsModel(DAO.Context.ApplicationDbContext context)
+        public DetailsModel()
         {
-            _context = context;
+            _bookingApi = new ApiHelper("bookings");
         }
 
-      public Booking Booking { get; set; } = default!; 
+        public BookingResponseDTO Booking { get; set; } = default!;
+        public bool IsSuccess { get; set; } = false;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Booking == null)
+            if(id is null)
             {
-                return NotFound();
+                ViewData["warning"] = "Booking not found";
+                return Page();
             }
-
-            var booking = await _context.Booking.FirstOrDefaultAsync(m => m.BookingId == id);
-            if (booking == null)
+            var apiResponse = await _bookingApi.GetAsync<ResponseBody<BookingResponseDTO>>(id.ToString()!);
+            if(apiResponse?.Result is null)
             {
-                return NotFound();
+                ViewData["warning"] = "Booking not found";
+                return Page();
             }
-            else 
-            {
-                Booking = booking;
-            }
+            Booking = apiResponse.Result;
             return Page();
         }
     }
 }
-*/

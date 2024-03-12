@@ -151,5 +151,10 @@ namespace CatCoffeePlatformRazorPages.Common
             }
             return null;
         }
+
+        public void SetAuthorizationHeader(string token)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
     }
 }

@@ -145,7 +145,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             {
                 var bookedDuration = (endTime - startTime).TotalMinutes;
                 var pricePerHour = area.PricePerHour;
-                var test = (double)pricePerHour * (bookedDuration / 60);
+                var test = (double)pricePerHour * (bookedDuration / 60) * BookedSlots;
                 if (decimal.TryParse(test.ToString(), out var totalRentalPrice))
                 {
                     TotalRentalPrice = totalRentalPrice;
