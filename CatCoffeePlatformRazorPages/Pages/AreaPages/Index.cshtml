@@ -1,68 +1,84 @@
-﻿@page
+﻿@page "/areapages"
 @model CatCoffeePlatformRazorPages.Pages.AreaPages.IndexModel
 
 @{
-    ViewData["Title"] = "Create Area";
+    ViewData["Title"] = "Area List";
 }
 
-<h1 style="text-align: center;";">Area</h1>
+<div class="container" style="min-height: 44vh;">
+    <h1 style="text-align: center;" ;">Area</h1>
 
-<p class="button" style="margin-left: 2%;">
-    <a asp-page="Create" class="btn btn-primary">Create</a>
-</p>
+    <p class="button" style="margin-left: 2%;">
+        <a asp-page="create" class="btn btn-primary">Create</a>
+    </p>
 
-<div class="card" id="main-table">
-    @if (Model.Area is null || !Model.Area.Any())
-    {
-        <h3 class="alert alert-info">No Areas Found</h3>
-    }
-    else
-    {
-        @if (TempData["area-msg"] is not null)
+    <div class="card" id="main-table">
+        @if (Model.Area is null || !Model.Area.Any())
         {
-            <div class="alert alert-info">
-                @TempData["area-msg"]
-            </div>
+            <h3 class="alert alert-info text-center">No Areas Found</h3>
+        }
+        else
+        {
+            @if (TempData["area-msg"] is not null)
+            {
+                <div class="alert alert-info">
+                    @TempData["area-msg"]
+                </div>
+            }
+
+            <table class="table table-striped d-sm-table">
+                <thead>
+                    <tr class="text-uppercase">
+                        <th>Area Name</th>
+                        <th>Description</th>
+                        <th>Price Per Hour</th>
+                        <th>Max Slots</th>
+                        <th>Coffee Shop</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Area)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AreaName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PricePerHour)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MaxSlots)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CoffeeShop)
+                            </td>
+                            <td>
+                                <a asp-page="./edit" asp-route-id="@item.AreaId" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-page="./details" asp-route-id="@item.AreaId" class="btn btn-info btn-sm">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
 
-        <table class="table table-striped d-sm-table">
-            <thead>
-                <tr>
-                    <th>Area Name</th>
-                    <th>Description</th>
-                    <th>Price Per Hour</th>
-                    <th>Max Slots</th>
-                    <th>Coffee Shop</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Area)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AreaName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PricePerHour)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MaxSlots)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CoffeeShop)
-                        </td>
-                        <td>
-                            <a asp-page="./Edit" asp-route-id="@item.AreaId" class="btn btn-primary btn-sm">Edit</a>
-                            <a asp-page="./Details" asp-route-id="@item.AreaId" class="btn btn-info btn-sm">Details</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    </div>
+</div>
+
+<style>
+    #main-table th,
+    #main-table td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
     }
 
-</div>
+    #main-table tr:hover,
+    #main-table th {
+        background-color: #f5f5f5;
+    }
+</style>
