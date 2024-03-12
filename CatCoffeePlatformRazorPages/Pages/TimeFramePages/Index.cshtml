@@ -1,61 +1,80 @@
-﻿@page
+﻿@page "/timeframes"
 @model CatCoffeePlatformRazorPages.Pages.TimeFramePages.IndexModel
 
 @{
-    ViewData["Title"] = "TimeFrame Index";
+    ViewData["Title"] = "Timeframe List";
 }
 
-<h1>TimeFrame Index</h1>
+<div class="container" style="min-height: 44vh;">
+    <h1 style="text-align: center;">Time Frame</h1>
+    <p class="button" style="margin-left: 2%;">
+        <a asp-page="create" class="btn btn-primary">Create</a>
+    </p>
+    <div class="card" id="main-table">
 
-<p>
-    <a asp-page="Create" class="btn btn-primary">Create</a>
-</p>
+        @if (Model.TimeFrame is null || !Model.TimeFrame.Any())
+        {
+            <h3 class="alert alert-info">No Time Frame Found</h3>
+        }
+        else
+        {
+            @if (TempData["tf-msg"] is not null)
+            {
+                <div class="alert alert-info">
+                    @TempData["tf-msg"]
+                </div>
+            }
 
-@if (Model.TimeFrame is null || !Model.TimeFrame.Any())
-{
-    <h3 class="alert alert-info">No Time Frame Found</h3>
-}
-else
-{
-    @if (TempData["tf-msg"] is not null)
-    {
-        <div class="alert alert-info">
-            @TempData["tf-msg"]
-        </div>
+            <table class="table table-striped d-sm-table">
+                <thead>
+                    <tr class="text-uppercase">
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Price</th>
+                        <th>Coffee Shop</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TimeFrame)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EndTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CoffeeShop)
+                            </td>
+                            <td>
+                                <a asp-page="./edit" asp-route-id="@item.TimeFrameId" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-page="./details" asp-route-id="@item.TimeFrameId"
+                                    class="btn btn-info btn-sm">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+</div>
+
+<style>
+    #main-table th,
+    #main-table td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
     }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Price</th>
-                <th>Coffee Shop</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.TimeFrame)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CoffeeShop)
-                    </td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@item.TimeFrameId">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.TimeFrameId">Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    #main-table tr:hover,
+    #main-table th {
+        background-color: #f5f5f5;
+    }
+</style>
