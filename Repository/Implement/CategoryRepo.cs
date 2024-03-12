@@ -3,7 +3,8 @@ using AutoMapper;
 using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
-using DTO.CategoryDTO;
+using DTO;
+using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
 
 namespace Repository.Implement
@@ -17,165 +18,100 @@ namespace Repository.Implement
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        
-        public Task<OperationResult<IEnumerable<Category>>> GetAll(Expression<Func<Category, bool>>? filter, int? pageIndex, int? pageSize, string[]? includeProperties = null)
+
+        public async Task<OperationResult<CategoryCreate>> CreateCategory(CategoryCreate categoryCreate)
         {
-            var result = new OperationResult<IEnumerable<Category>>();
+            var result = new OperationResult<CategoryCreate>
+            {
+                IsError = false
+            };
             try
             {
-                var categories = _unitOfWork.CategoryDAO.Get();
-                if (filter != null)
-                {
-                    categories = categories.Where(filter);
-                }
-
-                if (categories.ToList().Count == 0)
-                {
-                    result.IsError = true;
-                    result.AddError(ErrorCode.NotFound, "Does not exist category");
-                }
-                else
-                {
-                    result.IsError = false;
-                    result.Payload = categories.Take(pageSize ?? 10).Skip(pageIndex ?? 0).ToList();
-                }
+                var categoryEntity = _mapper.Map<Category>(categoryCreate);
+                await _unitOfWork.CategoryDAO.Insert(categoryEntity);
+                await _unitOfWork.SaveAsync();
+                result.Payload = _mapper.Map<CategoryCreate>(categoryEntity);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                result.IsError = true;
-                result.AddUnknownError(e.Message);
-            }
-            return Task.FromResult(result);
-        }
-
-        public async Task<OperationResult<Category>> GetById(int id)
-        {
-            var result = new OperationResult<Category>();
-            try
-            {
-                var category = await _unitOfWork.CategoryDAO.GetByIDAsync(id);
-                result.Payload = category;
-            }
-            catch (Exception e)
-            {
-                result.AddUnknownError(e.Message);
+                result.AddError(ErrorCode.ServerError, ex.Message);
             }
             return result;
         }
 
-        public Task<OperationResult<Category>> GetByFilter(Expression<Func<Category, bool>>? predicate)
+        public async Task<OperationResult<IEnumerable<CategoryDto>>> GetCategories()
         {
-            var result = new OperationResult<Category>();
-            try
+            var result = new OperationResult<IEnumerable<CategoryDto>>
             {
-                if(predicate == null)
-                    throw new Exception("Predicate is null");
-                var category = _unitOfWork.CategoryDAO.Get(predicate).FirstOrDefault();
-                result.Payload = category;
-            }
-            catch (Exception e)
-            {
-                result.AddUnknownError(e.Message);
-            }
-            return Task.FromResult(result);
-        }
+                IsError = false
+            };
 
-        public async Task<OperationResult<Category>> Create(CategoryUpsert requestModel)
-        {
-            
-            var result = new OperationResult<Category>();
             try
             {
-                var category = _mapper.Map<Category>(requestModel);
-                await _unitOfWork.CategoryDAO.Insert(category);
-                if (await _unitOfWork.SaveAsync() > 0)
-                {   
-                    result.Payload = category; 
-                }
-                else
-                {
-                    result.Payload = null;
-                    result.IsError = true;
-                    result.AddError(ErrorCode.NotFound, "Create Category Failed");
-                }
-                
-            }
-            catch (Exception e)
-            {
-                result.AddUnknownError(e.Message);
-            }
-            return result;
-        }
+                var categories = await _unitOfWork.CategoryDAO
+                    .Get().ToListAsync();
 
-        public async Task<OperationResult<bool>> Delete(int id)
-        {
-            var result = new OperationResult<bool>();
-            try
-            {
-                var category = await _unitOfWork.CategoryDAO.GetByIDAsync(id);
-                if (category == null)
+                var categoriesList = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+
+                if (categoriesList is null || !categoriesList.Any())
                 {
-                    result.IsError = true;
-                    result.AddError(ErrorCode.NotFound, "Category not found");
+                    result.AddError(ErrorCode.NotFound, "No category found");
                     return result;
                 }
-                _unitOfWork.CategoryDAO.Delete(category);
-                if (await _unitOfWork.SaveAsync() > 0)
-                {
-                    result.IsError = false;
-                    result.Payload = true;
-                }
-                else
-                {
-                    result.IsError = true;
-                    result.AddError(ErrorCode.UnAuthorize, "Delete Category Failed");
-                }
+
+                result.Payload = categoriesList;
+
+                return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                result.IsError = true;
-                result.AddUnknownError(e.Message);
+                result.AddError(ErrorCode.ServerError, ex.Message);
             }
+            return result;
+        }
+
+        public async Task<OperationResult<CategoryDto>> GetCategoryById(int id)
+        {
+            var result = new OperationResult<CategoryDto>
+            {
+                IsError = false
+            };
+
+            var category = await _unitOfWork.CategoryDAO
+                .Get(filter: categoryEntity => categoryEntity.CategoryId == id)
+                .FirstOrDefaultAsync();
+
+            if (category is null)
+            {
+                result.AddError(ErrorCode.NotFound, "No category found");
+                return result;
+            }
+            var categoryDto = _mapper.Map<CategoryDto>(category);
+            result.Payload = categoryDto;
 
             return result;
         }
 
-        public async Task<OperationResult<Category>> Update(int id, CategoryUpsert requestModel)
+        public async Task<OperationResult<CategoryUpdate>> UpdateCategory(CategoryUpdate categoryUpdate)
         {
-            var result = new OperationResult<Category>();
+            var result = new OperationResult<CategoryUpdate>
+            {
+                IsError = false
+            };
             try
             {
-                var category = await _unitOfWork.CategoryDAO.GetByIDAsync(id);
-                if (category == null)
-                {
-                    result.IsError = true;
-                    result.AddError(ErrorCode.NotFound, "Category not found");
-                    return result;
-                }
-                category.CategoryName = requestModel.CategoryName;
-                _unitOfWork.CategoryDAO.Update(category);
-                if (await _unitOfWork.SaveAsync() > 0)
-                {
-                    result.Payload = category;
-                }
-                else
-                {
-                    result.IsError = true;
-                    result.AddError(ErrorCode.UnAuthorize, "Update Category Failed");
-                }
+                var categoryEntity = _mapper.Map<Category>(categoryUpdate);
+                _unitOfWork.CategoryDAO.Update(categoryEntity);
+
+                await _unitOfWork.SaveAsync();
+                result.Payload = _mapper.Map<CategoryUpdate>(categoryEntity);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                result.AddUnknownError(e.Message);
+                result.AddError(ErrorCode.ServerError, ex.Message);
             }
 
             return result;
-        }
-
-        public Task<OperationResult<Pagination<Category>>> GetAccountPaginationAsync(int pageIndex = 0,
-            int pageSize = 10)
-        {
-            throw new NotImplementedException();
         }
     }
 }

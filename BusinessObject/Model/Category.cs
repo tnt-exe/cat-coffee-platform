@@ -9,7 +9,7 @@ namespace BusinessObject.Model
         public int CategoryId { get; set; }
 
         [Required]
-        public string CategoryName { get; set; }
+        public string? CategoryName { get; set; }
 
         public IEnumerable<Product> Products { get; set; } = new List<Product>();
     }
