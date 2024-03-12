@@ -31,6 +31,7 @@ namespace DTO.BookingDTO
         public BookingResponseDTO_User? User { get; set; }
         public int? CoffeeShopId { get; set; }
         public BookingResponseDTO_CoffeeShop? CoffeeShop { get; set; }
+        public IEnumerable<BookingResponseDTO_Product> Products { get; set; } = new List<BookingResponseDTO_Product>();
     }
 
     public class BookingResponseDTO_CoffeeShop
@@ -72,5 +73,15 @@ namespace DTO.BookingDTO
         public string? LastName { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
+    }
+
+    public class BookingResponseDTO_Product
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string? ProductName { get; set; }
+        public decimal Price { get; set; }
+        public string? Unit { get; set; }
     }
 }

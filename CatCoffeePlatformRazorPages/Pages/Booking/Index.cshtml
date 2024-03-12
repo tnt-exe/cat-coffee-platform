@@ -29,12 +29,13 @@
                 <th>Payment Status</th>
                 <th>Coffee Shop</th>
                 <th>Area</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.Bookings)
             {
-                <tr>
+                <tr style="vertical-align: middle;">
                     <td>
                         @Html.DisplayFor(modelItem => item.BookingDate)
                     </td>
@@ -64,6 +65,11 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Area!.AreaName)
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" asp-page="./Details" asp-route-id="@item.BookingId">
+                            <i class="fa fa-info px-1" style="font-size: 18px;"></i>
+                        </a>
                     </td>
                 </tr>
             }

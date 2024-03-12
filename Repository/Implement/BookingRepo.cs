@@ -240,6 +240,7 @@ namespace Repository.Implement
                 .Include(b => b.CoffeeShop)
                 .Include(b => b.Area)
                 .Include(b => b.TimeFrame)
+                .Include(nameof(Booking.BookingProducts) + "." + nameof(BookingProduct.Product))
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             if (existedBooking is null)

@@ -17,9 +17,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Product\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.25.3" />
@@ -40,5 +37,10 @@
 
   <ItemGroup>
 	<Protobuf Include="Protos\BookingCRUD.proto" GrpcServices="Client" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Category\" />
+    <Folder Include="Pages\Product\" />
   </ItemGroup>
 </Project>
