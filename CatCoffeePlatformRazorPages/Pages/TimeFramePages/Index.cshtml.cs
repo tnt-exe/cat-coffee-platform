@@ -15,14 +15,20 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
 
         public IEnumerable<TimeFrameDto> TimeFrame { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? shopId)
         {
-
             var apiResponse = await _apiTimeFrame
                 .GetAsync<ResponseBody<IEnumerable<TimeFrameDto>>>();
             var timeFrameList = apiResponse!.Result;
+
             if (timeFrameList is not null)
             {
+                if (shopId is not null)
+                {
+                    timeFrameList = timeFrameList
+                        .Where(x => x.CoffeeShopId == shopId);
+                }
+
                 TimeFrame = timeFrameList;
             }
         }
