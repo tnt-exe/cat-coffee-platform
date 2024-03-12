@@ -1,0 +1,32 @@
+﻿@page "/categorypages/create"
+@model CatCoffeePlatformRazorPages.Pages.CategoryPages.CreateModel
+
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<div class="row justify-content-center">
+    <div class="card col-md-4 p-3">
+        <h1 class="text-center">Category</h1>
+        <hr />
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Category.CategoryName" class="control-label"></label>
+                <input asp-for="Category.CategoryName" class="form-control" />
+                <span asp-validation-for="Category.CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group my-3 d-flex justify-content-end">
+                <input type="submit" value="Create" class="btn btn-primary me-3" />
+                <a asp-page="Index" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,50 @@
+﻿@page "/categorypages"
+@model CatCoffeePlatformRazorPages.Pages.CategoryPages.IndexModel
+
+@{
+    ViewData["Title"] = "Category List";
+}
+
+<div class="container" style="min-height: 44vh;">
+    <h1 class="text-align-center;">Category</h1>
+    <p class="button" style="margin-left: 2%;">
+        <a asp-page="Create" class="btn btn-primary">Create</a>
+    </p>
+    <div class="card" id=main-table>
+        @if (Model.Category is null || !Model.Category.Any())
+        {
+            <h3 class="alert alert-info text-center">No Areas Found</h3>
+        }
+        else
+        {
+            @if (TempData["category-msg"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["category-msg"]
+                </div>
+            }
+
+            <table class="table table-striped d-sm-table">
+                <thead>
+                    <tr class="text-uppercase">
+                        <th>Category Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Category)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CategoryName)
+                            </td>
+                            <td>
+                                <a asp-page="./edit" asp-route-id="@item.CategoryId" class="btn btn-primary btn-sm">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
