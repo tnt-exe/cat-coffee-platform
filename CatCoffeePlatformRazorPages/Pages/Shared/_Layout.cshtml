@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CatCoffeePlatformRazorPages</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CatCoffeePlatformRazorPages.styles.css" asp-append-version="true" />
@@ -86,7 +86,7 @@
         </script>
     }
 
-    <header style="padding: 0 148px; background-color: #F7F7F7;" class="d-flex align-items-center justify-content-between my-2">
+    <header style="background-color: #F7F7F7;" class="d-flex align-items-center justify-content-between px-5 py-3">
         <a asp-page="/Home" class="text-decoration-none fs-3 text-dark fw-bold">
             <i class="fa-solid fa-mug-saucer"></i> CCoffee
         </a>
@@ -128,7 +128,7 @@
         </div>
     </header>
 
-    <div style="position: relative">
+    <div class="my-5">
         @RenderBody()
     </div>
 
@@ -248,10 +248,7 @@
         color: #2f86eb;
     }
 
-    .footer{
-        display: absolute;
-        bottom: 0;
-        right: 0; 
-        left: 0;
+    body {
+        min-height: 100vh;
     }
 </style>

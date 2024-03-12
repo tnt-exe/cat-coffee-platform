@@ -1,48 +1,46 @@
-﻿@page
+﻿@page "/timeframes/create"
 @model CatCoffeePlatformRazorPages.Pages.TimeFramePages.CreateModel
 
 @{
-    ViewData["Title"] = "Time Frame Create";
+    ViewData["Title"] = "Create Timeframe";
 }
 
-<h1>Time Frame Create</h1>
+<div class="row justify-content-center">
+    <div class="card col-md-4 p-3">
+        <h1 class="text-center">Time Frame</h1>
+        <hr />
 
-<h4>TimeFrame</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="TimeFrame.StartTime" class="control-label"></label>
                 <input asp-for="TimeFrame.StartTime" type="time" class="form-control" />
                 <span asp-validation-for="TimeFrame.StartTime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="TimeFrame.EndTime" class="control-label"></label>
                 <input asp-for="TimeFrame.EndTime" type="time" class="form-control" />
                 <span asp-validation-for="TimeFrame.EndTime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="TimeFrame.Price" class="control-label"></label>
                 <input asp-for="TimeFrame.Price" class="form-control" />
                 <span asp-validation-for="TimeFrame.Price" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="TimeFrame.CoffeeShopId" class="control-label"></label>
-                <select asp-for="TimeFrame.CoffeeShopId" class ="form-control" asp-items="ViewBag.CoffeeShopId"></select>
+                <select asp-for="TimeFrame.CoffeeShopId" class="form-control" asp-items="ViewBag.CoffeeShopId"></select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group mb-3 d-flex justify-content-end">
+                <input type="submit" value="Create" class="btn btn-primary me-3" />
+                <a asp-page="Index" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="Index" class="btn btn-primary">Back</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
