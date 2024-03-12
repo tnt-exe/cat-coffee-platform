@@ -1,9 +1,12 @@
 ﻿@inject IHttpContextAccessor HttpContextAccessor
 @using BusinessObject.Enums;
+@using System.Security.Claims;
 @{
     var isAuthenticated = HttpContextAccessor.HttpContext?.User.Claims.Any() ?? false;
+
     //var isAdmin = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Contains("Admin")) ?? false;
     var isManager = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Manager).ToString())) ?? false;
+    var managerId = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 
 <!DOCTYPE html>
@@ -91,7 +94,7 @@
             <li><a asp-page="/Home" class="nav-link px-2 link-secondary px-4" data-target="Home"><i class="fa-solid fa-house me-2"></i>Home</a></li>
             @if (isManager)
             {
-                <li><a asp-page="/CoffeeShopPages/Details" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
+                <li><a asp-page="/CoffeeShopPages/CoffeeShopManager" asp-route-id ="@managerId" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
             }
             else
             {
@@ -102,11 +105,11 @@
             <li><a asp-page="/Booking/Index" class="nav-link px-2 link-secondary px-4" data-target="Booking"><i class="fa-solid fa-calendar"></i>Booking</a></li>
             @if (isManager)
             {
-                <li><a asp-page="/Cat/Index" class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
-                <li><a asp-page="/TimeFrame/Index" class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
-                <li><a asp-page="/Area/Index" class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
+                <li><a asp-page="/CatPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
+                <li><a asp-page="/TimeFramePages/Index" class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
+                <li><a asp-page="/AreaPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
                 <li><a asp-page="/Product/Index" class="nav-link px-2 link-secondary px-4" data-target="Product"><i class="fa-brands fa-product-hunt"></i>Product</a></li>
-                <li><a asp-page="/Category/Index" class="nav-link px-2 link-secondary px-4" data-target="Category"><i class="fa-solid fa-table-list"></i>Category</a></li>
+                <li><a asp-page="/CategoryPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Category"><i class="fa-solid fa-table-list"></i>Category</a></li>
             }
         </ul>
 

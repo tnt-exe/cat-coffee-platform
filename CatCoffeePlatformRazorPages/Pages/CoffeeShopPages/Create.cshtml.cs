@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using DTO.UserDTO;
+using Stripe;
 
 namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 {
