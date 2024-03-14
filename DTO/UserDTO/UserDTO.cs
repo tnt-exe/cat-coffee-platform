@@ -5,7 +5,9 @@ namespace DTO.UserDTO
 {
     public class UserDTO
     {
+        [Required]
         public string? FirstName { get; set; }
+        [Required]
         public string? LastName { get; set; }
         public string? UserName { get; set; }
         [MinLength(5)]

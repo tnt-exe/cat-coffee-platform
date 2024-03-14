@@ -4,9 +4,13 @@
 @{
     var isAuthenticated = HttpContextAccessor.HttpContext?.User.Claims.Any() ?? false;
 
-    //var isAdmin = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Contains("Admin")) ?? false;
+    var isAdmin = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Administrator).ToString())) ?? false;
     var isManager = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Manager).ToString())) ?? false;
     var managerId = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    var isStaff = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Staff).ToString())) ?? false;
+
+    var firstName = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "First Name")?.Value;
+    var lastName = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "Last Name")?.Value;
 }
 
 <!DOCTYPE html>
@@ -121,9 +125,48 @@
             }
             else
             {
-                <form method="post" action="/logout">
-                    <button type="submit" class="nav_button"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </form>
+                <div style="display:flex;">
+                    <div style="display:flex; align-items: center; color:gray; margin-right:5px; font-size:22px; font-weight:700;">
+                        @if(isAdmin){
+                            <text>
+                                Admin
+                            </text>
+                        }
+                        else if (isManager){
+                            <text>
+                                Manager
+                            </text>
+                        }
+                        else if(isStaff){
+                            <text>
+                                Staff
+                            </text>
+                        }
+                        else if(firstName is null && lastName is null){
+                            <text>
+                                User
+                            </text>
+                        }
+                        else{
+                            <text>
+                                @firstName @lastName
+                            </text>
+                        }
+                    </div>
+
+                    @if(!isAdmin){
+                        <a 
+                            class="rounded-circle" 
+                            style="cursor:pointer; display:flex; align-items: center; border: 1px solid white; margin: 5px 20px 5px 0; background-color: gray; padding:15px;"
+                            asp-page="./Profile">
+                            <i class="fa-solid fa-user" style="font-size: 15px; color:white;"></i>
+                        </a>
+                    }
+
+                    <form method="post" action="/logout" style="display:flex; align-items: center;">
+                        <button type="submit" class="nav_button"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </form>
+                </div>
             }
         </div>
     </header>

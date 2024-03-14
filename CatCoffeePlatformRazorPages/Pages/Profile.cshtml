@@ -1,0 +1,66 @@
+﻿@page
+@model Client.Pages.Profile.ProfileModel
+@using BusinessObject.Enums;
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (ViewData["warning"] != null)
+{
+    <div class="alert alert-info" style="position: fixed; top: 20%; right: 10%; width: 25%;">
+        @ViewData["warning"]
+    </div>
+}
+
+<section class="main">
+    <h4>Profile</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="UserInformation.Id" />
+                <div class="form-group">
+                    <label asp-for="UserInformation.FirstName" class="control-label"></label>
+                    <input asp-for="UserInformation.FirstName" class="form-control" />
+                    <span asp-validation-for="UserInformation.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserInformation.LastName" class="control-label"></label>
+                    <input asp-for="UserInformation.LastName" class="form-control" />
+                    <span asp-validation-for="UserInformation.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserInformation.PhoneNumber" class="control-label"></label>
+                    <input asp-for="UserInformation.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="UserInformation.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserInformation.Balance" class="control-label"></label>
+                    <input asp-for="UserInformation.Balance" class="form-control" readonly/>
+                    <span asp-validation-for="UserInformation.Balance" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserInformation.Email" class="control-label"></label>
+                    <input asp-for="UserInformation.Email" class="form-control" />
+                    <span asp-validation-for="UserInformation.Email" class="text-danger"></span>
+                </div> 
+                <div class="form-group">
+                    <label asp-for="UserInformation.Role" class="control-label"></label>
+                    <input class="form-control" value="@(Enum.GetName(typeof(Role), Model.UserInformation.Role ?? 0))" readonly />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-page="./home">Home</a>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
