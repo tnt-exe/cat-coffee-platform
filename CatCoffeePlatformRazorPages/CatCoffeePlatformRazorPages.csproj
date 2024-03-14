@@ -34,13 +34,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Stripe.net" Version="43.16.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Category\" />
-	  <Protobuf Include="Protos\BookingCRUD.proto" GrpcServices="Client" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Product\" />
-  </ItemGroup>
 </Project>
