@@ -23,7 +23,7 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
 
             if (timeFrameList is not null)
             {
-                if (shopId is not null)
+                if (shopId != null)
                 {
                     timeFrameList = timeFrameList
                         .Where(x => x.CoffeeShopId == shopId);

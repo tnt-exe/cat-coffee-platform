@@ -15,7 +15,7 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
 
         public IEnumerable<AreaDto> Area { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? shopId)
         {
             var apiResponse = await _apiArea
                 .GetAsync<ResponseBody<IEnumerable<AreaDto>>>();
@@ -23,11 +23,11 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
 
             if (areaList is not null)
             {
-                // if (shopId is not null)
-                // {
-                //     areaList = areaList
-                //         .Where(x => x.CoffeeShopId == shopId);
-                // }
+                if (shopId != null)
+                {
+                    areaList = areaList
+                        .Where(x => x.CoffeeShopId == shopId);
+                }
 
                 Area = areaList;
             }
