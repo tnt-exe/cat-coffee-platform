@@ -1,78 +1,96 @@
-﻿@page
+﻿@page "/catpages"
 @using BusinessObject.Enums
 @model CatCoffeePlatformRazorPages.Pages.CatPages.IndexModel
 
 @{
-    ViewData["Title"] = "Cat Index";
+    ViewData["Title"] = "Cat List";
 }
 
-<h1>Cat Index</h1>
+<div class="container" style="min-height: 44vh;">
+    <h1 style="text-align: center;">Cat</h1>
 
-<p>
-    <a asp-page="Create" class="btn btn-primary">Create</a>
-</p>
+    <p class="button">
+        <a asp-page="Create" class="btn btn-primary">Create</a>
+    </p>
 
-@if (Model.Cat is null || !Model.Cat.Any())
-{
-    <h3 class="alert alert-info">No Cats Found</h3>
-}
-else
-{
-    @if (TempData["cat-msg"] is not null)
-    {
-        <div class="alert alert-info">
-            @TempData["cat-msg"]
-        </div>
+    <div class="card" id="main-table">
+        @if (Model.Cat is null || !Model.Cat.Any())
+        {
+            <h3 class="alert alert-info text-center">No Cats Found</h3>
+        }
+        else
+        {
+            @if (TempData["cat-msg"] is not null)
+            {
+                <div class="alert alert-info">
+                    @TempData["cat-msg"]
+                </div>
+            }
+
+            <table class="table table-striped d-sm-table">
+                <thead>
+                    <tr class="text-uppercase">
+                        <th>Cat Name</th>
+                        <th>Description</th>
+                        <th>Healthy Status</th>
+                        <th>Area</th>
+                        <th>Coffee Shop</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Cat)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CatName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @if (item.HealthyStatus == (int)CatStatus.Healthy)
+                                {
+                                    <span class="badge bg-success">Healthy</span>
+                                }
+                                else if (item.HealthyStatus == (int)CatStatus.Sick)
+                                {
+                                    <span class="badge bg-warning">Sick</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Dead</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Area)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CoffeeShop)
+                            </td>
+                            <td>
+                                <a asp-page="./edit" asp-route-id="@item.CatId" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-page="./details" asp-route-id="@item.CatId" class="btn btn-info btn-sm">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+</div>
+
+<style>
+    #main-table th,
+    #main-table td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
     }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Cat Name</th>
-                <th>Description</th>
-                <th>Healthy Status</th>
-                <th>Area</th>
-                <th>Coffee Shop</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Cat)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CatName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @if (item.HealthyStatus == (int)CatStatus.Healthy)
-                        {
-                            <span class="badge bg-success">Healthy</span>
-                        }
-                        else if (item.HealthyStatus == (int)CatStatus.Sick)
-                        {
-                            <span class="badge bg-warning">Sick</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">Dead</span>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Area)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CoffeeShop)
-                    </td>
-                    <td>
-                        <a asp-page="./Edit" asp-route-id="@item.CatId">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.CatId">Details</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.CatId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    #main-table tr:hover,
+    #main-table th {
+        background-color: #f5f5f5;
+    }
+</style>
