@@ -15,6 +15,7 @@ namespace DTO.UserDTO
         public string? PhoneNumber { get; set; }
         public bool? LockoutEnabled { get; set; }
         public DateTimeOffset? LockoutEnd { get; set; }
+        public decimal? Balance { get; set; }
         public byte? Role { get; set; }
         public byte? Status { get; set; }
         public string? Email { get; set; }

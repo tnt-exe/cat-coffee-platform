@@ -153,7 +153,7 @@ namespace Repository.Implement
 
             if(resource.Email is not null)
             {
-                var existedEmail = await _unitOfWork.UserDAO.Get(u => u.Email.Equals(resource.Email)).AsNoTracking().FirstOrDefaultAsync();
+                var existedEmail = await _unitOfWork.UserDAO.Get(u => u.Email.Equals(resource.Email) && u.Id != id).AsNoTracking().FirstOrDefaultAsync();
                 if(existedEmail is not null)
                 {
                     result.AddError(ErrorCode.BadRequest, "Email is already taken");
@@ -165,7 +165,7 @@ namespace Repository.Implement
 
             if(resource.PhoneNumber is not null)
             {
-                var existedPhone = await _unitOfWork.UserDAO.Get(u => u.PhoneNumber.Equals(resource.PhoneNumber)).AsNoTracking().FirstOrDefaultAsync();
+                var existedPhone = await _unitOfWork.UserDAO.Get(u => u.PhoneNumber.Equals(resource.PhoneNumber) && u.Id != id).AsNoTracking().FirstOrDefaultAsync();
                 if (existedPhone is not null)
                 {
                     result.AddError(ErrorCode.BadRequest, "Phone is already taken");
