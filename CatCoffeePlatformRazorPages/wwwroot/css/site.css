@@ -7,6 +7,29 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.btn-primary {
+    color: #fff;
+    background-color: #a4d587;
+    border-color: #a4d587;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #619940;
+    border-color: #619940;
+}
+
+.btn-primary:focus {
+    color: #fff;
+    background-color: #4a8f21;
+    border-color: #4a8f21;
+    box-shadow: 0 0 0 0.25rem rgba(74, 143, 33, 0.5);
+}
+
+.btn-primary:active:focus {
+    box-shadow: 0 0 0 0.25rem rgba(74, 143, 33, 0.5);
+}
+
 section {
     padding: 64px;
 }
