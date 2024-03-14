@@ -3,6 +3,8 @@ using DTO.BookingDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
+using Grpc.Net.Client;
+
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {

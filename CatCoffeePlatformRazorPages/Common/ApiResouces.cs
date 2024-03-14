@@ -8,7 +8,7 @@
 
         public static readonly string TimeFrames = "timeframes";
         public static readonly string Categories = "categories";
-        public static readonly string Products = "products";
+        public static readonly string Products = "product";
 
         public static readonly string Wallets = "wallets";
         public static readonly string Bookings = "bookings";

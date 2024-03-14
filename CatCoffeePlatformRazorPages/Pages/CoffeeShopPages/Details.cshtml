@@ -1,13 +1,15 @@
 ﻿@page
 @using BusinessObject.Enums;
 @model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.DetailsModel
-
+@inject IHttpContextAccessor HttpContextAccessor
+@using System.Security.Claims;
 @{
     ViewData["Title"] = "Details";
+    var isCustomer = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Customer).ToString())) ?? false;
 }
 
 <h1>CoffeeShop Details</h1>
-
+<div style="padding-left:30px">
 <div>
     <hr />
     <dl class="row">
@@ -64,7 +66,6 @@
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.CoffeeShop?.CoffeeShopId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
 </div>
 <br/>
 <br />
@@ -73,7 +74,16 @@
 <br/>
 <br />
 <h1>Cat In Shop</h1>
-<br />
+<br/>
+@if(isCustomer)
+{
+
+}
+else
+{
+    <a asp-page="../CatPages/Create">Create New Cat</a>
+}
+
 @if (Model.Cat is null || !Model.Cat.Any())
 {
     <h3 class="alert alert-info">No Cats Found</h3>
@@ -129,9 +139,19 @@ else
                         @Html.DisplayFor(modelItem => item.CoffeeShop)
                     </td>
                     <td>
-                        <a asp-page="../CatPages/Edit" asp-route-id="@item.CatId">Edit</a> |
-                        <a asp-page="../CatPages/Details" asp-route-id="@item.CatId">Details</a> |
-                        <a asp-page="../CatPages/Delete" asp-route-id="@item.CatId">Delete</a>
+                        @if (isCustomer)
+                        {
+
+                        }
+                        else
+                        {
+                            <text>
+                                <a asp-page="../CatPages/Edit" asp-route-id="@item.CatId">Edit</a> |
+                                <a asp-page="../CatPages/Details" asp-route-id="@item.CatId">Details</a> |
+                                <a asp-page="../CatPages/Delete" asp-route-id="@item.CatId">Delete</a>
+                            </text>
+                        }
+                        
                     </td>
                 </tr>
             }
@@ -146,7 +166,14 @@ else
 <br />
 <h1>Area</h1>
 <br />
+@if (isCustomer)
+{
 
+}
+else
+{
+    <a asp-page="../AreaPages/Create">Create New Area</a>
+}
 
 @if (Model.Area is null || !Model.Area.Any())
 {
@@ -192,8 +219,17 @@ else
                         @Html.DisplayFor(modelItem => item.CoffeeShop)
                     </td>
                     <td>
-                        <a asp-page="./Edit" asp-route-id="@item.AreaId">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.AreaId">Details</a>
+                        @if(isCustomer){
+
+                        }
+                        else
+                        {
+                            <text>
+                                <a asp-page="../AreaPages/Edit" asp-route-id="@item.AreaId">Edit</a> |
+                                <a asp-page="../AreaPages/Details" asp-route-id="@item.AreaId">Details</a>
+                            </text>
+                        }
+                        
                     </td>
                 </tr>
             }
@@ -209,6 +245,14 @@ else
 <br />
 <h1>Time Frames</h1>
 <br />
+@if (isCustomer)
+{
+
+}
+else
+{
+    <a asp-page="../TimeFramePages/Create">Create New Time Frame</a>
+}
 
 @if (Model.TimeFrame is null || !Model.TimeFrame.Any())
 {
@@ -250,11 +294,107 @@ else
                         @Html.DisplayFor(modelItem => item.CoffeeShop)
                     </td>
                     <td>
-                        <a asp-page="./Edit" asp-route-id="@item.TimeFrameId">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.TimeFrameId">Details</a>
+                        @if(isCustomer)
+                        {
+
+                        }
+                        else
+                        {
+                            <text>
+                                <a asp-page="../TimeFramePages/Edit" asp-route-id="@item.TimeFrameId">Edit</a> |
+                                <a asp-page="../TimeFramePages/Details" asp-route-id="@item.TimeFrameId">Details</a>
+                            </text>
+                        }
+                        
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
+
+<br />
+<br />
+
+<hr />
+<br />
+<br />
+<h1>Product</h1>
+<br />
+@if (isCustomer)
+{
+
+}
+else
+{
+    <a asp-page="../ProductPages/Create">Create New Product</a>
+}
+
+@if (Model.Product is null || !Model.Product.Any())
+{
+    <h3 class="alert alert-info">No Product Found</h3>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Unit
+            </th>
+           
+            <th>
+                Category
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Product)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit)
+                </td>              
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                        @if (isCustomer)
+                        {
+
+                        }
+                        else
+                        {
+                            <text>
+                                <a asp-page="../ProductPages/Edit" asp-route-id="@item.ProductId">Edit</a> |
+                                <a asp-page="../ProductPages/Details" asp-route-id="@item.ProductId">Details</a> |
+                                <a asp-page="../ProductPages/Delete" asp-route-id="@item.ProductId">Delete</a>
+                            </text>
+                        }
+                        
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+</div>
