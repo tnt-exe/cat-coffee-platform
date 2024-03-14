@@ -7,8 +7,7 @@ using DTO.AreaDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Grpc.Net.Client;
-using CatCoffeePlatformRazorPages.Protos;
-using BookingObject = CatCoffeePlatformRazorPages.Protos.Booking;
+
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {

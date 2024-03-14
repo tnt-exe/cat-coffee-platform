@@ -36,6 +36,7 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
         public IEnumerable<CatDto> Cat { get; set; } = default!;
         public IEnumerable<AreaDto> Area { get; set; } = default!;
         public IEnumerable<TimeFrameDto> TimeFrame { get; set; } = default!;
+        public IEnumerable<Product> Product { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
 
@@ -55,6 +56,10 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 
             var apiTimeResponse = await _apiTime.GetAsync<ResponseBody<IEnumerable<TimeFrameDto>>>();
             var timeFrameList = apiTimeResponse!.Result.Where(c => c.CoffeeShopId == id);
+
+            var apiProductResponse = await _apiProduct.GetQueryAsync<IEnumerable<Product>>($"shopId={id}&pageIndex=0&pageSize=10&includeProperties=Category");
+
+
             if (shop == null || catList == null)
             {
                 return NotFound();
@@ -65,6 +70,7 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
                 Cat = catList;
                 Area = areaList;
                 TimeFrame = timeFrameList;
+                Product = apiProductResponse!;
             }
             return Page();
         }
