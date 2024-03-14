@@ -37,6 +37,10 @@
 
   <ItemGroup>
     <Folder Include="Pages\Category\" />
+	  <Protobuf Include="Protos\BookingCRUD.proto" GrpcServices="Client" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Pages\Product\" />
   </ItemGroup>
 </Project>

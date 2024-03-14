@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using CatCoffeePlatformRazorPages.Common;
+﻿using CatCoffeePlatformRazorPages.Common;
 using DTO.BookingDTO;
-using BusinessObject.Model;
-using DTO.AreaDTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Grpc.Net.Client;
 

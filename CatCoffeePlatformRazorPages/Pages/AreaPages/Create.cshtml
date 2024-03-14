@@ -1,51 +1,47 @@
-﻿@page
+﻿@page "/areapages/create"
 @model CatCoffeePlatformRazorPages.Pages.AreaPages.CreateModel
 
 @{
     ViewData["Title"] = "Create Area";
 }
 
-<h1>Create Area</h1>
-
-<h4>Area</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="card col-md-4 p-3">
+        <h1 class="text-center">Area</h1>
+        <hr />
+    
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Area.AreaName" class="control-label"></label>
                 <input asp-for="Area.AreaName" class="form-control" />
                 <span asp-validation-for="Area.AreaName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Area.Description" class="control-label"></label>
                 <input asp-for="Area.Description" class="form-control" />
                 <span asp-validation-for="Area.Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Area.PricePerHour" class="control-label"></label>
                 <input asp-for="Area.PricePerHour" class="form-control" />
                 <span asp-validation-for="Area.PricePerHour" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Area.MaxSlots" class="control-label"></label>
                 <input asp-for="Area.MaxSlots" class="form-control" />
                 <span asp-validation-for="Area.MaxSlots" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Area.CoffeeShopId" class="control-label"></label>
                 <select asp-for="Area.CoffeeShopId" class ="form-control" asp-items="ViewBag.CoffeeShopId"></select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group my-3 d-flex justify-content-end">
+                <input type="submit" value="Create" class="btn btn-primary me-3"/>
+                <a asp-page="Index" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index" class="btn btn-primary">Back</a>
 </div>
 
 @section Scripts {

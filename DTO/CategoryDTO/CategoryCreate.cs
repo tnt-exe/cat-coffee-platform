@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DTO.CategoryDTO
+namespace DTO
 {
-    public record CategoryUpsert
+    public record CategoryCreate
     {
         [Required]
-        public string CategoryName { get; init; }
+        public string? CategoryName { get; init; }
     }
 }

@@ -23,6 +23,12 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
 
             if (areaList is not null)
             {
+                // if (shopId is not null)
+                // {
+                //     areaList = areaList
+                //         .Where(x => x.CoffeeShopId == shopId);
+                // }
+
                 Area = areaList;
             }
         }
