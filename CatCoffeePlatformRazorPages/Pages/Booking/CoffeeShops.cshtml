@@ -7,8 +7,8 @@
 
 <section class="main coffee_shop_list img-bg-card">
     <div class="search_tool">
-        <input type="text" placeholder="Enter shop information"/>
-        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        <input id="InputValue" value="@Model.SearchValue" type="text" placeholder="Enter shop information"/>
+        <button onclick="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
 
     <form method="post" asp-page="areas" id="submitform">
@@ -46,13 +46,23 @@
     </form>
 </section>
 
+<form method="post" asp-page-handler="Search" id="submitSearchForm">
+    <input id="inputSeachValue" type="hidden" asp-for="@Model.SearchValue"/>
+</form>
 
 <script>
+
     function chooseShop(shop){
         console.log("Click on shop: " + shop.ShopName);
         let jsonString = JSON.stringify(shop);
         document.getElementById("coffeeShopInput").value = jsonString;
         document.getElementById("submitform").submit();
+    }
+
+    function search(){
+        var searchValue = $('#InputValue').val();
+        $('#inputSeachValue').val(searchValue);
+        $('#submitSearchForm').submit();
     }
 </script>
 

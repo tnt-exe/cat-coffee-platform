@@ -23,6 +23,7 @@ namespace DTO.BookingDTO
         public DateTime? PaymentDate { get; set; }
         public int? PaymentStatus { get; set; }
         public int? Status { get; set; }
+        public bool Deleted { get; set; }
         public int? AreaId { get; set; }
         public BookingResponseDTO_Area? Area { get; set; }
         public int? TimeFrameId { get; set; }

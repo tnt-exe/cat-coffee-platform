@@ -9,32 +9,49 @@
     @{
         if (ViewData["warning"] != null)
         {
-                                                    <div class="alert alert-info">
-                                                        @ViewData["warning"]
-                                                    </div>
+                                                                    <div class="alert alert-info">
+                                                                        @ViewData["warning"]
+                                                                    </div>
         }
         var data = (List<string>?)ViewData["errors"];
         if (data != null)
         {
-                                                    <div style="margin-top:20px">
-                                                        @foreach (var item in data)
+                                                                    <div style="margin-top:20px">
+                                                                        @foreach (var item in data)
                 {
-                                                            <div class="alert alert-danger" style="margin-top:10px">
-                                                                @item
-                                                            </div>
+                                                                            <div class="alert alert-danger" style="margin-top:10px">
+                                                                                @item
+                                                                            </div>
                 }
-                                                    </div>
+                                                                    </div>
         }
     }
 </div>
 
+<div class="popup-box">
+    <h1>Are you sure want to cancel</h1>
+    @if(Model.Booking.PaymentStatus == (int)PaymentStatus.Paid){
+        <h4>Warning: You will only be refunded 80% of the amount</h4>
+    }
+    <div class="popup-button">
+        <button class="yes-btn" onclick="yesBtn()">Yes</button>
+        <button class="no-btn" onclick="noBtn()">No</button>
+    </div>
+</div>
 
 <section class="main">
-
     <div style="display:inline-flex; flex-direction:row; width:auto; margin-bottom: 30px;">
-        <button class="button_checkout">Checkout</button>
-        <div style="width: 30px;"></div>
-        <button class="button_cancel">Cancel</button>
+        @if(Model.Booking.PaymentStatus == (int)PaymentStatus.UnPaid || Model.Booking.PaymentStatus == (int)PaymentStatus.None){
+            <form method="post" asp-page-handler="PayOrder">
+                <input type="hidden" asp-for="@Model.TotalRentalPrice" value="@Model.Booking.TotalMoney" />
+                <input type="hidden" asp-for="@Model.BookingId" value="@Model.Booking.BookingId"/>
+                <button class="button_checkout" type="submit">Checkout</button>
+            </form>
+            <div style="width: 30px;"></div>
+        }
+        @if(Model.Booking.Status != (int)BookingStatus.Cancel){
+            <button class="button_cancel" onclick="cancelBooking()">Cancel</button>
+        }
     </div>
 
     <div>
@@ -208,7 +225,87 @@
 
 </section>
 
+<form method="post" asp-page-handler="Cancel" id="submitcancelform">
+    <input type="hidden" asp-for="@Model.BookingId" value="@Model.Booking.BookingId"/>
+</form>
+
+<script>
+    const popupBox = document.querySelector('.popup-box');
+    const submitCancelForm = document.querySelector('#submitcancelform');
+
+    function cancelBooking(){
+        popupBox.classList.add('active');
+    }
+
+    function noBtn() {
+        popupBox.classList.remove('active');
+    }
+
+    function yesBtn(){
+        submitCancelForm.submit();
+    }
+</script>
+
 <style>
+    .popup-box {
+        position: fixed; 
+        top: 40%;
+        left: 40%;
+        opacity: 0;
+        pointer-events: none;
+        width: 500px;
+        background: #f2f2f2;
+        border-radius: 6px;
+        border: 1px solid #625d5d;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .popup-box.active {
+        opacity: 1;
+        pointer-events: auto;
+        transition: .4s ease;
+    }
+    .popup-box h1{
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .popup-box h4{
+        font-size: 20px;
+        font-weight: 500;
+        color: #c25b5b;
+    }
+    .popup-box .popup-button {
+        width: 100%;
+        height: 45px;
+        display: flex;
+        justify-content: space-around;
+        margin-top: 32px;
+    }
+    .popup-button .yes-btn {
+        min-width: 90px;
+        background-color: #6e78ff;
+        border-radius: 6px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+    }
+    .popup-button .no-btn {
+        min-width: 90px;
+        background-color: #ee7474;
+        border-radius: 6px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
     .button_checkout {
         display: block;
         background-color: #a4d587;
