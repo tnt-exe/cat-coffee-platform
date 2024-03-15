@@ -34,5 +34,21 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
             }
             return Page();
         }
+
+        public async Task<IActionResult> OnGetCoffeeShopAsync(int CoffeeShopId)
+        {
+            var apiResponse = await _apiShop.GetAsync<ResponseBody<CoffeeShopResponseDTO>>(CoffeeShopId.ToString());
+            var shop = apiResponse!.Result;
+
+            if (shop == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                CoffeeShop = shop;
+            }
+            return Page();
+        }
     }
 }

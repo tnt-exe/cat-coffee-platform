@@ -182,8 +182,8 @@ namespace Repository.Implement
                 }
                 else
                 {
-                    var existedCoffeeShop = await _unitOfWork.CoffeeShopDAO.Get(c => c.CoffeeShopId.Equals(resource.CoffeeShopId)).AsNoTracking().FirstOrDefaultAsync();
-                    if (existedCoffeeShop is not null)
+                    var existedCoffeeShop = await _unitOfWork.CoffeeShopDAO.Get(c => c.CoffeeShopId == resource.CoffeeShopId).AsNoTracking().FirstOrDefaultAsync();
+                    if (existedCoffeeShop is null)
                     {
                         result.AddError(ErrorCode.BadRequest, "Coffee Shop not found");
                         return result;

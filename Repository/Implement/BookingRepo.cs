@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BusinessObject.Enums;
 using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
@@ -310,7 +311,6 @@ namespace Repository.Implement
             }
 
             existedBooking.TotalMoney = resource.TotalMoney ?? existedBooking.TotalMoney;
-            existedBooking.Status = resource.Status ?? existedBooking.Status;
             existedBooking.PaymentStatus = resource.PaymentStatus ?? existedBooking.PaymentStatus;
             existedBooking.PaymentDate = resource.PaymentDate ?? existedBooking.PaymentDate;
 
@@ -337,6 +337,20 @@ namespace Repository.Implement
                     return result;
                 }
             }
+
+            if(resource.Status is not null && resource.Status == (int)BookingStatus.Cancel && resource.Status != existedBooking.Status)
+            {
+                // Refund 80%
+                var customer = await _unitOfWork.UserDAO.GetByIDAsync(existedBooking.UserId);
+                if(customer is null)
+                {
+                    result.AddError(ErrorCode.NotFound, "Customer information not found");
+                    result.AddError(ErrorCode.NotFound, "Can not update customer balance");
+                    return result;
+                }
+                customer.Balance += (existedBooking.TotalMoney * 80 / 100);
+            }
+            existedBooking.Status = resource.Status ?? existedBooking.Status;
 
             try
             {
@@ -423,7 +437,7 @@ namespace Repository.Implement
 
                 if (queryOptions.Count?.Value == true)
                 {
-                    queryOptions.Request.ODataFeature().TotalCount = ((IQueryable<BookingResponseDTO>)result).Select(b => b.Slots).Sum();
+                    queryOptions.Request.ODataFeature().TotalCount = ((IQueryable<BookingResponseDTO>)result).Where(b => !b.Deleted).Select(b => b.Slots).Sum();
                 }
                 if (orderBy != null)
                     result = orderBy.ApplyTo(result, settings);

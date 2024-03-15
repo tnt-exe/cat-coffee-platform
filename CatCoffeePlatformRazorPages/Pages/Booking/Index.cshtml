@@ -6,6 +6,29 @@
     ViewData["Title"] = "Index";
 }
 
+<div style="position: fixed; top: 15%; right: 10%; width: 25%;">
+    @{
+        if (ViewData["warning"] != null)
+        {
+            <div class="alert alert-info">
+                @ViewData["warning"]
+            </div>
+        }
+        var data = (List<string>?)ViewData["errors"];
+        if (data != null)
+        {
+            <div style="margin-top:20px">
+                @foreach (var item in data)
+                {
+                    <div class="alert alert-danger" style="margin-top:10px">
+                        @item
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
 <section class="main">
     <form asp-page="CoffeeShops" method="get">
         @Html.AntiForgeryToken()
@@ -19,6 +42,9 @@
     <table class="table table-striped d-sm-table">
         <thead>
             <tr>
+                @if(Model.ShowCustomer){
+                    <th>Customer</th>
+                }
                 <th>Created</th>
                 <th>Date</th>
                 <th>Time</th>
@@ -36,6 +62,11 @@
             @foreach (var item in Model.Bookings)
             {
                 <tr style="vertical-align: middle;">
+                    @if(Model.ShowCustomer){
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User!.Email!)
+                        </td>
+                    }
                     <td>
                         @Html.DisplayFor(modelItem => item.BookingDate)
                     </td>
