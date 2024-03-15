@@ -46,11 +46,11 @@ section {
     background-color: white;
 }
 
-    .nav_button:hover {
-        color: white;
-        background-color: #a4d587;
-        transition-duration: 0.4s;
-    }
+.nav_button:hover {
+    color: white;
+    background-color: #a4d587;
+    transition-duration: 0.4s;
+}
 
 footer {
     display: flex;
@@ -61,48 +61,40 @@ footer {
 }
 
 
-    footer .main {
-        width: 450px;
-        color: #3A3A3A;
-    }
+footer .main {
+    width: 450px;
+    color: #3A3A3A;
+}
 
-        footer .main a {
-            font-size: 2rem;
-            text-decoration: none;
-            color: #3A3A3A;
-            display: inline-block;
-            margin-bottom: 16px;
-        }
+footer .main a {
+    font-size: 2rem;
+    text-decoration: none;
+    color: #3A3A3A;
+    display: inline-block;
+    margin-bottom: 16px;
+}
 
-        footer .main p {
-            font-size: 0.85rem;
-        }
+footer .main p {
+    font-size: 0.85rem;
+}
 
-    footer .navigation {
-    }
 
-        footer .navigation h2 {
-            display: inline-block;
-            margin-bottom: 16px;
-        }
+footer .navigation h2 {
+    display: inline-block;
+    margin-bottom: 16px;
+}
 
-        footer .navigation p a {
-            text-decoration: none;
-            color: #3A3A3A;
-        }
+footer .navigation p a {
+    text-decoration: none;
+    color: #3A3A3A;
+}
 
-    footer .share {
-    }
+footer .share h2 {
+    display: inline-block;
+    margin-bottom: 16px;
+}
 
-        footer .share h2 {
-            display: inline-block;
-            margin-bottom: 16px;
-        }
-
-    footer .contact {
-    }
-
-        footer .contact h2 {
-            display: inline-block;
-            margin-bottom: 16px;
-        }
+footer .contact h2 {
+    display: inline-block;
+    margin-bottom: 16px;
+}
