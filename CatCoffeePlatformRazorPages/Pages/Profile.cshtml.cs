@@ -97,7 +97,7 @@ public class ProfileModel : PageModel
                 return Page();
             }
 
-            return RedirectToPage("./home");
+            return Page();
         }
 
         ViewData["warning"] = "Invalid input";

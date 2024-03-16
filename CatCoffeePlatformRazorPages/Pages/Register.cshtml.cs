@@ -79,7 +79,7 @@ public class RegisterModel : PageModel
         if (response.IsSuccessStatusCode)
         {
             TempData["Information"] = data?["title"]?.Value<string>();
-            return RedirectToPage("./home");
+            return RedirectToPage("./login");
         }
         else
         {
