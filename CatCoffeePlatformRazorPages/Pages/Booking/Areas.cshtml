@@ -136,7 +136,8 @@
 </section>
 
 <form method="get" action="/areapages/details" id="submitform_viewdetail">
-    <input type="hidden" name="id" id="area_id"/>
+    <input type="hidden" name="areaId" id="area_id"/>
+    <input type="hidden" name="shopId" id="shop_id"/>
 </form>
 
 <form method="post" asp-page="products" id="submitform">
@@ -154,6 +155,7 @@
 
     function ViewAreaDetail(areaId){
         $('#area_id').attr('value', areaId);
+        $('#shop_id').attr('value', @Model.CoffeeShop.CoffeeShopId);
         $('#submitform_viewdetail').submit();
     }
 
