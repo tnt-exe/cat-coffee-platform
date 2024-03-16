@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using BusinessObject.Model;
 using CatCoffeePlatformAPI.Controllers.Base;
 using DTO.ProductDTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Implement;
 using Repository.Interface;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace CatCoffeePlatformAPI.Controllers
 {
@@ -27,7 +21,7 @@ namespace CatCoffeePlatformAPI.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] [Required] int shopId,
+            [FromQuery][Required] int shopId,
             [FromQuery] int? productId,
             [FromQuery] string? productName,
             [FromQuery] int? categoryId,
@@ -47,7 +41,7 @@ namespace CatCoffeePlatformAPI.Controllers
 
         [HttpGet("filter")]
         public async Task<IActionResult> GetAllByFilter(
-            [FromQuery] [Required] int shopId,
+            [FromQuery][Required] int shopId,
             [FromQuery] int? productId,
             [FromQuery] string? productName,
             [FromQuery] int? categoryId,
@@ -105,8 +99,8 @@ namespace CatCoffeePlatformAPI.Controllers
 
         [HttpPut]
         public async Task<IActionResult> Update(
-            [FromQuery] [Required] int shopId,
-            [FromQuery] [Required] int productId,
+            [FromQuery][Required] int shopId,
+            [FromQuery][Required] int productId,
             [FromBody] ProductUpdate product)
         {
             if (String.IsNullOrEmpty(product.ProductName) && product.Price == 0 && product.Quantity == 0 &&

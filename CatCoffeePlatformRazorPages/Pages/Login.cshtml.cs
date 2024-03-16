@@ -1,14 +1,13 @@
-﻿using DTO.UserDTO;
+﻿using CatCoffeePlatformRazorPages.Common;
+using DTO.UserDTO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json.Linq;
-using JsonConvert = Newtonsoft.Json.JsonConvert;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
-using CatCoffeePlatformRazorPages.Common;
-using BusinessObject.Enums;
+using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace CatCoffeePlatformRazorPages.Pages
 {

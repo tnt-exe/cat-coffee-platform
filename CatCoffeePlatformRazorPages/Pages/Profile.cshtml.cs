@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DTO.UserDTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
-using JsonConvert = Newtonsoft.Json.JsonConvert;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
-using DTO.UserDTO;
-using BusinessObject.Model;
+using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace Client.Pages.Profile;
 
@@ -32,7 +30,7 @@ public class ProfileModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         var userId = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        if(userId is null)
+        if (userId is null)
         {
             ViewData["warning"] = "Can not load user information";
             return Page();
@@ -52,7 +50,7 @@ public class ProfileModel : PageModel
                 return Page();
             }
             var userInformation = data?["result"]?.ToObject<UserResponseDTO>();
-            if(userInformation is null)
+            if (userInformation is null)
             {
                 ViewData["warning"] = "Something wrong happends (Can not load data)";
                 return Page();
@@ -92,7 +90,7 @@ public class ProfileModel : PageModel
             }
             else
             {
-                var data = (JObject)JsonConvert.DeserializeObject(responseMessage)!; 
+                var data = (JObject)JsonConvert.DeserializeObject(responseMessage)!;
                 ViewData["warning"] = data?["errors"]?.Value<List<string>>()?.FirstOrDefault() ?? "Error";
                 return Page();
             }

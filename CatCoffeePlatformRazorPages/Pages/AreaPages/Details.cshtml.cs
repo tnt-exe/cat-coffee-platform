@@ -35,8 +35,8 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
             {
                 Area = areaResponse.Result!;
                 Cats = catList;
-            } 
-            else 
+            }
+            else
             {
                 return NotFound();
             }

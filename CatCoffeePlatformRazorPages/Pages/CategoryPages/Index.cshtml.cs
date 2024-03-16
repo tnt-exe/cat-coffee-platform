@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using CatCoffeePlatformRazorPages.Common;
+﻿using CatCoffeePlatformRazorPages.Common;
 using DTO;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.CategoryPages
 {
@@ -13,7 +13,7 @@ namespace CatCoffeePlatformRazorPages.Pages.CategoryPages
             _apiCategory = new ApiHelper(ApiResources.Categories);
         }
 
-        public IEnumerable<CategoryDto> Category { get;set; } = default!;
+        public IEnumerable<CategoryDto> Category { get; set; } = default!;
 
         public async Task OnGetAsync()
         {

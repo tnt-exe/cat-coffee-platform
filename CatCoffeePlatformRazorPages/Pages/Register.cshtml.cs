@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessObject.Enums;
+using DTO.UserDTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using Newtonsoft.Json.Linq;
 using JsonConvert = Newtonsoft.Json.JsonConvert;
-using System;
-using DTO.UserDTO;
-using BusinessObject.Enums;
 
 namespace CatCoffeePlatformRazorPages.Register;
 
@@ -29,11 +27,11 @@ public class RegisterModel : PageModel
     public IActionResult OnGet()
     {
         var checkRole = int.TryParse(httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "scope")?.Value, out int role);
-        if(checkRole && role == (int)Role.Administrator)
+        if (checkRole && role == (int)Role.Administrator)
         {
             IsAdmin = true;
         }
-        else if(role == (int)Role.Manager)
+        else if (role == (int)Role.Manager)
         {
             IsManager = true;
         }
@@ -59,13 +57,13 @@ public class RegisterModel : PageModel
     // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task<IActionResult> OnPostAsync()
     {
-        if(!ModelState.IsValid || Account is null)
+        if (!ModelState.IsValid || Account is null)
         {
             ViewData["warning"] = "Invalid input";
             return Page();
         }
 
-        if(Account.Password != Account.ConfirmPassword)
+        if (Account.Password != Account.ConfirmPassword)
         {
             ViewData["warning"] = "Password and confirm password does not match";
             return Page();

@@ -19,7 +19,7 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginUser([FromBody]UserLogin resource)
+        public async Task<IActionResult> LoginUser([FromBody] UserLogin resource)
         {
             if (ModelState.IsValid)
             {
@@ -33,7 +33,7 @@ namespace CatCoffeePlatformAPI.Controllers
                     });
                 }
 
-                if(result.Payload is null)
+                if (result.Payload is null)
                 {
                     return BadRequest(new
                     {
@@ -58,7 +58,7 @@ namespace CatCoffeePlatformAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody]UserDTO resource)
+        public async Task<IActionResult> RegisterUser([FromBody] UserDTO resource)
         {
             if (ModelState.IsValid)
             {

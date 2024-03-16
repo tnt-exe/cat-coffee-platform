@@ -1,29 +1,26 @@
-using DAO.UnitOfWork;
 using BusinessObject.Enums;
 using BusinessObject.Model;
 using CatCoffeePlatformAPI.Permission;
 using CatCoffeePlatformAPI.Service;
 using DAO.Context;
 using DAO.Helper;
+using DAO.UnitOfWork;
+using DTO.AreaDTO;
+using DTO.BookingDTO;
+using DTO.Common;
+using DTO.TimeFrameDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Repository;
-using Repository.Implement;
-using Repository.Interface;
-using System.Data;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using DTO.Common;
+using Microsoft.AspNetCore.OData;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
-using Microsoft.AspNetCore.OData;
-using DTO.BookingDTO;
-using DTO.TimeFrameDTO;
-using DTO.AreaDTO;
+using Microsoft.OpenApi.Models;
+using Repository;
+using System.Text.Json;
 
 namespace CatCoffeePlatformAPI
 {
@@ -152,7 +149,8 @@ namespace CatCoffeePlatformAPI
 
             builder.Services.AddControllers(config =>
             {
-                using (var serviceProvider = builder.Services.BuildServiceProvider()) {
+                using (var serviceProvider = builder.Services.BuildServiceProvider())
+                {
                     var readerFactory = serviceProvider.GetRequiredService<IHttpRequestStreamReaderFactory>();
                     config.ModelBinderProviders.Insert(0, new ModelBinderProvider(config.InputFormatters, readerFactory));
                 }
@@ -230,7 +228,7 @@ namespace CatCoffeePlatformAPI
             });
 
             builder.Services.AddRepositories();
-            
+
             // Add Repository to the container
             builder.Services.AddScoped<UnitOfWork>();
 
@@ -279,7 +277,7 @@ namespace CatCoffeePlatformAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
-            
+
             app.MapControllers();
 
             app.UseEndpoints(e =>

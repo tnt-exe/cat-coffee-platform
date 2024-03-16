@@ -1,7 +1,6 @@
 ﻿using DAO.Helper;
 using Repository.Interface;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Implement
 {

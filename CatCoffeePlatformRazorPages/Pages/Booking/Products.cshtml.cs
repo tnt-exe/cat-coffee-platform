@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CatCoffeePlatformRazorPages.Common;
+using DTO.AreaDTO;
+using DTO.BookingDTO;
+using DTO.CoffeeShopDTO;
+using DTO.Common;
+using DTO.TimeFrameDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BusinessObject.Model;
-using DTO.Common;
-using DTO.CoffeeShopDTO;
-using DTO.AreaDTO;
-using DTO.TimeFrameDTO;
-using Microsoft.IdentityModel.Tokens;
-using CatCoffeePlatformRazorPages.Common;
-using System.Text.Json;
-using System.Net.Http.Headers;
-using DTO.UserDTO;
-using System.Security.Claims;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Stripe;
 using Stripe.Checkout;
-using DTO.BookingDTO;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {

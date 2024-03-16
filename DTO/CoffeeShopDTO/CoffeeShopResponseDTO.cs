@@ -22,7 +22,7 @@ namespace DTO.CoffeeShopDTO
         public bool Deleted { get; set; }
         public Guid ManagerId { get; set; }
         public string? ManagerEmail { get; set; }
-      
+
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);

@@ -1,9 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTO.Common.CustomJsonConverter
 {
@@ -21,7 +16,7 @@ namespace DTO.Common.CustomJsonConverter
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if(!(value is DateOnly))
+            if (!(value is DateOnly))
             {
                 throw new JsonSerializationException("Expected DateOnly object value.");
             }

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CatCoffeePlatformRazorPages.Common;
+using DTO;
+using DTO.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BusinessObject.Model;
-using DAO.Context;
-using CatCoffeePlatformRazorPages.Common;
-using DTO.ProductDTO;
-using Google.Protobuf.WellKnownTypes;
-using DTO;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CatCoffeePlatformRazorPages.Pages.ProductPages
 {
@@ -34,7 +26,7 @@ namespace CatCoffeePlatformRazorPages.Pages.ProductPages
             }
 
             ViewData["shopId"] = shopId;
-            
+
             await _loadSelectList();
             return Page();
         }
@@ -47,7 +39,7 @@ namespace CatCoffeePlatformRazorPages.Pages.ProductPages
 
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 await _loadSelectList();
                 return Page();

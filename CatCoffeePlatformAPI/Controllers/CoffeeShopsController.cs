@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using BusinessObject.Model;
-using CatCoffeePlatformAPI.Common;
-using DAO.Helper;
+﻿using CatCoffeePlatformAPI.Common;
 using DTO.CoffeeShopDTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
-using System.Globalization;
 
 namespace CatCoffeePlatformAPI.Controllers
 {

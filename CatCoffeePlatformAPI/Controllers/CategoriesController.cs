@@ -45,7 +45,7 @@ namespace CatCoffeePlatformAPI.Controllers
                     Result = result.Payload
                 });
         }
-        
+
         [HttpPost]
         [ProducesResponseType(typeof(ResponseBody<CategoryCreate>), 200)]
         [ProducesResponseType(400)]

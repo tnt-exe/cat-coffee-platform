@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 using System.ComponentModel.DataAnnotations;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace DTO.AreaDTO
 {

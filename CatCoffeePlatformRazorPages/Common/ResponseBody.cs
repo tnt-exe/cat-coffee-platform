@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Options;
-
-namespace CatCoffeePlatformRazorPages.Common
+﻿namespace CatCoffeePlatformRazorPages.Common
 {
     public class ResponseBody<T> where T : class
     {

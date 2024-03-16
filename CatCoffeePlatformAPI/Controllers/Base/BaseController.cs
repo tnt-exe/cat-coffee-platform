@@ -1,6 +1,5 @@
 ﻿using DAO.Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace CatCoffeePlatformAPI.Controllers.Base
 {
