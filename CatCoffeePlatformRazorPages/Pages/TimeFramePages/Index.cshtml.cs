@@ -1,5 +1,6 @@
 ﻿using CatCoffeePlatformRazorPages.Common;
 using DTO.TimeFrameDTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
@@ -15,22 +16,30 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
 
         public IEnumerable<TimeFrameDto> TimeFrame { get; set; } = default!;
 
-        public async Task OnGetAsync(int? shopId)
+        public async Task<IActionResult> OnGetAsync(int? shopId)
         {
+            if (shopId == null)
+            {
+                return NotFound();
+            }
+
             var apiResponse = await _apiTimeFrame
                 .GetAsync<ResponseBody<IEnumerable<TimeFrameDto>>>();
             var timeFrameList = apiResponse!.Result;
 
-            if (timeFrameList is not null)
+            if (timeFrameList == null)
             {
-                if (shopId != null)
-                {
-                    timeFrameList = timeFrameList
-                        .Where(x => x.CoffeeShopId == shopId);
-                }
-
-                TimeFrame = timeFrameList;
+                return NotFound();
             }
+
+            timeFrameList = timeFrameList
+                    .Where(x => x.CoffeeShopId == shopId);
+
+            TimeFrame = timeFrameList;
+
+            ViewData["shopId"] = shopId;
+
+            return Page();
         }
     }
 }
