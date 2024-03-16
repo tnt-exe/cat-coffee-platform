@@ -17,20 +17,25 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
         [BindProperty]
         public TimeFrameUpdate TimeFrame { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public int ShopId { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? tfId, int? shopId)
         {
-            if (id == null)
+            if (tfId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var apiResponse = await _apiTimeFrame.GetAsync<ResponseBody<TimeFrameUpdate>>($"{id}");
+            var apiResponse = await _apiTimeFrame.GetAsync<ResponseBody<TimeFrameUpdate>>($"{tfId}");
             var timeFrame = apiResponse!.Result;
             if (timeFrame == null)
             {
                 return NotFound();
             }
             TimeFrame = timeFrame;
+
+            ViewData["shopId"] = shopId;
 
             return Page();
         }
@@ -51,7 +56,8 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
             }
 
             TempData["tf-msg"] = "Update timeframe success";
-            return RedirectToPage("./Index");
+
+            return Redirect("/CoffeeShopPages/Details?id=" + ShopId);
         }
     }
 }

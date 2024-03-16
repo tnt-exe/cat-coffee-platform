@@ -22,14 +22,17 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
         [BindProperty]
         public CatUpdate Cat { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public int ShopId { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? catId, int? shopId)
         {
-            if (id == null)
+            if (catId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var apiResponse = await _apiCat.GetAsync<ResponseBody<CatUpdate>>($"{id}");
+            var apiResponse = await _apiCat.GetAsync<ResponseBody<CatUpdate>>($"{catId}");
             var cat = apiResponse!.Result;
             if (cat == null)
             {
@@ -37,7 +40,10 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
             }
             Cat = cat;
 
-            await _loadSelectList();
+            ViewData["shopId"] = shopId;
+            ShopId = shopId.Value;
+
+            await LoadSelectList();
             return Page();
         }
 
@@ -45,7 +51,7 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
         {
             if (!ModelState.IsValid)
             {
-                await _loadSelectList();
+                await LoadSelectList();
                 return Page();
             }
 
@@ -53,18 +59,21 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
 
             if (!result)
             {
-                await _loadSelectList();
+                await LoadSelectList();
                 return Page();
             }
 
             TempData["cat-msg"] = "Update cat success";
-            return RedirectToPage("./Index");
+
+            return Redirect("/CoffeeShopPages/Details?id=" + ShopId);
         }
 
-        private async Task _loadSelectList()
+        private async Task LoadSelectList()
         {
             var apiResponse = await _apiArea.GetAsync<ResponseBody<IEnumerable<AreaDto>>>();
-            var areaList = apiResponse!.Result;
+            var areaList = apiResponse!.Result!
+                .Where(a => a.CoffeeShopId == ShopId);
+
 
             var statusList = from CatStatus catStatus in Enum.GetValues(typeof(CatStatus))
                              select new
@@ -72,7 +81,8 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
                                  HealthyStatus = (int)catStatus,
                                  StatusName = catStatus.ToString()
                              };
-            if (areaList is not null)
+
+            if (areaList.Any())
             {
                 ViewData["AreaId"] = new SelectList(areaList, "AreaId", "AreaName");
             }

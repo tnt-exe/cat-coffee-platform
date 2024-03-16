@@ -17,20 +17,25 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
         [BindProperty]
         public AreaUpdate Area { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public int ShopId { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? areaId, int? shopId)
         {
-            if (id == null)
+            if (areaId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var apiResponse = await _apiArea.GetAsync<ResponseBody<AreaUpdate>>($"{id}");
+            var apiResponse = await _apiArea.GetAsync<ResponseBody<AreaUpdate>>($"{areaId}");
             var area = apiResponse!.Result;
             if (area == null)
             {
                 return NotFound();
             }
             Area = area;
+
+            ViewData["shopId"] = shopId;
 
             return Page();
         }
@@ -50,7 +55,8 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
             }
 
             TempData["area-msg"] = "Update area success";
-            return RedirectToPage("./Index");
+
+            return Redirect("/CoffeeShopPages/Details?id=" + ShopId);
         }
     }
 }

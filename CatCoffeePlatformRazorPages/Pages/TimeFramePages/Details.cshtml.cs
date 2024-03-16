@@ -16,14 +16,14 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
 
         public TimeFrameDto TimeFrame { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? tfId, int? shopId)
         {
-            if (id == null)
+            if (tfId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var apiResponse = await _apiTimeFrame.GetAsync<ResponseBody<TimeFrameDto>>($"{id}");
+            var apiResponse = await _apiTimeFrame.GetAsync<ResponseBody<TimeFrameDto>>($"{tfId}");
             var timeFrame = apiResponse!.Result;
             if (timeFrame == null)
             {
@@ -33,6 +33,9 @@ namespace CatCoffeePlatformRazorPages.Pages.TimeFramePages
             {
                 TimeFrame = timeFrame;
             }
+
+            ViewData["shopId"] = shopId;
+
             return Page();
         }
     }
