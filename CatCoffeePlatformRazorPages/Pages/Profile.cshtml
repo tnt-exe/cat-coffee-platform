@@ -2,7 +2,7 @@
 @model Client.Pages.Profile.ProfileModel
 @using BusinessObject.Enums;
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Profile";
 }
 
 @if (ViewData["warning"] != null)
@@ -12,54 +12,50 @@
     </div>
 }
 
-<section class="main">
-    <h4>Profile</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="UserInformation.Id" />
-                <div class="form-group">
-                    <label asp-for="UserInformation.FirstName" class="control-label"></label>
-                    <input asp-for="UserInformation.FirstName" class="form-control" />
-                    <span asp-validation-for="UserInformation.FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserInformation.LastName" class="control-label"></label>
-                    <input asp-for="UserInformation.LastName" class="form-control" />
-                    <span asp-validation-for="UserInformation.LastName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserInformation.PhoneNumber" class="control-label"></label>
-                    <input asp-for="UserInformation.PhoneNumber" class="form-control" />
-                    <span asp-validation-for="UserInformation.PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserInformation.Balance" class="control-label"></label>
-                    <input asp-for="UserInformation.Balance" class="form-control" readonly/>
-                    <span asp-validation-for="UserInformation.Balance" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserInformation.Email" class="control-label"></label>
-                    <input asp-for="UserInformation.Email" class="form-control" />
-                    <span asp-validation-for="UserInformation.Email" class="text-danger"></span>
-                </div> 
-                <div class="form-group">
-                    <label asp-for="UserInformation.Role" class="control-label"></label>
-                    <input class="form-control" value="@(Enum.GetName(typeof(Role), Model.UserInformation.Role ?? 0))" readonly />
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>
+<div class="row justify-content-center">
+    <div class="card col-md-4 p-3">
+        <h1 class="text-center">Profile</h1>
+        <hr />
 
-    <div>
-        <a asp-page="./home">Home</a>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserInformation.Id" />
+            <div class="form-group mb-3">
+                <label asp-for="UserInformation.FirstName" class="control-label"></label>
+                <input asp-for="UserInformation.FirstName" class="form-control" />
+                <span asp-validation-for="UserInformation.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserInformation.LastName" class="control-label"></label>
+                <input asp-for="UserInformation.LastName" class="form-control" />
+                <span asp-validation-for="UserInformation.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserInformation.PhoneNumber" class="control-label"></label>
+                <input asp-for="UserInformation.PhoneNumber" class="form-control" />
+                <span asp-validation-for="UserInformation.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserInformation.Balance" class="control-label"></label>
+                <input asp-for="UserInformation.Balance" class="form-control" readonly />
+                <span asp-validation-for="UserInformation.Balance" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserInformation.Email" class="control-label"></label>
+                <input asp-for="UserInformation.Email" class="form-control" />
+                <span asp-validation-for="UserInformation.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UserInformation.Role" class="control-label"></label>
+                <input class="form-control" value="@(Enum.GetName(typeof(Role), Model.UserInformation.Role ?? 0))" readonly />
+            </div>
+            <div class="form-group my-3 d-flex justify-content-end">
+                <input type="submit" value="Save" class="btn btn-primary me-3" />
+                <a asp-page="./home" class="btn btn-secondary">Home</a>
+            </div>
+        </form>
     </div>
-</section>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
