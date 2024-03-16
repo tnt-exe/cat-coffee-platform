@@ -10,6 +10,13 @@
 
 <div class="container">
 
+    @if (TempData["product-msg"] is not null)
+    {
+        <div class="alert alert-info">
+            @TempData["product-msg"]
+        </div>
+    }
+
     @if(!isCustomer)
     {   
         <p class="button">
@@ -284,7 +291,8 @@
     @if(!isCustomer)
     {
         <p class="button">
-            <a asp-page="../ProductPages/Create" class="btn btn-primary">Create Product</a>
+            <a asp-page="../ProductPages/Create" asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId"
+                class="btn btn-primary">Create Product</a>
         </p>
     }
 
@@ -298,6 +306,7 @@
             <table class="table table-striped d-sm-table">
                 <thead>
                     <tr>
+                        <th>Product Id</th>
                         <th>Product Name</th>
                         <th>Price</th>
                         <th>Quantity</th>
@@ -313,6 +322,10 @@
                     @foreach (var item in Model.Product)
                     {
                         <tr>
+                            <td>
+                                <a asp-page="../ProductPages/Details" asp-route-productId="@item.ProductId"
+                                   asp-route-shopId="@item.CoffeeShopId" class="badge bg-info btn">@item.ProductId</a>
+                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.ProductName)
                             </td>
@@ -331,8 +344,10 @@
                             <td>
                                 @if (!isCustomer)
                                 {
-                                    <a asp-page="../ProductPages/Edit" asp-route-id="@item.ProductId" class="btn btn-primary btn-sm">Edit</a>
-                                    <a asp-page="../ProductPages/Details" asp-route-id="@item.ProductId" class="btn btn-info btn-sm">Details</a>
+                                    <a asp-page="../ProductPages/Edit" asp-route-productId="@item.ProductId" 
+                                        asp-route-shopId="@item.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
+                                    <a asp-page="../ProductPages/Details" asp-route-productId="@item.ProductId" 
+                                        asp-route-shopId="@item.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
                                 }
                             </td>
                         </tr>

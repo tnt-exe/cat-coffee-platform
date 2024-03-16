@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using BusinessObject.Model;
-using DAO.Context;
+﻿using BusinessObject.Model;
 using CatCoffeePlatformRazorPages.Common;
+using DTO.AreaDTO;
 using DTO.CatDTO;
 using DTO.CoffeeShopDTO;
-using DTO.AreaDTO;
 using DTO.TimeFrameDTO;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 {
