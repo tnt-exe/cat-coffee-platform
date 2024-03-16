@@ -20,9 +20,9 @@
     @if(!isCustomer)
     {   
         <p class="button">
-            <a asp-page="../CatPages/Create" class="btn btn-primary">Create Cat</a>
-            <a asp-page="../AreaPages/Create" class="btn btn-success">Create Area</a>
-            <a asp-page="../TimeFramePages/Create" class="btn btn-warning">Create Time Frame</a>
+            <a asp-page="../CatPages/Create" asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-primary">Create Cat</a>
+            <a asp-page="../AreaPages/Create" asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-success">Create Area</a>
+            <a asp-page="../TimeFramePages/Create" asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-warning">Create Time Frame</a>
         </p>
     }
 
@@ -123,8 +123,8 @@
                         {
                             <tr>
                                 <td>
-                                    <a asp-page="../CatPages/Details" asp-route-id="@item.CatId"
-                                        class="badge bg-info btn">@item.CatId</a>
+                                    <a asp-page="../CatPages/Details" asp-route-catId="@item.CatId"
+                                       asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="badge bg-info btn">@item.CatId</a>
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CatName)
@@ -149,8 +149,10 @@
                                 <td>
                                     @if (!isCustomer)
                                     {
-                                        <a asp-page="../CatPages/Edit" asp-route-id="@item.CatId" class="btn btn-primary btn-sm">Edit</a>
-                                        <a asp-page="../CatPages/Details" asp-route-id="@item.CatId" class="btn btn-info btn-sm">Details</a>
+                                        <a asp-page="../CatPages/Edit" asp-route-catId="@item.CatId"
+                                           asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
+                                        <a asp-page="../CatPages/Details" asp-route-catId="@item.CatId"
+                                           asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
                                     }
                                 </td>
                             </tr>
@@ -194,8 +196,8 @@
                         {
                             <tr>
                                 <td>
-                                    <a asp-page="../AreaPages/Details" asp-route-id="@item.AreaId"
-                                        class="badge bg-info btn">@item.AreaId</a>
+                                    <a asp-page="../AreaPages/Details" asp-route-areaId="@item.AreaId"
+                                        asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="badge bg-info btn">@item.AreaId</a>
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.AreaName)
@@ -209,8 +211,10 @@
                                 <td>
                                     @if (!isCustomer)
                                     {
-                                        <a asp-page="../AreaPages/Edit" asp-route-id="@item.AreaId" class="btn btn-primary btn-sm">Edit</a>
-                                        <a asp-page="../AreaPages/Details" asp-route-id="@item.AreaId" class="btn btn-info btn-sm">Details</a>
+                                        <a asp-page="../AreaPages/Edit" asp-route-areaId="@item.AreaId"
+                                           asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
+                                        <a asp-page="../AreaPages/Details" asp-route-areaId="@item.AreaId"
+                                           asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
                                     }
                                 </td>
                             </tr>
@@ -254,8 +258,8 @@
                         {
                             <tr>
                                 <td>
-                                    <a asp-page="../TimeFramePages/Details" asp-route-id="@item.TimeFrameId"
-                                       class="badge bg-info btn">@item.TimeFrameId</a>
+                                    <a asp-page="../TimeFramePages/Details" asp-route-tfId="@item.TimeFrameId"
+                                       asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="badge bg-info btn">@item.TimeFrameId</a>
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.StartTime)
@@ -269,8 +273,10 @@
                                 <td>
                                     @if (!isCustomer)
                                     {
-                                        <a asp-page="../TimeFramePages/Edit" asp-route-id="@item.TimeFrameId" class="btn btn-primary btn-sm">Edit</a>
-                                        <a asp-page="../TimeFramePages/Details" asp-route-id="@item.TimeFrameId" class="btn btn-info btn-sm">Details</a>
+                                        <a asp-page="../TimeFramePages/Edit" asp-route-tfId="@item.TimeFrameId"
+                                           asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
+                                        <a asp-page="../TimeFramePages/Details" asp-route-tfId="@item.TimeFrameId"
+                                           asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
                                     }
                                 </td>
                             </tr>
@@ -324,7 +330,7 @@
                         <tr>
                             <td>
                                 <a asp-page="../ProductPages/Details" asp-route-productId="@item.ProductId"
-                                   asp-route-shopId="@item.CoffeeShopId" class="badge bg-info btn">@item.ProductId</a>
+                                   asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="badge bg-info btn">@item.ProductId</a>
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.ProductName)
@@ -344,10 +350,10 @@
                             <td>
                                 @if (!isCustomer)
                                 {
-                                    <a asp-page="../ProductPages/Edit" asp-route-productId="@item.ProductId" 
-                                        asp-route-shopId="@item.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
-                                    <a asp-page="../ProductPages/Details" asp-route-productId="@item.ProductId" 
-                                        asp-route-shopId="@item.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
+                                    <a asp-page="../ProductPages/Edit" asp-route-productId="@item.ProductId"
+                                       asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
+                                    <a asp-page="../ProductPages/Details" asp-route-productId="@item.ProductId"
+                                       asp-route-shopId="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
                                 }
                             </td>
                         </tr>

@@ -27,13 +27,10 @@
                 <input asp-for="TimeFrame.Price" class="form-control" />
                 <span asp-validation-for="TimeFrame.Price" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="TimeFrame.CoffeeShopId" class="control-label"></label>
-                <select asp-for="TimeFrame.CoffeeShopId" class="form-control" asp-items="ViewBag.CoffeeShopId"></select>
-            </div>
+            <input type="hidden" asp-for="TimeFrame.CoffeeShopId" value="@ViewData["shopId"]" />
             <div class="form-group mb-3 d-flex justify-content-end">
                 <input type="submit" value="Create" class="btn btn-primary me-3" />
-                <a asp-page="Index" class="btn btn-secondary">Back</a>
+                <a asp-page="/CoffeeShopPages/Details" asp-route-id="@ViewData["shopId"]" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>

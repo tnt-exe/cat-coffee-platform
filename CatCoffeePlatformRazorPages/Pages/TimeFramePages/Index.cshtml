@@ -8,7 +8,7 @@
 <div class="container" style="min-height: 44vh;">
     <h1 style="text-align: center;">Time Frame</h1>
     <p class="button">
-        <a asp-page="create" class="btn btn-primary">Create</a>
+        <a asp-page="create" asp-route-shopId="@ViewData["shopId"]" class="btn btn-primary">Create</a>
     </p>
     <div class="card" id="main-table">
 
@@ -52,9 +52,10 @@
                                 @Html.DisplayFor(modelItem => item.CoffeeShop)
                             </td>
                             <td>
-                                <a asp-page="./edit" asp-route-id="@item.TimeFrameId" class="btn btn-primary btn-sm">Edit</a>
-                                <a asp-page="./details" asp-route-id="@item.TimeFrameId"
-                                    class="btn btn-info btn-sm">Details</a>
+                                <a asp-page="./edit" asp-route-tfId="@item.TimeFrameId"
+                                   asp-route-shopId="@ViewData["shopId"]" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-page="./details" asp-route-tfId="@item.TimeFrameId"
+                                   asp-route-shopId="@ViewData["shopId"]" class="btn btn-info btn-sm">Details</a>
                             </td>
                         </tr>
                     }

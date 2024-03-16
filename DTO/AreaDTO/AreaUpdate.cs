@@ -14,7 +14,7 @@ namespace DTO.AreaDTO
         public string? Description { get; set; }
 
         [Required]
-        [Range(1, 9999, ErrorMessage = "Invalid Price")]
+        [Range(1, 999999999, ErrorMessage = "Invalid Price")]
         public decimal PricePerHour { get; set; }
 
         [Required]

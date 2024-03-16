@@ -1,5 +1,6 @@
 ﻿using CatCoffeePlatformRazorPages.Common;
 using DTO.AreaDTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.AreaPages
@@ -15,22 +16,30 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
 
         public IEnumerable<AreaDto> Area { get; set; } = default!;
 
-        public async Task OnGetAsync(int? shopId)
+        public async Task<IActionResult> OnGetAsync(int? shopId)
         {
+            if (shopId == null)
+            {
+                return NotFound();
+            }
+
             var apiResponse = await _apiArea
                 .GetAsync<ResponseBody<IEnumerable<AreaDto>>>();
             var areaList = apiResponse!.Result;
 
-            if (areaList is not null)
+            if (areaList == null)
             {
-                if (shopId != null)
-                {
-                    areaList = areaList
-                        .Where(x => x.CoffeeShopId == shopId);
-                }
-
-                Area = areaList;
+                return NotFound();
             }
+
+            areaList = areaList
+                .Where(x => x.CoffeeShopId == shopId);
+
+            Area = areaList;
+
+            ViewData["shopId"] = shopId;
+
+            return Page();
         }
     }
 }

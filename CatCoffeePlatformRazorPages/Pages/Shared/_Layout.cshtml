@@ -115,10 +115,14 @@
             <li><a asp-page="/Booking/Index" class="nav-link px-2 link-secondary px-4" data-target="Booking"><i class="fa-solid fa-calendar"></i>Booking</a></li>
             @if (isManager || isStaff)
             {
-                <li><a asp-page="/CatPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
-                <li><a asp-page="/TimeFramePages/Index" class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
-                <li><a asp-page="/AreaPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
-                <li><a asp-page="/Product/Index" class="nav-link px-2 link-secondary px-4" data-target="Product"><i class="fa-brands fa-product-hunt"></i>Product</a></li>
+                <li><a asp-page="/CatPages/Index" asp-route-shopId="@coffeeShopId"
+                    class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
+                <li><a asp-page="/TimeFramePages/Index" asp-route-shopId="@coffeeShopId"
+                    class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
+                <li><a asp-page="/AreaPages/Index" asp-route-shopId="@coffeeShopId"
+                    class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
+                <li><a asp-page="/ProductPages/Index" asp-route-shopId="@coffeeShopId" 
+                    class="nav-link px-2 link-secondary px-4" data-target="Product"><i class="fa-brands fa-product-hunt"></i>Product</a></li>
                 <li><a asp-page="/CategoryPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Category"><i class="fa-solid fa-table-list"></i>Category</a></li>
             }
         </ul>

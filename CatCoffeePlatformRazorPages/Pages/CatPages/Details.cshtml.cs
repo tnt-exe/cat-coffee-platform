@@ -16,14 +16,14 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
 
         public CatDto Cat { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? catId, int? shopId)
         {
-            if (id == null)
+            if (catId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var apiResponse = await _apiCat.GetAsync<ResponseBody<CatDto>>($"{id}");
+            var apiResponse = await _apiCat.GetAsync<ResponseBody<CatDto>>($"{catId}");
             var cat = apiResponse!.Result;
             if (cat == null)
             {
@@ -33,6 +33,9 @@ namespace CatCoffeePlatformRazorPages.Pages.CatPages
             {
                 Cat = cat;
             }
+
+            ViewData["shopId"] = shopId;
+
             return Page();
         }
     }

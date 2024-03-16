@@ -20,26 +20,26 @@ namespace CatCoffeePlatformRazorPages.Pages.AreaPages
         public AreaDto Area { get; set; } = default!;
         public IEnumerable<CatDto>? Cats { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? areaId, int? shopId)
         {
-            if (id == null)
+            if (areaId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            ResponseBody<AreaDto>? areaResponse = await _apiArea.GetAsync<ResponseBody<AreaDto>>($"{id}");
+            ResponseBody<AreaDto>? areaResponse = await _apiArea.GetAsync<ResponseBody<AreaDto>>($"{areaId}");
             IEnumerable<CatDto>? catList = await _apiCat.GetAsync<ResponseBody<IEnumerable<CatDto>>>()
-                .ContinueWith(t => t.Result?.Result?.Where(c => c.AreaId == id));
+                .ContinueWith(t => t.Result?.Result?.Where(c => c.AreaId == areaId));
 
-            if (areaResponse != null)
-            {
-                Area = areaResponse.Result!;
-                Cats = catList;
-            }
-            else
+            if (areaResponse == null)
             {
                 return NotFound();
             }
+
+            Area = areaResponse.Result!;
+            Cats = catList;
+
+            ViewData["shopId"] = shopId;
 
             return Page();
         }
