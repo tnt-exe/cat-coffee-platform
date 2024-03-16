@@ -9,9 +9,12 @@
     var managerId = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
     var isStaff = HttpContextAccessor.HttpContext?.User.Claims.Where(c => c.Type == "scope").Any(c => c.Value.Equals(((int)Role.Staff).ToString())) ?? false;
     var coffeeShopId = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "coffeeshop id")?.Value;
+    var managedShopId = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "managed coffeeshop id")?.Value;
 
     var firstName = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "First Name")?.Value;
     var lastName = HttpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "Last Name")?.Value;
+
+    string? shopId = isManager ? managedShopId : coffeeShopId;
 }
 
 <!DOCTYPE html>
@@ -103,7 +106,8 @@
             {
                 <li><a asp-page="/CoffeeShopPages/CoffeeShopManager" asp-route-id ="@managerId" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
             }
-            else if(isStaff && coffeeShopId is not null){
+            else if (isStaff && coffeeShopId is not null)
+            {
                 <li><a asp-page="/CoffeeShopPages/CoffeeShopManager" asp-page-handler="CoffeeShop" asp-route-CoffeeShopId="@coffeeShopId" class="nav-link px-2 link-secondary px-4" data-target="CoffeeShop"><i class="fa-solid fa-tags"></i>Coffee Shop</a></li>
             }
             else
@@ -115,13 +119,13 @@
             <li><a asp-page="/Booking/Index" class="nav-link px-2 link-secondary px-4" data-target="Booking"><i class="fa-solid fa-calendar"></i>Booking</a></li>
             @if (isManager || isStaff)
             {
-                <li><a asp-page="/CatPages/Index" asp-route-shopId="@coffeeShopId"
+                <li><a asp-page="/CatPages/Index" asp-route-shopId="@shopId"
                     class="nav-link px-2 link-secondary px-4" data-target="Cat"><i class="fa-solid fa-cat"></i>Cat</a></li>
-                <li><a asp-page="/TimeFramePages/Index" asp-route-shopId="@coffeeShopId"
+                <li><a asp-page="/TimeFramePages/Index" asp-route-shopId="@shopId"
                     class="nav-link px-2 link-secondary px-4" data-target="TimeFrame"><i class="fa-solid fa-calendar-xmark"></i>TimeFrame</a></li>
-                <li><a asp-page="/AreaPages/Index" asp-route-shopId="@coffeeShopId"
+                <li><a asp-page="/AreaPages/Index" asp-route-shopId="@shopId"
                     class="nav-link px-2 link-secondary px-4" data-target="Area"><i class="fa-solid fa-layer-group"></i>Area</a></li>
-                <li><a asp-page="/ProductPages/Index" asp-route-shopId="@coffeeShopId" 
+                <li><a asp-page="/ProductPages/Index" asp-route-shopId="@shopId" 
                     class="nav-link px-2 link-secondary px-4" data-target="Product"><i class="fa-brands fa-product-hunt"></i>Product</a></li>
                 <li><a asp-page="/CategoryPages/Index" class="nav-link px-2 link-secondary px-4" data-target="Category"><i class="fa-solid fa-table-list"></i>Category</a></li>
             }
