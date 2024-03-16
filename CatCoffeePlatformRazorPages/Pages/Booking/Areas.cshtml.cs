@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using DTO.CoffeeShopDTO;
-using System.Text.Json;
+﻿using CatCoffeePlatformRazorPages.Common;
 using DTO.AreaDTO;
-using CatCoffeePlatformRazorPages.Common;
+using DTO.CoffeeShopDTO;
 using DTO.TimeFrameDTO;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
@@ -30,7 +29,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
         public CoffeeShopResponseDTO? CoffeeShop { get; set; }
         [BindProperty]
         public string? CoffeeShopJson { get; set; }
-        public IList<AreaDto> Areas { get;set; } = new List<AreaDto>();
+        public IList<AreaDto> Areas { get; set; } = new List<AreaDto>();
         public IList<TimeFrameDto> TimeFrames { get; set; } = new List<TimeFrameDto>();
         public DateOnly BookedDate { get; set; }
         public int BookedTimeFrameId { get; set; }
@@ -81,7 +80,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
                 return Page();
             }
 
-            foreach(var area in areas)
+            foreach (var area in areas)
             {
                 var responseMessage = await _apiODataBooking.GetODataAsync($"count=true&top=0&filter=Date eq {currentDate.ToString("yyyy-MM-dd")} and AreaId eq {area.AreaId} and TimeFrameId eq {firstTimeFrame?.TimeFrameId}");
                 var data = (JObject)JsonConvert.DeserializeObject(responseMessage ?? "")!;

@@ -1,6 +1,5 @@
-﻿using DTO.CoffeeShopDTO;
-using DAO.Helper;
-using BusinessObject.Model;
+﻿using DAO.Helper;
+using DTO.CoffeeShopDTO;
 
 namespace Repository.Interface
 {

@@ -17,7 +17,7 @@ namespace BusinessObject.Model
 
         [Required]
         public int Quantity { get; set; }
-        
+
         public string Unit { get; set; }
         public int CoffeeShopId { get; set; }
         public CoffeeShop? CoffeeShop { get; set; }

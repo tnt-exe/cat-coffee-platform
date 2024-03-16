@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Primitives;
 using System.Text;
 using System.Text.Json;
 
@@ -9,7 +8,7 @@ public class BookingDTOModelBinder : IModelBinder
 {
     public async Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        if(bindingContext == null)
+        if (bindingContext == null)
         {
             throw new ArgumentNullException(nameof(bindingContext));
         }
@@ -19,12 +18,12 @@ public class BookingDTOModelBinder : IModelBinder
 
         // To Access the body of a POST request, we can use StreamReader to read the stream of bytes from the HTTP request body
         string requestBodyAsJson;
-        using(var reader = new StreamReader(bindingContext.HttpContext.Request.Body, Encoding.UTF8))
+        using (var reader = new StreamReader(bindingContext.HttpContext.Request.Body, Encoding.UTF8))
         {
             requestBodyAsJson = await reader.ReadToEndAsync();
         }
 
-        if(requestBodyAsJson.Length == 0)
+        if (requestBodyAsJson.Length == 0)
         {
             bindingContext.ModelState.TryAddModelError(nameof(BookingDTO.BookingDTO), "Invalid input");
             bindingContext.Result = ModelBindingResult.Failed();
@@ -37,14 +36,14 @@ public class BookingDTOModelBinder : IModelBinder
         {
             bookingDto = JsonSerializer.Deserialize<BookingDTO.BookingDTO>(requestBodyAsJson);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             bindingContext.ModelState.TryAddModelError(nameof(BookingDTO.BookingDTO), ex.Message);
             bindingContext.Result = ModelBindingResult.Failed();
             return;
         }
-        
-        if(bookingDto is null)
+
+        if (bookingDto is null)
         {
             bindingContext.ModelState.TryAddModelError(nameof(BookingDTO.BookingDTO), "Invalid input");
             bindingContext.Result = ModelBindingResult.Failed();

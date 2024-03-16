@@ -67,7 +67,7 @@ namespace Repository.Implement
                 IsError = false
             };
 
-            if(resource.UserName is null || resource.Password is null || resource.FirstName is null || resource.LastName is null)
+            if (resource.UserName is null || resource.Password is null || resource.FirstName is null || resource.LastName is null)
             {
                 result.AddError(ErrorCode.BadRequest, "Invalid input");
                 return result;
@@ -112,7 +112,7 @@ namespace Repository.Implement
                 var identityResult = await _userManager.CreateAsync(newUser, resource.Password);
                 if (!identityResult.Succeeded)
                 {
-                    foreach(var error in identityResult.Errors)
+                    foreach (var error in identityResult.Errors)
                     {
                         result.AddError(ErrorCode.BadRequest, error.Description);
                     }
@@ -145,16 +145,16 @@ namespace Repository.Implement
             };
 
             var existedUser = await _unitOfWork.UserDAO.Get(u => u.Id == id && !u.Deleted).FirstOrDefaultAsync();
-            if(existedUser is null)
+            if (existedUser is null)
             {
                 result.AddError(ErrorCode.BadRequest, "User not found");
                 return result;
             }
 
-            if(resource.Email is not null)
+            if (resource.Email is not null)
             {
                 var existedEmail = await _unitOfWork.UserDAO.Get(u => u.Email.Equals(resource.Email) && u.Id != id).AsNoTracking().FirstOrDefaultAsync();
-                if(existedEmail is not null)
+                if (existedEmail is not null)
                 {
                     result.AddError(ErrorCode.BadRequest, "Email is already taken");
                     return result;
@@ -163,7 +163,7 @@ namespace Repository.Implement
                 existedUser.NormalizedEmail = resource.Email.ToUpper();
             }
 
-            if(resource.PhoneNumber is not null)
+            if (resource.PhoneNumber is not null)
             {
                 var existedPhone = await _unitOfWork.UserDAO.Get(u => u.PhoneNumber.Equals(resource.PhoneNumber) && u.Id != id).AsNoTracking().FirstOrDefaultAsync();
                 if (existedPhone is not null)
@@ -174,9 +174,9 @@ namespace Repository.Implement
                 existedUser.PhoneNumber = resource.PhoneNumber;
             }
 
-            if(resource.CoffeeShopId is not null)
+            if (resource.CoffeeShopId is not null)
             {
-                if(resource.CoffeeShopId <= 0)
+                if (resource.CoffeeShopId <= 0)
                 {
                     existedUser.CoffeeShopId = null;
                 }
@@ -232,7 +232,7 @@ namespace Repository.Implement
                 }
                 else
                 {
-                    foreach(var error in identityResult.Errors)
+                    foreach (var error in identityResult.Errors)
                     {
                         result.AddError(ErrorCode.BadRequest, error.Description);
                         return result;
@@ -373,7 +373,7 @@ namespace Repository.Implement
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(User.Status)), Expression.Constant(status)));
             }
 
-            if(coffeeShopId is not null)
+            if (coffeeShopId is not null)
             {
                 expressions.Add(Expression.Equal(Expression.Property(pe, nameof(User.CoffeeShopId)), Expression.Constant(coffeeShopId)));
             }

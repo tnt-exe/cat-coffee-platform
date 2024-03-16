@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using System.Security.Policy;
 using System.Text.Json;
 
 namespace CatCoffeePlatformRazorPages.Common
@@ -119,6 +118,13 @@ namespace CatCoffeePlatformRazorPages.Common
                 return JsonSerializer.Deserialize<T>(data, GetJsonSerializerOptions());
             }
             return default;
+        }
+
+        public async Task<bool> PutQueryAsync<T>(string queryString, T item)
+        {
+            HttpResponseMessage response = await _client
+                .PutAsJsonAsync(_apiQueryUrl + "?" + queryString, item);
+            return response.IsSuccessStatusCode;
         }
 
         // For OData

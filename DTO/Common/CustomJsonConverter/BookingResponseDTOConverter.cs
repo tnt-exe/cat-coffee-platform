@@ -1,10 +1,5 @@
 ﻿using DTO.BookingDTO;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DTO.Common.CustomJsonConverter
 {
@@ -22,7 +17,7 @@ namespace DTO.Common.CustomJsonConverter
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if(!(value is BookingResponseDTO bookingResponse))
+            if (!(value is BookingResponseDTO bookingResponse))
             {
                 throw new JsonSerializationException("Expected BookingResponseDTO object value.");
             }

@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Extensions;
-using Microsoft.OData.Edm;
-using DTO.BookingDTO;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.OData.Batch;
 
 namespace CatCoffeePlatformAPI.Common.Odata
 {

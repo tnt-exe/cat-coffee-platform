@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using CatCoffeePlatformRazorPages.Common;
+﻿using CatCoffeePlatformRazorPages.Common;
 using DTO;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.CategoryPages
 {

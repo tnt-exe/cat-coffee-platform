@@ -5,13 +5,11 @@ using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
 using DTO.BookingDTO;
-using DTO.UserDTO;
 using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
 using Repository.Interface;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -314,12 +312,12 @@ namespace Repository.Implement
             existedBooking.PaymentStatus = resource.PaymentStatus ?? existedBooking.PaymentStatus;
             existedBooking.PaymentDate = resource.PaymentDate ?? existedBooking.PaymentDate;
 
-            if (resource.Date != null || 
+            if (resource.Date != null ||
                resource.TimeFrameId != null ||
                resource.Slots != null)
             {
                 var existedArea = await _unitOfWork.AreaDAO.GetByIDAsync(existedBooking.AreaId);
-                if(existedArea is null)
+                if (existedArea is null)
                 {
                     result.AddError(ErrorCode.NotFound, "Area not found");
                     return result;
@@ -331,18 +329,18 @@ namespace Repository.Implement
 
                 var bookedSlots = _unitOfWork.BookingDAO.Get(b => b.BookingId != existedBooking.BookingId && b.AreaId == existedBooking.AreaId && b.TimeFrameId == existedBooking.TimeFrameId && b.Date == existedBooking.Date).Sum(b => b.Slots);
                 var availableSlots = existedArea.MaxSlots - bookedSlots;
-                if(existedBooking.Slots > availableSlots)
+                if (existedBooking.Slots > availableSlots)
                 {
                     result.AddError(ErrorCode.BadRequest, $"Only {availableSlots} slots available");
                     return result;
                 }
             }
 
-            if(resource.Status is not null && resource.Status == (int)BookingStatus.Cancel && resource.Status != existedBooking.Status)
+            if (resource.Status is not null && resource.Status == (int)BookingStatus.Cancel && resource.Status != existedBooking.Status)
             {
                 // Refund 80%
                 var customer = await _unitOfWork.UserDAO.GetByIDAsync(existedBooking.UserId);
-                if(customer is null)
+                if (customer is null)
                 {
                     result.AddError(ErrorCode.NotFound, "Customer information not found");
                     result.AddError(ErrorCode.NotFound, "Can not update customer balance");
@@ -410,12 +408,12 @@ namespace Repository.Implement
                         {
                             newFilterString = acceptFilter.First();
                         }
-                        else if(acceptFilter.Count() > 1)
+                        else if (acceptFilter.Count() > 1)
                         {
                             newFilterString = String.Join(" and ", acceptFilter);
                         }
 
-                        if(newFilterString is not null)
+                        if (newFilterString is not null)
                         {
                             var newFilter = new FilterQueryOption(newFilterString, queryOptions.Context,
                             new Microsoft.OData.UriParser.ODataQueryOptionParser(

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using CatCoffeePlatformRazorPages.Common;
+﻿using CatCoffeePlatformRazorPages.Common;
 using DTO;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.CategoryPages
 {
@@ -21,10 +21,10 @@ namespace CatCoffeePlatformRazorPages.Pages.CategoryPages
 
         [BindProperty]
         public CategoryCreate Category { get; set; } = default!;
-        
+
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return Page();
             }

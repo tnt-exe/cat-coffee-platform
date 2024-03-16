@@ -1,5 +1,4 @@
-﻿using BusinessObject.Model;
-using DAO.Helper;
+﻿using DAO.Helper;
 using DTO.UserDTO;
 
 namespace Repository.Interface

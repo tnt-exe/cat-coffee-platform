@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BusinessObject.Enums;
+using CatCoffeePlatformRazorPages.Common;
+using DTO.BookingDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using BusinessObject.Model;
-using DAO.Context;
-using DTO.BookingDTO;
-using CatCoffeePlatformRazorPages.Common;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Stripe;
 using Stripe.Checkout;
-using BusinessObject.Enums;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using Newtonsoft.Json.Linq;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
@@ -48,13 +41,13 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if(id is null)
+            if (id is null)
             {
                 ViewData["warning"] = "Booking not found";
                 return Page();
             }
             var apiResponse = await _bookingApi.GetAsync<ResponseBody<BookingResponseDTO>>(id.ToString()!);
-            if(apiResponse?.Result is null)
+            if (apiResponse?.Result is null)
             {
                 ViewData["warning"] = "Booking not found";
                 return Page();
@@ -122,7 +115,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             }
 
             var token = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "token")?.Value;
-            if(token is null)
+            if (token is null)
             {
                 ViewData["warning"] = "Cannot cancel";
                 ViewData["errors"] = new string[1]

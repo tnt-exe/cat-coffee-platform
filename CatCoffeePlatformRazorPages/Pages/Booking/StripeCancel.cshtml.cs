@@ -1,10 +1,9 @@
 ﻿
+using BusinessObject.Enums;
+using CatCoffeePlatformRazorPages.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
-using CatCoffeePlatformRazorPages.Common;
-using DTO.BookingDTO;
-using BusinessObject.Enums;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -26,7 +25,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             BookingApiUrl = "https://localhost:7039/api/Bookings";
             _httpContextAccessor = httpContextAccessor;
         }
-        public string SessionId { get ; set; }
+        public string SessionId { get; set; }
 
         [BindProperty]
         public Guid OrderItemId { get; set; }

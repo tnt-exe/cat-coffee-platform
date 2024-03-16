@@ -1,79 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BusinessObject.Model;
+using CatCoffeePlatformRazorPages.Common;
+using DTO;
+using DTO.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BusinessObject.Model;
-using DAO.Context;
 
 namespace CatCoffeePlatformRazorPages.Pages.ProductPages
 {
     public class EditModel : PageModel
     {
-        private readonly DAO.Context.ApplicationDbContext _context;
+        private readonly ApiHelper _apiProduct;
+        private readonly ApiHelper _apiCategory;
 
-        public EditModel(DAO.Context.ApplicationDbContext context)
+        public EditModel()
         {
-            _context = context;
+            _apiProduct = new ApiHelper(ApiResources.Products);
+            _apiCategory = new ApiHelper(ApiResources.Categories);
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default!;
+        public ProductUpdate Product { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public int ShopId { get; set; }
+
+        [BindProperty]
+        public int ProductId { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? productId, int? shopId)
         {
-            if (id == null || _context.Products == null)
+            if (productId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var product =  await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            IEnumerable<Product>? productRes = await _apiProduct
+                .GetQueryAsync<IEnumerable<Product>>($"productId={productId}&shopId={shopId}&includeProperties=Category");
+
+            if (productRes == null || !productRes.Any())
             {
                 return NotFound();
             }
-            Product = product;
-           ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-           ViewData["CoffeeShopId"] = new SelectList(_context.CoffeeShops, "CoffeeShopId", "ContactNumber");
+
+            var product = productRes.FirstOrDefault(p => p.ProductId == productId)!;
+
+            Product = new ProductUpdate
+            {
+                ProductName = product.ProductName,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                CategoryId = product.CategoryId,
+                Unit = product.Unit,
+            };
+
+            await _loadCategoryList();
+
+            ViewData["shopId"] = shopId;
+            ViewData["productId"] = productId;
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                await _loadCategoryList();
                 return Page();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
+            bool result = await _apiProduct.PutQueryAsync($"productId={ProductId}&shopId={ShopId}", Product);
 
-            try
+            if (!result)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(Product.ProductId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                await _loadCategoryList();
+                return Page();
             }
 
-            return RedirectToPage("./Index");
+            TempData["product-msg"] = "Update product success";
+
+            return Redirect("/CoffeeShopPages/Details?id=" + ShopId);
         }
 
-        private bool ProductExists(int id)
+        private async Task _loadCategoryList()
         {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            var apiResponse = await _apiCategory.GetAsync<ResponseBody<IEnumerable<CategoryDto>>>();
+            var categoryList = apiResponse!.Result;
+
+            if (categoryList is not null)
+            {
+                ViewData["CategoryId"] = new SelectList(categoryList, "CategoryId", "CategoryName");
+            }
         }
     }
 }

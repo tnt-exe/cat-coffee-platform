@@ -1,47 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CatCoffeePlatformRazorPages.Common;
+using DTO;
+using DTO.ProductDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BusinessObject.Model;
-using DAO.Context;
 
 namespace CatCoffeePlatformRazorPages.Pages.ProductPages
 {
     public class CreateModel : PageModel
     {
-        private readonly DAO.Context.ApplicationDbContext _context;
+        private readonly ApiHelper _apiProduct;
+        private readonly ApiHelper _apiCategory;
 
-        public CreateModel(DAO.Context.ApplicationDbContext context)
+        public CreateModel()
         {
-            _context = context;
+            _apiProduct = new ApiHelper(ApiResources.Products);
+            _apiCategory = new ApiHelper(ApiResources.Categories);
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync(int? shopId)
         {
-        ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-        ViewData["CoffeeShopId"] = new SelectList(_context.CoffeeShops, "CoffeeShopId", "ContactNumber");
+            if (shopId == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["shopId"] = shopId;
+
+            await _loadSelectList();
             return Page();
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default!;
-        
+        public ProductCreate Product { get; set; } = default!;
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        [BindProperty]
+        public int ShopId { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Products == null || Product == null)
+            if (!ModelState.IsValid)
             {
+                await _loadSelectList();
                 return Page();
             }
 
-            _context.Products.Add(Product);
-            await _context.SaveChangesAsync();
+            bool result = await _apiProduct.PostAsync(Product);
 
-            return RedirectToPage("./Index");
+            if (!result)
+            {
+                await _loadSelectList();
+                return Page();
+            }
+
+            TempData["product-msg"] = "Product created successfully";
+
+            return Redirect("/CoffeeShopPages/Details?id=" + ShopId);
+        }
+
+        private async Task _loadSelectList()
+        {
+            var apiResponse = await _apiCategory.GetAsync<ResponseBody<IEnumerable<CategoryDto>>>();
+            var categoryList = apiResponse!.Result;
+
+            if (categoryList is not null)
+            {
+                ViewData["CategoryId"] = new SelectList(categoryList, "CategoryId", "CategoryName");
+            }
         }
     }
 }

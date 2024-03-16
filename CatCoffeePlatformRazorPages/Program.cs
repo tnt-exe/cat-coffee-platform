@@ -40,7 +40,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-builder.Services.Configure<StripeSetting>(Configuration.GetSection("StripeSettings")); 
+builder.Services.Configure<StripeSetting>(Configuration.GetSection("StripeSettings"));
 
 var app = builder.Build();
 

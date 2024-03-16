@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject.Model;
 using DTO.ProductDTO;
-using Microsoft.Data.SqlClient;
 
 namespace Repository.MapperConfig
 {

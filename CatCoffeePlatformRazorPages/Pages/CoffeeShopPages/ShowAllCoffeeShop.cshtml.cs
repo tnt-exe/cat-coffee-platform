@@ -1,6 +1,5 @@
 using CatCoffeePlatformRazorPages.Common;
 using DTO.CoffeeShopDTO;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages

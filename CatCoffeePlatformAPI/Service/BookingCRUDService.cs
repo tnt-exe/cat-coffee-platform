@@ -1,11 +1,6 @@
-﻿using BusinessObject.Model;
-using CatCoffeePlatformAPI.Protos;
-using DTO.BookingDTO;
+﻿using CatCoffeePlatformAPI.Protos;
 using Grpc.Core;
-using Microsoft.OData.Edm;
-using NuGet.Packaging;
 using Repository.Interface;
-using static System.Reflection.Metadata.BlobBuilder;
 using Booking = CatCoffeePlatformAPI.Protos.Booking;
 
 namespace CatCoffeePlatformAPI.Service;
@@ -32,7 +27,7 @@ public class BookingCRUDService : BookingCRUD.BookingCRUDBase
                 Date = b.Date.ToString("yyyy-MM-dd") ?? "None",
                 Slots = b.Slots ?? 0,
                 TotalMoney = double.Parse(b.TotalMoney.ToString() ?? "0"),
-                PaymentDate = b.PaymentDate?.ToString("yyyy-MM-dd") ?? "None" ,
+                PaymentDate = b.PaymentDate?.ToString("yyyy-MM-dd") ?? "None",
                 Status = b.Status ?? 0,
                 AreaId = b.AreaId ?? 0,
                 TimeFrameId = b.TimeFrameId ?? 0,

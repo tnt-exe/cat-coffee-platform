@@ -107,9 +107,9 @@ namespace CatCoffeePlatformAPI.Controllers
         [HttpGet]
         [Authorize(Policy = "Staff Manager Admin")]
         public async Task<IActionResult> GetUsers(
-            [FromQuery] int startPage, 
-            [FromQuery] int endPage, 
-            [FromQuery] int? quantity, 
+            [FromQuery] int startPage,
+            [FromQuery] int endPage,
+            [FromQuery] int? quantity,
             [FromQuery] string? name,
             [FromQuery] byte? role,
             [FromQuery] byte? status,

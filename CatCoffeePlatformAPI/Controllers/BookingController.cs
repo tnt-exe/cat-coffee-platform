@@ -1,20 +1,11 @@
-﻿using BusinessObject.Enums;
-using BusinessObject.Model;
-using CatCoffeePlatformAPI.Common.Odata;
-using DTO.AreaDTO;
+﻿using CatCoffeePlatformAPI.Common.Odata;
 using DTO.BookingDTO;
 using DTO.Common;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using Microsoft.Extensions.Options;
-using Repository.Implement;
 using Repository.Interface;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace CatCoffeePlatformAPI.Controllers;
 
@@ -196,7 +187,7 @@ public class BookingController : ODataController
     public IActionResult Get(ODataQueryOptions<BookingResponseDTO>? options)
     {
         var result = _bookingRepo.GetDbSet(options);
-        if(options?.SelectExpand is not null)
+        if (options?.SelectExpand is not null)
         {
             return Ok(options.SelectExpand.ApplyTo(result, new ODataQuerySettings()));
         }

@@ -1,21 +1,21 @@
-﻿using System.Linq.Expressions;
-using BusinessObject.Model;
+﻿using BusinessObject.Model;
 using DAO.Helper;
 using DTO.ProductDTO;
+using System.Linq.Expressions;
 
 namespace Repository.Interface
 {
     public interface IProductRepo
     {
         Task<OperationResult<IEnumerable<Product>>> GetAll(
-            int shopId, 
+            int shopId,
             Expression<Func<Product, bool>>? filter,
-            int? pageIndex = 0, 
-            int? pageSize = 10, 
+            int? pageIndex = 0,
+            int? pageSize = 10,
             string[]? includeProperties = null);
         Task<OperationResult<Product>> GetById(int shopId, int id);
         Task<OperationResult<Product>> Create(ProductCreate requestModel);
         Task<OperationResult<bool>> Delete(int shopId, int productId);
-        Task<OperationResult<Product>> Update(int shopId,int productId, ProductUpdate requestModel);
+        Task<OperationResult<Product>> Update(int shopId, int productId, ProductUpdate requestModel);
     }
 }

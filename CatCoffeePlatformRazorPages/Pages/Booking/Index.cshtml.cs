@@ -1,11 +1,9 @@
-﻿using CatCoffeePlatformRazorPages.Common;
+﻿using BusinessObject.Enums;
+using CatCoffeePlatformRazorPages.Common;
 using DTO.BookingDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
-using Grpc.Net.Client;
-using BusinessObject.Enums;
-using BusinessObject.Model;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
 {
@@ -34,7 +32,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
 
             var role = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "scope")?.Value;
 
-            if(role is null)
+            if (role is null)
             {
                 ViewData["warning"] = "Get user information failed";
                 return Page();
@@ -52,7 +50,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             {
                 ShowCustomer = true;
                 var shopId = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "coffeeshop id")?.Value;
-                if(shopId != null)
+                if (shopId != null)
                 {
                     var apiResponse = await _apiArea
                         .GetQueryAsync<ResponseBody<IEnumerable<BookingResponseDTO>>>("coffeeShopId=" + shopId);

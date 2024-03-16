@@ -2,10 +2,10 @@
 @model CatCoffeePlatformRazorPages.Register.RegisterModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Register";
 }
 
-<div style="position: fixed; top: 15%; right: 10%; width: 25%;">
+<div style="position: fixed; top: 15%; right: 5%; width: 15%;">
     @{
         if (ViewData["warning"] != null)
         {
@@ -28,96 +28,98 @@
     }
 </div>
 
-<section class="main">
-    <h4>Register</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="card col-md-4 p-3">
+        <h1 class="text-center">Register</h1>
+        <hr />
+
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.FirstName" class="control-label"></label>
-                <input asp-for="Account.FirstName" class="form-control" required/>
+                <input asp-for="Account.FirstName" class="form-control" required />
                 <span asp-validation-for="Account.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.LastName" class="control-label"></label>
-                <input asp-for="Account.LastName" class="form-control" required/>
+                <input asp-for="Account.LastName" class="form-control" required />
                 <span asp-validation-for="Account.LastName" class="text-danger"></span>
             </div>
 
-            @if(Model.IsAdmin){
-                <div class="form-group">
+            @if (Model.IsAdmin)
+            {
+                <div class="form-group mb-3">
                     <label asp-for="Account.LockoutEnabled" class="control-label"></label>
                     <input asp-for="Account.LockoutEnabled" class="form-control" />
                     <span asp-validation-for="Account.LockoutEnabled" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label asp-for="Account.LockoutEnd" class="control-label"></label>
                     <input asp-for="Account.LockoutEnd" class="form-control" />
                     <span asp-validation-for="Account.LockoutEnd" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label asp-for="Account.Status" class="control-label"></label>
                     <input asp-for="Account.Status" class="form-control" />
                     <span asp-validation-for="Account.Status" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label asp-for="Account.Role" class="control-label"></label>
                     <input asp-for="Account.Role" class="form-control" />
                     <span asp-validation-for="Account.Role" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label asp-for="CoffeeShopId" class="control-label"></label>
                     <input asp-for="CoffeeShopId" class="form-control" />
                     <span asp-validation-for="CoffeeShopId" class="text-danger"></span>
                 </div>
             }
-            else if(Model.IsManager){
-                <div class="form-group">
+            else if (Model.IsManager)
+            {
+                <div class="form-group mb-3">
                     <label asp-for="WorkingStaff" class="control-label"></label>
-                    <input asp-for="WorkingStaff" class="form-control" readonly/>
+                    <input asp-for="WorkingStaff" class="form-control" readonly />
                     <span asp-validation-for="WorkingStaff" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label asp-for="CoffeeShopId" class="control-label"></label>
-                    <input asp-for="CoffeeShopId" class="form-control" readonly/>
+                    <input asp-for="CoffeeShopId" class="form-control" readonly />
                     <span asp-validation-for="CoffeeShopId" class="text-danger"></span>
                 </div>
             }
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.PhoneNumber" class="control-label"></label>
                 <input asp-for="Account.PhoneNumber" class="form-control" />
                 <span asp-validation-for="Account.PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.Email" class="control-label"></label>
                 <input asp-for="Account.Email" class="form-control" />
                 <span asp-validation-for="Account.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.UserName" class="control-label"></label>
-                <input asp-for="Account.UserName" class="form-control" required/>
+                <input asp-for="Account.UserName" class="form-control" required />
                 <span asp-validation-for="Account.UserName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.Password" class="control-label"></label>
                 <input asp-for="Account.Password" type="password" class="form-control" required />
                 <span asp-validation-for="Account.Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Account.ConfirmPassword" class="control-label"></label>
                 <input asp-for="Account.ConfirmPassword" type="password" class="form-control" required />
                 <span asp-validation-for="Account.ConfirmPassword" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
+            <div class="form-group my-3 d-flex justify-content-end">
+                <input type="submit" value="Register" class="btn btn-primary me-3" />
+                <a asp-page="/Login" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
 </div>
-</section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

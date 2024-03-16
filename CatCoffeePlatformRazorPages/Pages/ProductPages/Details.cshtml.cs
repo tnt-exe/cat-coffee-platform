@@ -1,42 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BusinessObject.Model;
+using CatCoffeePlatformRazorPages.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using BusinessObject.Model;
-using DAO.Context;
 
 namespace CatCoffeePlatformRazorPages.Pages.ProductPages
 {
     public class DetailsModel : PageModel
     {
-        private readonly DAO.Context.ApplicationDbContext _context;
+        private readonly ApiHelper _apiProduct;
 
-        public DetailsModel(DAO.Context.ApplicationDbContext context)
+        public DetailsModel()
         {
-            _context = context;
+            _apiProduct = new ApiHelper(ApiResources.Products);
         }
 
-      public Product Product { get; set; } = default!; 
+        public Product Product { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? productId, int? shopId)
         {
-            if (id == null || _context.Products == null)
+            if (productId == null || shopId == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            IEnumerable<Product>? productRes = await _apiProduct
+                .GetQueryAsync<IEnumerable<Product>>($"productId={productId}&shopId={shopId}&includeProperties=Category");
+
+            if (productRes == null || !productRes.Any())
             {
                 return NotFound();
             }
-            else 
-            {
-                Product = product;
-            }
+
+            Product = productRes.FirstOrDefault(p => p.ProductId == productId)!;
+            ViewData["shopId"] = shopId;
+
             return Page();
         }
     }

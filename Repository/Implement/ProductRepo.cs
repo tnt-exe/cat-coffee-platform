@@ -1,11 +1,11 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using BusinessObject.Model;
 using DAO.Helper;
 using DAO.UnitOfWork;
 using DTO.ProductDTO;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
+using System.Linq.Expressions;
 
 namespace Repository.Implement
 {
@@ -26,7 +26,7 @@ namespace Repository.Implement
             var result = new OperationResult<IEnumerable<Product>>();
             try
             {
-                var products =  _unitOfWork.ProductDAO.Get().AsQueryable();
+                var products = _unitOfWork.ProductDAO.Get().AsQueryable();
                 if (products.ToList().Count == 0)
                 {
                     result.IsError = true;
@@ -90,7 +90,7 @@ namespace Repository.Implement
                 var product = _mapper.Map<Product>(requestModel);
                 await _unitOfWork.ProductDAO.Insert(product);
                 var count = await _unitOfWork.SaveAsync();
-                if(count == 0)
+                if (count == 0)
                 {
                     result.IsError = true;
                     result.AddError(ErrorCode.ServerError, "Create product failed");

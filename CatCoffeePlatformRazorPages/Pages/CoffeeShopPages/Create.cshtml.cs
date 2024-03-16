@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CatCoffeePlatformRazorPages.Common;
+using DTO.CoffeeShopDTO;
+using DTO.UserDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BusinessObject.Model;
-using DAO.Context;
-using CatCoffeePlatformRazorPages.Common;
-using DTO.CoffeeShopDTO;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using DTO.UserDTO;
-using Stripe;
 
 namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
 {

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using CatCoffeePlatformRazorPages.Common;
+﻿using CatCoffeePlatformRazorPages.Common;
 using DTO.CoffeeShopDTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
 namespace CatCoffeePlatformRazorPages.Pages.Booking
@@ -17,7 +17,7 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public IList<CoffeeShopResponseDTO> CoffeeShops { get;set; } = default!;
+        public IList<CoffeeShopResponseDTO> CoffeeShops { get; set; } = default!;
 
         [BindProperty]
         public string? SearchValue { get; set; }
@@ -47,9 +47,9 @@ namespace CatCoffeePlatformRazorPages.Pages.Booking
             var apiResponse = await _apiCoffeeShop
                 .GetAsync<ResponseBody<IEnumerable<CoffeeShopResponseDTO>>>();
             var coffeeShops = apiResponse?.Result?.ToList();
-            if(SearchValue is not null)
+            if (SearchValue is not null)
             {
-                var coffeeShopList = coffeeShops?.Where(c => (c.ShopName?.Contains(SearchValue) ?? false) 
+                var coffeeShopList = coffeeShops?.Where(c => (c.ShopName?.Contains(SearchValue) ?? false)
                 || (c.Address?.Contains(SearchValue) ?? false)
                 || (c.ContactNumber?.Contains(SearchValue) ?? false)
                 || (c.Email?.Contains(SearchValue) ?? false)
