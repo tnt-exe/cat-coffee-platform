@@ -1,9 +1,5 @@
-using BusinessObject.Model;
 using CatCoffeePlatformRazorPages.Common;
-using DTO.AreaDTO;
-using DTO.CatDTO;
 using DTO.CoffeeShopDTO;
-using DTO.TimeFrameDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,11 +12,15 @@ namespace CatCoffeePlatformRazorPages.Pages.CoffeeShopPages
         public CoffeeShopManagerModel()
         {
             _apiShop = new ApiHelper(ApiResources.CoffeeShops);
-
         }
         public CoffeeShopResponseDTO CoffeeShop { get; set; } = default!;
-        public async Task<IActionResult> OnGetAsync(Guid id)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
             var apiResponse = await _apiShop.GetAsync<ResponseBody<CoffeeShopResponseDTO>>($"get-by-manager-id/{id}");
             var shop = apiResponse!.Result;
 

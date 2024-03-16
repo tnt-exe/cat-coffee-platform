@@ -1,85 +1,73 @@
-﻿@page
+﻿@page "/coffeeshoppages"
 @model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Coffeeshop List";
 }
 
-<h1>Index</h1>
+<div class="container" style="min-height: 44vh;">
+    <h1 style="text-align: center;">CoffeeShop</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-@if (TempData["shop-msg"] is not null)
-{
-    <div class="alert alert-info">
-        @TempData["shop-msg"]
+    <p class="button">
+        <a asp-page="create" class="btn btn-primary">Create</a>
+    </p>
+
+    <div class="card" id="main-table">
+        @if (Model.CoffeeShop is null || !Model.CoffeeShop.Any())
+        {
+            <h3 class="alert alert-info text-center">No CoffeeShop found</h3>
+        }
+        else
+        {
+            @if (TempData["shop-msg"] is not null)
+            {
+                <div class="alert alert-info">
+                    @TempData["shop-msg"]
+                </div>
+            }
+
+            <table class="table table-striped d-sm-table">
+                <thead>
+                    <tr>
+                        <th>ShopName</th>
+                        <th>OpeningTime</th>
+                        <th>ClosingTime</th>
+                        <th>ContactNumber</th>
+                        <th>Shop Email</th>
+                        <th>Manager Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CoffeeShop) 
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShopName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OpeningTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClosingTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ContactNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ManagerEmail)
+                            </td>
+                            <td>
+                                <a asp-page="./edit" asp-route-id="@item.CoffeeShopId" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-page="./details" asp-route-id="@item.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                ShopName
-            </th>
-            <th>
-                Address
-            </th>
-            <th>
-                OpeningTime
-            </th>
-            <th>
-                ClosingTime
-            </th>
-            <th>
-                ContactNumber
-            </th>
-            <th>
-                Shop Email
-            </th>
-            <th>
-                Description
-            </th>
-            
-            <th>
-                Manager Email
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.CoffeeShop) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShopName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OpeningTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosingTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManagerEmail)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.CoffeeShopId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.CoffeeShopId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.CoffeeShopId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</div>

@@ -1,105 +1,75 @@
-﻿@page
+﻿@page "/coffeeshoppages/showallcoffeeshop"
 @model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.ShowAllCoffeeShopModel
 @{
+    ViewData["Title"] = "ShowAllCoffeeShop";
 }
-@if (TempData["shop-msg"] is not null)
-{
-    <div class="alert alert-info">
-        @TempData["shop-msg"]
-    </div>
-}
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee Shops</title>
-    <style>
-        /* General styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
 
-        /* Container */
-        .container {
-            width: 90%;
-            margin: 20px auto;
-        }
+<div class="container" style="min-height: 44vh;">
+    <h1 style="text-align: center;">CoffeeShop</h1>
 
-        /* Table styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
+    <div class="card" id="main-table">
+        @if (Model.CoffeeShop is null || !Model.CoffeeShop.Any())
+        {
+            <h3 class="alert alert-info text-center">No CoffeeShop found</h3>
         }
+        else
+        {
+            @if (TempData["shop-msg"] is not null)
+            {
+                <div class="alert alert-info">
+                    @TempData["shop-msg"]
+                </div>
+            }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        th {
-            background-color: #f8f8f8;
-            font-weight: bold;
-        }
-
-        /* Alternate row coloring */
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        /* Hover effect */
-        tbody tr:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Responsive table */
-        
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Coffee Shops</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Shop Name</th>
-                    <th>Address</th>
-                    <th>Opening Time</th>
-                    <th>Closing Time</th>
-                    <th>Contact Number</th>
-                    <th>Shop Email</th>
-                    <th>Description</th>
-                    <th>Manager Email</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.CoffeeShop)
-                {
+            <table class="table table-striped d-sm-table">
+                <thead>
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.ShopName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Address)</td>
-                        <td>@Html.DisplayFor(modelItem => item.OpeningTime)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ClosingTime)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ContactNumber)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ManagerEmail)</td>
-                        <td>
-                            <a asp-page="./Details" asp-route-id="@item.CoffeeShopId">Details</a> 
-                        </td>
+                        <th>ShopName</th>
+                        <th>Address</th>
+                        <th>OpeningTime</th>
+                        <th>ClosingTime</th>
+                        <th>ContactNumber</th>
+                        <th>Shop Email</th>
+                        <th>Description</th>
+                        <th>Manager Email</th>
+                        <th>Action</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CoffeeShop) 
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShopName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OpeningTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClosingTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ContactNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ManagerEmail)
+                            </td>
+                            <td>
+                                <a asp-page="./details" asp-route-id="@item.CoffeeShopId" class="btn btn-info btn-sm">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
-</body>
-</html>
+</div>

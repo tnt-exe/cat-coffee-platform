@@ -1,72 +1,71 @@
-﻿@page
+﻿@page "/coffeeshoppages/edit"
 @model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Coffeeshop";
 }
 
-<h1>Edit</h1>
+<div class="row justify-content-center">
+    
+    <div class="card col-md-4 p-3">
+        <h1 class="text-center">Edit</h1>
+        <hr />
 
-<h4>CoffeeShop</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+        @if (TempData["shop-msg"] is not null)
+        {
+            <div class="alert alert-info">
+                @TempData["shop-msg"]
+            </div>
+        }
+
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CoffeeShop.CoffeeShopId" />
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.ShopName" class="control-label"></label>
                 <input asp-for="CoffeeShop.ShopName" class="form-control" />
                 <span asp-validation-for="CoffeeShop.ShopName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.Address" class="control-label"></label>
                 <input asp-for="CoffeeShop.Address" class="form-control" />
                 <span asp-validation-for="CoffeeShop.Address" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.OpeningTime" class="control-label"></label>
                 <input asp-for="CoffeeShop.OpeningTime" type="time" class="form-control" />
                 <span asp-validation-for="CoffeeShop.OpeningTime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.ClosingTime" class="control-label"></label>
                 <input asp-for="CoffeeShop.ClosingTime" type="time" class="form-control" />
                 <span asp-validation-for="CoffeeShop.ClosingTime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.ContactNumber" class="control-label"></label>
                 <input asp-for="CoffeeShop.ContactNumber" class="form-control" />
                 <span asp-validation-for="CoffeeShop.ContactNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.Email" class="control-label"></label>
                 <input asp-for="CoffeeShop.Email" class="form-control" />
                 <span asp-validation-for="CoffeeShop.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CoffeeShop.Description" class="control-label"></label>
                 <input asp-for="CoffeeShop.Description" class="form-control" />
                 <span asp-validation-for="CoffeeShop.Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input asp-for="CoffeeShop.ManagerId" type ="hidden"  class="form-control" />
+            <div class="form-group mb-3">
+                <input asp-for="CoffeeShop.ManagerId" type="hidden" class="form-control" />
             </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group my-3 d-flex justify-content-end">
+                <input type="submit" value="Save" class="btn btn-primary me-3" />
+                <a asp-page="./Index" class="btn btn-secondary">Back</a>
             </div>
         </form>
     </div>
-</div>
-@if (TempData["shop-msg"] is not null)
-{
-    <div class="alert alert-info">
-        @TempData["shop-msg"]
-    </div>
-}
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {

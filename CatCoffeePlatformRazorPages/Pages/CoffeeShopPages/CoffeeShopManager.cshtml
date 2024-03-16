@@ -1,65 +1,73 @@
-﻿@page
+﻿@page "/coffeeshoppages/coffeeshopmanager"
 @model CatCoffeePlatformRazorPages.Pages.CoffeeShopPages.CoffeeShopManagerModel
+
 @{
+    ViewData["Title"] = "Coffeeshop Details";
 }
-<h1>CoffeeShop Details</h1>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.ShopName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.ShopName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.OpeningTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.OpeningTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.ClosingTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.ClosingTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.ContactNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.ContactNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.Description)
-        </dd>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card col-7 p-5">
+            <h1 class="card-title">Details</h1>
+            <hr />
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CoffeeShop.ManagerEmail)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CoffeeShop.ManagerEmail)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.CoffeeShop?.CoffeeShopId">Edit</a> |
-    <a asp-page="./Details" asp-route-id="@Model.CoffeeShop?.CoffeeShopId">Details</a> 
-    
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.ShopName)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.ShopName)
+                    </dd>
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.Address)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.Address)
+                    </dd>
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.OpeningTime)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.OpeningTime)
+                    </dd>
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.ClosingTime)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.ClosingTime)
+                    </dd>
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.ContactNumber)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.ContactNumber)
+                    </dd>
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.Email)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.Email)
+                    </dd>
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.Description)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.Description)
+                    </dd>
+
+                    <dt class="col-sm-3 pb-2">
+                        @Html.DisplayNameFor(model => model.CoffeeShop.ManagerEmail)
+                    </dt>
+                    <dd class="col-sm-9 pb-2">
+                        @Html.DisplayFor(model => model.CoffeeShop.ManagerEmail)
+                    </dd>
+                </dl>
+                <div class="d-flex justify-content-end">
+                    <a asp-page="./Edit" asp-route-id="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-primary me-3">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@Model.CoffeeShop?.CoffeeShopId" class="btn btn-info">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
